@@ -18,7 +18,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
@@ -37,13 +36,11 @@ jobs:
         working-directory: frontend
         run: npx cap sync android
 
-      - name: Make Gradlew Executable
-        working-directory: frontend/android
-        run: chmod +x gradlew
-
       - name: Build Debug APK
         working-directory: frontend/android
-        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload ChartsOff APK
         uses: actions/upload-artifact@v4
