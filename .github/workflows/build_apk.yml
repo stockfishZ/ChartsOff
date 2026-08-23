@@ -29,12 +29,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install & Sync Capacitor
+      - name: Build Web Production Assets
         working-directory: frontend
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
-          npx cap sync android
+          mkdir -p android/app/src/main/assets/public
+          cp -r dist/* android/app/src/main/assets/public/
 
       - name: Build Debug APK with Gradle
         working-directory: frontend/android
