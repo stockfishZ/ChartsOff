@@ -1,0 +1,9 @@
+{
+	"appId": "com.chartsoff.app",
+	"appName": "ChartsOff",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	}
+}

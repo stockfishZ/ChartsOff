@@ -1,0 +1,16 @@
+﻿{
+  "short_name": "ChartsOff",
+  "name": "ChartsOff - AI Stock Forecast",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#F8F7F4",
+  "theme_color": "#121316",
+  "display": "standalone",
+  "orientation": "portrait"
+}
