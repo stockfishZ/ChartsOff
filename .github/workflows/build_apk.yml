@@ -37,7 +37,7 @@ jobs:
         working-directory: frontend/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleDebug --no-daemon -PcdvMinSdkVersion=24
 
       - name: Locate and Stage APK
         run: |
