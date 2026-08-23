@@ -37,7 +37,7 @@ jobs:
         working-directory: frontend/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle_output.log || (echo "=== GRADLE FAILURE LOG ==="; tail -n 120 gradle_output.log; exit 1)
 
       - name: Upload ChartsOff APK
         uses: actions/upload-artifact@v4
