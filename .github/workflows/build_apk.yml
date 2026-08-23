@@ -37,11 +37,16 @@ jobs:
         working-directory: frontend/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --stacktrace --no-daemon
+
+      - name: Locate and Stage APK
+        run: |
+          mkdir -p release_apk
+          find frontend/android -name "*.apk" -exec cp {} release_apk/ChartsOff.apk \;
 
       - name: Upload ChartsOff APK
         uses: actions/upload-artifact@v4
         with:
           name: ChartsOff-Android-Debug-APK
-          path: frontend/android/app/build/outputs/apk/**/*.apk
+          path: release_apk/ChartsOff.apk
           retention-days: 14
