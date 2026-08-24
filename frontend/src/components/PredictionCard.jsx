@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Star, Plus, Edit2 } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
@@ -209,15 +209,10 @@ export default function PredictionCard({
           </div>
 
           {/* Broker Tactical Guidance Box */}
-          <div className="p-2 bg-white border border-[#DCDAD4] text-xs font-sans">
-            <div className="flex items-start space-x-1.5">
-              <span className="font-mono text-[10px] font-bold uppercase text-[#121316] shrink-0 mt-0.5">
-                [SARAN BROKER]
-              </span>
-              <p className="text-[11px] text-[#2B2925] leading-relaxed">
-                {holdingStats.brokerAdvice}
-              </p>
-            </div>
+          <div className="p-2.5 bg-white border border-[#DCDAD4] text-xs font-sans">
+            <p className="text-[11px] text-[#2B2925] leading-relaxed">
+              {holdingStats.brokerAdvice}
+            </p>
           </div>
         </div>
       ) : (
