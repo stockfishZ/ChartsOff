@@ -1,5 +1,6 @@
 ﻿import React from "react";
-import { Star, Briefcase, Plus, Edit2, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { Star, Plus, Edit2 } from "lucide-react";
+import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
 
 const COMPANY_NAMES = {
@@ -82,7 +83,6 @@ export default function PredictionCard({
     const plPct = ((prediction.current_price - holding.buyPrice) / holding.buyPrice) * 100;
     const isProfit = plAmount >= 0;
 
-    // Broker Tactical Advice
     let brokerAdvice = "";
     if (isProfit && isBull) {
       brokerAdvice = `Posisi Anda telah mencatatkan keuntungan +${plPct.toFixed(1)}%. Model memproyeksikan potensi penguatan lanjutan menuju target ${formatRupiah(targetPrice)} (+${prediction.expected_return_pct}%). Rekomendasi Broker: Pertahankan posisi penuh (Hold & Ride Trend).`;
@@ -118,11 +118,11 @@ export default function PredictionCard({
                 <button
                   type="button"
                   onClick={onOpenPortfolioModal}
-                  className="p-1 hover:bg-[#E8F5E9] rounded transition active:scale-95 flex items-center space-x-1 border border-[#1B5E20]/40 bg-[#E8F5E9]/50"
+                  className="px-2 py-0.5 hover:bg-[#E8F5E9] rounded transition active:scale-95 flex items-center space-x-1.5 border border-[#1B5E20]/40 bg-[#E8F5E9]/60"
                   title="Saham Dimiliki di Portofolio (Klik untuk edit)"
                 >
-                  <Briefcase className="w-4 h-4 text-[#1B5E20] fill-[#1B5E20]" />
-                  <span className="text-[10px] font-mono font-bold text-[#1B5E20] uppercase px-1">
+                  <HoldingIcon className="w-3.5 h-3.5" color="#1B5E20" />
+                  <span className="text-[10px] font-mono font-bold text-[#1B5E20] uppercase">
                     Dimiliki
                   </span>
                 </button>
@@ -161,7 +161,7 @@ export default function PredictionCard({
         <div className="mb-3 p-3 bg-[#FAF9F6] border border-[#121316]">
           <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2.5">
             <div className="flex items-center space-x-1.5">
-              <Briefcase className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20]" />
+              <HoldingIcon className="w-4 h-4" color="#1B5E20" />
               <span className="font-mono text-xs font-bold uppercase text-[#121316]">
                 Posisi Portofolio Anda
               </span>

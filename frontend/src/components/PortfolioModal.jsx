@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
-import { X, Briefcase, Trash2 } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
+import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
 
 export default function PortfolioModal({
@@ -54,8 +55,8 @@ export default function PortfolioModal({
       <div className="bg-white border-2 border-[#121316] w-full max-w-md p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
         {/* Header Modal */}
         <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-3 mb-4">
-          <div className="flex items-center space-x-2">
-            <Briefcase className="w-5 h-5 text-[#1B5E20] fill-[#1B5E20]" />
+          <div className="flex items-center space-x-2.5">
+            <HoldingIcon className="w-5 h-5" color="#1B5E20" />
             <div>
               <h3 className="font-editorial font-bold text-lg text-[#121316]">
                 {existingHolding ? "Edit Portofolio Saham" : "Catat Pembelian Saham"}

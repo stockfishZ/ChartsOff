@@ -1,5 +1,6 @@
 ﻿import React from "react";
-import { Star, Briefcase } from "lucide-react";
+import { Star } from "lucide-react";
+import HoldingIcon from "./HoldingIcon";
 
 export function formatRupiah(val) {
   if (val == null || isNaN(val)) return "Rp 0";
@@ -44,9 +45,9 @@ export default function TickerList({
                 <div className="flex items-center justify-between space-x-2">
                   <div className="flex items-center">
                     {isBought ? (
-                      <Briefcase
-                        className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20] flex-shrink-0 mr-1"
-                        title="Saham Dimiliki (Portofolio)"
+                      <HoldingIcon
+                        className="w-3.5 h-3.5 mr-1 flex-shrink-0"
+                        color="#1B5E20"
                       />
                     ) : isFavorite ? (
                       <Star

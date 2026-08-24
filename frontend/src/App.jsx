@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect, useMemo } from "react";
-import { Star, Briefcase } from "lucide-react";
+import { Star } from "lucide-react";
+import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
 import TickerList, { formatRupiah } from "./components/TickerList";
 import PredictionCard from "./components/PredictionCard";
@@ -315,10 +316,10 @@ export default function App() {
                                 setModalTicker(item.ticker);
                                 setIsModalOpen(true);
                               }}
-                              className="p-1 hover:bg-[#E8F5E9] rounded"
-                              title="Saham Dimiliki di Portofolio"
+                              className="p-1 hover:bg-[#E8F5E9] rounded flex items-center justify-center mx-auto"
+                              title="Saham Dimiliki di Portofolio (Klik untuk edit)"
                             >
-                              <Briefcase className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20]" />
+                              <HoldingIcon className="w-3.5 h-3.5" color="#1B5E20" />
                             </button>
                           ) : (
                             <button
@@ -345,10 +346,10 @@ export default function App() {
                           }}
                           className="py-2.5 font-bold font-editorial cursor-pointer"
                         >
-                          <div className="flex items-center space-x-1">
+                          <div className="flex items-center space-x-1.5">
                             <span>{cleanTicker}</span>
                             {isBought && (
-                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 border border-[#1B5E20]/30 uppercase">
+                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
                                 Dimiliki
                               </span>
                             )}
