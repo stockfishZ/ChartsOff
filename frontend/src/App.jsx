@@ -1,11 +1,12 @@
 ﻿import React, { useState, useEffect, useMemo } from "react";
-import { Star } from "lucide-react";
+import { Star, Briefcase } from "lucide-react";
 import Header from "./components/Header";
 import TickerList, { formatRupiah } from "./components/TickerList";
 import PredictionCard from "./components/PredictionCard";
 import StockChart from "./components/StockChart";
 import KeyFactors from "./components/KeyFactors";
 import NewsFeed from "./components/NewsFeed";
+import PortfolioModal from "./components/PortfolioModal";
 import { resolveTicker } from "./data/idx_companies";
 
 export default function App() {
@@ -17,7 +18,17 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("signals");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Load user favorites from localStorage
+  // Portfolio State (Personal Broker bought stocks)
+  const [portfolio, setPortfolio] = useState(() => {
+    try {
+      const saved = localStorage.getItem("chartsoff_portfolio");
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+
+  // User favorites (Starred stocks)
   const [favorites, setFavorites] = useState(() => {
     try {
       const saved = localStorage.getItem("chartsoff_favorites");
@@ -27,13 +38,50 @@ export default function App() {
     }
   });
 
+  // Portfolio Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTicker, setModalTicker] = useState("BBCA.JK");
+
+  const savePortfolioHolding = (ticker, holdingData) => {
+    setPortfolio((prev) => {
+      const updated = { ...prev, [ticker]: holdingData };
+      try {
+        localStorage.setItem("chartsoff_portfolio", JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+
+    // Rule: Automatically add bought stock to favorites if not already present
+    setFavorites((prev) => {
+      if (!prev.includes(ticker)) {
+        const updated = [ticker, ...prev];
+        try {
+          localStorage.setItem("chartsoff_favorites", JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      }
+      return prev;
+    });
+  };
+
+  const deletePortfolioHolding = (ticker) => {
+    setPortfolio((prev) => {
+      const updated = { ...prev };
+      delete updated[ticker];
+      try {
+        localStorage.setItem("chartsoff_portfolio", JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
+
   const toggleFavorite = (ticker) => {
     setFavorites((prev) => {
       let updated;
       if (prev.includes(ticker)) {
         updated = prev.filter((t) => t !== ticker);
       } else {
-        updated = [ticker, ...prev]; // Put new favorite at the very top
+        updated = [ticker, ...prev];
       }
       try {
         localStorage.setItem("chartsoff_favorites", JSON.stringify(updated));
@@ -124,29 +172,51 @@ export default function App() {
     }
   };
 
-  // Sort list: Pinned favorites are placed on the VERY LEFT (first indices)
+  // Tiered Sorting Hierarchy:
+  // Tier 1: Bought Stocks in Portfolio (Very Leftmost / First Index)
+  // Tier 2: Starred / Favorite Stocks (Not in Portfolio)
+  // Tier 3: General Stock Universe
   const sortedPredictions = useMemo(() => {
     if (!predictions || predictions.length === 0) return [];
+    
+    const boughtTickers = Object.keys(portfolio);
+    const boughtSet = new Set(boughtTickers);
     const favSet = new Set(favorites);
-    const favItems = [];
-    const regularItems = [];
 
-    // Maintain the order of favorites
-    favorites.forEach((favTicker) => {
-      const found = predictions.find((p) => p.ticker === favTicker);
-      if (found) favItems.push(found);
+    const tier1Bought = [];
+    const tier2Favorites = [];
+    const tier3General = [];
+
+    // Add Tier 1 (Bought Stocks)
+    boughtTickers.forEach((t) => {
+      const found = predictions.find((p) => p.ticker === t);
+      if (found) tier1Bought.push(found);
     });
 
-    predictions.forEach((p) => {
-      if (!favSet.has(p.ticker)) {
-        regularItems.push(p);
+    // Add Tier 2 (Favorites that are not bought)
+    favorites.forEach((t) => {
+      if (!boughtSet.has(t)) {
+        const found = predictions.find((p) => p.ticker === t);
+        if (found) tier2Favorites.push(found);
       }
     });
 
-    return [...favItems, ...regularItems];
-  }, [predictions, favorites]);
+    // Add Tier 3 (Remaining General Stocks)
+    predictions.forEach((p) => {
+      if (!boughtSet.has(p.ticker) && !favSet.has(p.ticker)) {
+        tier3General.push(p);
+      }
+    });
 
-  const activePrediction = predictions.find((p) => p.ticker === selectedTicker) || sortedPredictions[0] || predictions[0];
+    return [...tier1Bought, ...tier2Favorites, ...tier3General];
+  }, [predictions, portfolio, favorites]);
+
+  const activePrediction =
+    predictions.find((p) => p.ticker === selectedTicker) ||
+    sortedPredictions[0] ||
+    predictions[0];
+
+  const activeHolding = activePrediction ? portfolio[activePrediction.ticker] : null;
 
   return (
     <div className="min-h-screen bg-[#F8F7F4] text-[#121316] flex flex-col justify-between selection:bg-[#E5E3DC]">
@@ -180,7 +250,7 @@ export default function App() {
                 selectedTicker={selectedTicker}
                 onSelectTicker={setSelectedTicker}
                 favorites={favorites}
-                onToggleFavorite={toggleFavorite}
+                portfolio={portfolio}
               />
               {activePrediction && (
                 <>
@@ -188,8 +258,16 @@ export default function App() {
                     prediction={activePrediction}
                     isFavorite={favorites.includes(activePrediction.ticker)}
                     onToggleFavorite={toggleFavorite}
+                    holding={activeHolding}
+                    onOpenPortfolioModal={() => {
+                      setModalTicker(activePrediction.ticker);
+                      setIsModalOpen(true);
+                    }}
                   />
-                  <StockChart prediction={activePrediction} />
+                  <StockChart
+                    prediction={activePrediction}
+                    holding={activeHolding}
+                  />
                   <KeyFactors factors={activePrediction.key_factors} />
                   <NewsFeed newsSentiment={activePrediction.news_sentiment} />
                 </>
@@ -207,7 +285,7 @@ export default function App() {
               <table className="w-full text-left text-xs font-sans border-collapse">
                 <thead>
                   <tr className="border-b border-[#121316] text-[10px] uppercase text-[#737168]">
-                    <th className="py-2 w-6">Pin</th>
+                    <th className="py-2 w-7">Status</th>
                     <th className="py-2">Kode</th>
                     <th className="py-2">Harga</th>
                     <th className="py-2">Sinyal ML</th>
@@ -219,6 +297,7 @@ export default function App() {
                   {sortedPredictions.map((item) => {
                     const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
                     const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
+                    const isBought = Boolean(portfolio[item.ticker]);
                     const isFav = favorites.includes(item.ticker);
                     const cleanTicker = item.ticker.replace(".JK", "");
 
@@ -228,21 +307,36 @@ export default function App() {
                         className="hover:bg-[#FAF9F6] transition"
                       >
                         <td className="py-2.5 text-center">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleFavorite(item.ticker);
-                            }}
-                            className="p-1 hover:bg-[#E5E3DC] rounded"
-                            title={isFav ? "Hapus Pin" : "Pin ke Paling Depan"}
-                          >
-                            <Star
-                              className={`w-3.5 h-3.5 ${
-                                isFav ? "text-[#D97706] fill-[#D97706]" : "text-[#DCDAD4]"
-                              }`}
-                            />
-                          </button>
+                          {isBought ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setModalTicker(item.ticker);
+                                setIsModalOpen(true);
+                              }}
+                              className="p-1 hover:bg-[#E8F5E9] rounded"
+                              title="Saham Dimiliki di Portofolio"
+                            >
+                              <Briefcase className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20]" />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(item.ticker);
+                              }}
+                              className="p-1 hover:bg-[#E5E3DC] rounded"
+                              title={isFav ? "Hapus Favorit" : "Sematkan ke Favorit"}
+                            >
+                              <Star
+                                className={`w-3.5 h-3.5 ${
+                                  isFav ? "text-[#D97706] fill-[#D97706]" : "text-[#DCDAD4]"
+                                }`}
+                              />
+                            </button>
+                          )}
                         </td>
                         <td
                           onClick={() => {
@@ -251,7 +345,14 @@ export default function App() {
                           }}
                           className="py-2.5 font-bold font-editorial cursor-pointer"
                         >
-                          {cleanTicker}
+                          <div className="flex items-center space-x-1">
+                            <span>{cleanTicker}</span>
+                            {isBought && (
+                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 border border-[#1B5E20]/30 uppercase">
+                                Dimiliki
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td
                           onClick={() => {
@@ -307,6 +408,17 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Portfolio Modal Dialog */}
+      <PortfolioModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        ticker={modalTicker}
+        currentPrice={predictions.find((p) => p.ticker === modalTicker)?.current_price || 0}
+        existingHolding={portfolio[modalTicker]}
+        onSave={savePortfolioHolding}
+        onDelete={deletePortfolioHolding}
+      />
     </div>
   );
 }

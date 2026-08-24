@@ -7,11 +7,12 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  ReferenceLine,
 } from "recharts";
 import { formatRupiah } from "./TickerList";
 
-// Precision Candlestick Canvas with Financial Crosshair Scrubber
-function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
+// Precision Candlestick Canvas with Financial Crosshair Scrubber & Personal Buy Price Line
+function CandlestickCanvas({ data, minPrice, maxPrice, holding = null, height = 220 }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const svgRef = useRef(null);
 
@@ -42,7 +43,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
     return { price: p, y: getY(p) };
   });
 
-  // Calculate index from mouse/touch event coordinates
   const calculateIndexFromPointer = (clientX) => {
     if (!svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
@@ -67,6 +67,9 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
   const activeCX = hoveredIndex != null ? paddingLeft + hoveredIndex * stepX + stepX / 2 : null;
   const activePrice = hoveredItem ? (hoveredItem.isProjected ? hoveredItem.projectedPrice : hoveredItem.close) : null;
   const activeCY = activePrice != null ? getY(activePrice) : null;
+
+  // Personal Buy Price Line Coordinate
+  const buyY = holding && holding.buyPrice ? getY(holding.buyPrice) : null;
 
   return (
     <div className="relative select-none w-full touch-none">
@@ -113,10 +116,35 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
           stroke="#DCDAD4"
         />
 
+        {/* Personal Buy Price Reference Line */}
+        {buyY != null && (
+          <g>
+            <line
+              x1={paddingLeft}
+              y1={buyY}
+              x2={totalWidth - paddingRight}
+              y2={buyY}
+              stroke="#1B5E20"
+              strokeWidth="1.5"
+              strokeDasharray="4 3"
+            />
+            <text
+              x={totalWidth - paddingRight}
+              y={buyY - 4}
+              textAnchor="end"
+              fontSize="8.5"
+              fill="#1B5E20"
+              fontWeight="bold"
+              fontFamily="monospace"
+            >
+              Harga Beli: {formatRupiah(holding.buyPrice)}
+            </text>
+          </g>
+        )}
+
         {/* Active Inspection Highlight Column (Crosshair Scrubber) */}
         {hoveredIndex != null && activeCX != null && (
           <g>
-            {/* Vertical column highlight */}
             <rect
               x={activeCX - stepX / 2}
               y={paddingTop}
@@ -125,7 +153,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
               fill="#121316"
               fillOpacity="0.05"
             />
-            {/* Vertical crosshair line */}
             <line
               x1={activeCX}
               y1={paddingTop}
@@ -135,7 +162,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
               strokeWidth="1"
               strokeDasharray="3 3"
             />
-            {/* Horizontal price crosshair line */}
             {activeCY != null && (
               <line
                 x1={paddingLeft}
@@ -205,7 +231,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
 
           return (
             <g key={`candle-${idx}`}>
-              {/* Wick */}
               <line
                 x1={cx}
                 y1={yHigh}
@@ -214,7 +239,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
                 stroke={candleColor}
                 strokeWidth={isInspected ? "1.8" : "1.2"}
               />
-              {/* Candle Body */}
               <rect
                 x={cx - candleWidth / 2}
                 y={topBody}
@@ -236,7 +260,6 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
           const cx = paddingLeft + idx * stepX + stepX / 2;
 
           if (isInspected) {
-            // Pill badge for the active inspected date
             return (
               <g key={`x-active-${idx}`}>
                 <rect
@@ -304,7 +327,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
   );
 }
 
-export default function StockChart({ prediction }) {
+export default function StockChart({ prediction, holding = null }) {
   const [timeframe, setTimeframe] = useState("3B");
   const [chartType, setChartType] = useState("line"); // 'line' | 'candle'
 
@@ -385,6 +408,7 @@ export default function StockChart({ prediction }) {
     d.low,
     d.realPrice,
     d.projectedPrice,
+    holding?.buyPrice,
   ]).filter((p) => p != null && !isNaN(p));
 
   const minPrice = allPrices.length > 0 ? Math.floor(Math.min(...allPrices) * 0.98) : 0;
@@ -398,12 +422,12 @@ export default function StockChart({ prediction }) {
           <span className="font-mono text-xs font-bold uppercase text-[#121316] block">
             Pergerakan Harga & Proyeksi 20 Hari
           </span>
-          <div className="flex items-center space-x-3 mt-1 text-[10px] font-mono">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10px] font-mono">
             {chartType === "line" ? (
               <>
                 <span className="flex items-center text-[#121316]">
                   <span className="inline-block w-3 h-0.5 bg-[#121316] mr-1.5"></span>
-                  Harga Riil (BEI)
+                  Harga Riil
                 </span>
                 <span className="flex items-center text-[#D97706] font-semibold">
                   <span className="inline-block w-3 h-0.5 bg-[#D97706] mr-1.5"></span>
@@ -425,6 +449,13 @@ export default function StockChart({ prediction }) {
                   Proyeksi
                 </span>
               </>
+            )}
+
+            {holding && holding.buyPrice && (
+              <span className="flex items-center text-[#1B5E20] font-semibold">
+                <span className="inline-block w-3 h-0.5 border-b-2 border-dashed border-[#1B5E20] mr-1.5"></span>
+                Harga Beli ({formatRupiah(holding.buyPrice)})
+              </span>
             )}
           </div>
         </div>
@@ -478,6 +509,7 @@ export default function StockChart({ prediction }) {
           data={chartData}
           minPrice={minPrice}
           maxPrice={maxPrice}
+          holding={holding}
           height={220}
         />
       ) : (
@@ -529,6 +561,24 @@ export default function StockChart({ prediction }) {
                   return null;
                 }}
               />
+
+              {/* Personal Buy Price Reference Line */}
+              {holding && holding.buyPrice && (
+                <ReferenceLine
+                  y={holding.buyPrice}
+                  stroke="#1B5E20"
+                  strokeDasharray="4 3"
+                  strokeWidth={1.5}
+                  label={{
+                    value: `Beli: ${formatRupiah(holding.buyPrice)}`,
+                    fill: "#1B5E20",
+                    fontSize: 9,
+                    position: "insideTopRight",
+                    fontWeight: "bold",
+                  }}
+                />
+              )}
+
               <Line
                 type="monotone"
                 dataKey="realPrice"

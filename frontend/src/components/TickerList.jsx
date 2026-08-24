@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Star } from "lucide-react";
+import { Star, Briefcase } from "lucide-react";
 
 export function formatRupiah(val) {
   if (val == null || isNaN(val)) return "Rp 0";
@@ -15,6 +15,7 @@ export default function TickerList({
   selectedTicker,
   onSelectTicker,
   favorites = [],
+  portfolio = {},
 }) {
   return (
     <div className="border-b border-[#DCDAD4] bg-[#F1EFEA]">
@@ -22,6 +23,7 @@ export default function TickerList({
         <div className="flex items-center space-x-1.5 overflow-x-auto px-3 py-2 no-scrollbar">
           {predictions.map((item) => {
             const isSelected = selectedTicker === item.ticker;
+            const isBought = Boolean(portfolio[item.ticker]);
             const isFavorite = favorites.includes(item.ticker);
             const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
             const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
@@ -34,14 +36,24 @@ export default function TickerList({
                 className={`flex-shrink-0 px-3 py-1.5 border transition-all text-left ${
                   isSelected
                     ? "bg-white border-[#121316] shadow-sm ring-1 ring-[#121316]"
+                    : isBought
+                    ? "bg-white/80 border-[#1B5E20]/40 hover:bg-white text-[#595750]"
                     : "bg-transparent border-transparent hover:bg-white/60 text-[#595750]"
                 }`}
               >
                 <div className="flex items-center justify-between space-x-2">
                   <div className="flex items-center">
-                    {isFavorite && (
-                      <Star className="w-3 h-3 text-[#D97706] fill-[#D97706] flex-shrink-0 mr-1" />
-                    )}
+                    {isBought ? (
+                      <Briefcase
+                        className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20] flex-shrink-0 mr-1"
+                        title="Saham Dimiliki (Portofolio)"
+                      />
+                    ) : isFavorite ? (
+                      <Star
+                        className="w-3 h-3 text-[#D97706] fill-[#D97706] flex-shrink-0 mr-1"
+                        title="Favorit / Disematkan"
+                      />
+                    ) : null}
                     <span className={`font-editorial font-bold text-sm tracking-wide ${isSelected ? "text-[#121316]" : "text-[#2B2925]"}`}>
                       {cleanCode}
                     </span>

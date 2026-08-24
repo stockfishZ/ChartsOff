@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Star } from "lucide-react";
+import { Star, Briefcase, Plus, Edit2, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { formatRupiah } from "./TickerList";
 
 const COMPANY_NAMES = {
@@ -59,6 +59,8 @@ export default function PredictionCard({
   prediction,
   isFavorite = false,
   onToggleFavorite,
+  holding = null,
+  onOpenPortfolioModal,
 }) {
   if (!prediction) return null;
 
@@ -71,19 +73,67 @@ export default function PredictionCard({
   const deltaPrice = targetPrice - prediction.current_price;
   const horizon = prediction.target_horizon_days || 20;
 
+  // Personal Broker Position Calculation
+  let holdingStats = null;
+  if (holding && holding.buyPrice && holding.shares) {
+    const totalCost = holding.buyPrice * holding.shares;
+    const currentValue = prediction.current_price * holding.shares;
+    const plAmount = currentValue - totalCost;
+    const plPct = ((prediction.current_price - holding.buyPrice) / holding.buyPrice) * 100;
+    const isProfit = plAmount >= 0;
+
+    // Broker Tactical Advice
+    let brokerAdvice = "";
+    if (isProfit && isBull) {
+      brokerAdvice = `Posisi Anda telah mencatatkan keuntungan +${plPct.toFixed(1)}%. Model memproyeksikan potensi penguatan lanjutan menuju target ${formatRupiah(targetPrice)} (+${prediction.expected_return_pct}%). Rekomendasi Broker: Pertahankan posisi penuh (Hold & Ride Trend).`;
+    } else if (isProfit && isBear) {
+      brokerAdvice = `Posisi Anda untung +${plPct.toFixed(1)}%, namun model mendeteksi sinyal Waspada (Bearish) dalam 20 hari ke depan. Rekomendasi Broker: Pertimbangkan merealisasikan sebagian keuntungan (Take Profit) untuk mengunci cuan.`;
+    } else if (!isProfit && isBull) {
+      brokerAdvice = `Posisi Anda saat ini terkoreksi ${plPct.toFixed(1)}%. Sinyal model menunjukkan pembalikan arah positif menuju target ${formatRupiah(targetPrice)}. Rekomendasi Broker: Tahan posisi (Hold) atau pertimbangkan akumulasi bertahap jika profil risiko sesuai.`;
+    } else {
+      brokerAdvice = `Posisi Anda sedang turun ${plPct.toFixed(1)}% dan sinyal teknikal masih dalam tekanan jual. Rekomendasi Broker: Pasang Stop Loss disiplin di bawah area support terdekat untuk mencegah kerugian lebih dalam.`;
+    }
+
+    holdingStats = {
+      totalCost,
+      currentValue,
+      plAmount,
+      plPct,
+      isProfit,
+      brokerAdvice,
+    };
+  }
+
   return (
     <div className="bg-white border border-[#121316] p-4 mb-3">
-      {/* 1. Header Saham & Tombol Favorit / Pin */}
+      {/* 1. Header Saham & Indikator Portofolio / Favorit */}
       <div className="border-b border-[#E5E3DC] pb-3 mb-3">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center space-x-2">
               <h2 className="font-editorial font-bold text-3xl text-[#121316] tracking-tight">{cleanTicker}</h2>
+              
+              {/* Bought / Portfolio Priority Icon */}
+              {holding ? (
+                <button
+                  type="button"
+                  onClick={onOpenPortfolioModal}
+                  className="p-1 hover:bg-[#E8F5E9] rounded transition active:scale-95 flex items-center space-x-1 border border-[#1B5E20]/40 bg-[#E8F5E9]/50"
+                  title="Saham Dimiliki di Portofolio (Klik untuk edit)"
+                >
+                  <Briefcase className="w-4 h-4 text-[#1B5E20] fill-[#1B5E20]" />
+                  <span className="text-[10px] font-mono font-bold text-[#1B5E20] uppercase px-1">
+                    Dimiliki
+                  </span>
+                </button>
+              ) : null}
+
+              {/* Favorite Star Toggle Button */}
               <button
                 type="button"
                 onClick={() => onToggleFavorite && onToggleFavorite(prediction.ticker)}
                 className="p-1 hover:bg-[#F1EFEA] rounded transition active:scale-95"
-                title={isFavorite ? "Hapus dari Favorit / Pin" : "Sematkan ke Favorit / Pin"}
+                title={isFavorite ? "Hapus dari Favorit" : "Sematkan ke Favorit"}
               >
                 <Star
                   className={`w-5 h-5 transition-colors ${
@@ -98,7 +148,7 @@ export default function PredictionCard({
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] uppercase tracking-wider text-[#737168] block">Harga Saham</span>
+            <span className="text-[10px] uppercase tracking-wider text-[#737168] block">Harga Pasar Saat Ini</span>
             <span className="font-mono-num text-2xl font-bold text-[#121316]">
               {formatRupiah(prediction.current_price)}
             </span>
@@ -106,7 +156,93 @@ export default function PredictionCard({
         </div>
       </div>
 
-      {/* 2. Banner Sinyal & Kondisi Pasar */}
+      {/* 2. Personal Broker Position Panel (If User Bought This Stock) */}
+      {holdingStats ? (
+        <div className="mb-3 p-3 bg-[#FAF9F6] border border-[#121316]">
+          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2.5">
+            <div className="flex items-center space-x-1.5">
+              <Briefcase className="w-3.5 h-3.5 text-[#1B5E20] fill-[#1B5E20]" />
+              <span className="font-mono text-xs font-bold uppercase text-[#121316]">
+                Posisi Portofolio Anda
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={onOpenPortfolioModal}
+              className="text-[10px] font-mono font-bold text-[#121316] underline hover:text-[#737168] flex items-center space-x-1"
+            >
+              <Edit2 className="w-3 h-3 mr-0.5" />
+              <span>Ubah Posisi</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left mb-2.5">
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Harga Beli Rata-rata</span>
+              <span className="font-mono-num text-xs font-bold text-[#121316]">
+                {formatRupiah(holding.buyPrice)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Kepemilikan</span>
+              <span className="font-mono-num text-xs font-bold text-[#121316]">
+                {holding.lots} Lot ({holding.shares.toLocaleString("id-ID")} lbr)
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Total Modal</span>
+              <span className="font-mono-num text-xs font-bold text-[#121316]">
+                {formatRupiah(holdingStats.totalCost)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Untung / Rugi (P/L)</span>
+              <span
+                className={`font-mono-num text-xs font-bold ${
+                  holdingStats.isProfit ? "text-[#1B5E20]" : "text-[#B71C1C]"
+                }`}
+              >
+                {holdingStats.isProfit ? "+" : ""}
+                {formatRupiah(holdingStats.plAmount)} ({holdingStats.isProfit ? "+" : ""}{holdingStats.plPct.toFixed(2)}%)
+              </span>
+            </div>
+          </div>
+
+          {/* Broker Tactical Guidance Box */}
+          <div className="p-2 bg-white border border-[#DCDAD4] text-xs font-sans">
+            <div className="flex items-start space-x-1.5">
+              <span className="font-mono text-[10px] font-bold uppercase text-[#121316] shrink-0 mt-0.5">
+                [SARAN BROKER]
+              </span>
+              <p className="text-[11px] text-[#2B2925] leading-relaxed">
+                {holdingStats.brokerAdvice}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Action to Add to Portfolio if Not Owned */
+        <div className="mb-3 p-2.5 bg-[#FAF9F6] border border-dashed border-[#A8A59C] flex items-center justify-between">
+          <div>
+            <span className="font-mono text-[11px] font-bold text-[#121316] block">
+              Punya Saham {cleanTicker}?
+            </span>
+            <span className="text-[10px] text-[#737168] font-sans block">
+              Catat pembelian Anda agar broker AI dapat menghitung P/L dan memberikan saran personal.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenPortfolioModal}
+            className="px-2.5 py-1.5 bg-[#121316] text-white hover:bg-black font-mono font-bold text-[10px] uppercase tracking-wider flex items-center space-x-1 transition active:scale-95 shrink-0"
+          >
+            <Plus className="w-3 h-3 mr-1" />
+            <span>Catat Saham</span>
+          </button>
+        </div>
+      )}
+
+      {/* 3. Banner Sinyal & Kondisi Pasar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-left">
         {/* Sinyal ML */}
         <div
