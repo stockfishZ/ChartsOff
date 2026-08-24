@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from "react";
+﻿import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Star } from "lucide-react";
 import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
@@ -10,6 +10,38 @@ import NewsFeed from "./components/NewsFeed";
 import PortfolioModal from "./components/PortfolioModal";
 import { resolveTicker } from "./data/idx_companies";
 
+// Helper to determine default stock based on 3-tier user priority
+function determineDefaultTicker(data, currentPortfolio, currentFavorites) {
+  if (!data || data.length === 0) return "BBCA.JK";
+
+  // Priority 1: Latest stock the user bought
+  const boughtTickers = Object.keys(currentPortfolio || {});
+  if (boughtTickers.length > 0) {
+    const sortedBought = boughtTickers.sort((a, b) => {
+      const timeA = currentPortfolio[a]?.updatedAt || new Date(currentPortfolio[a]?.buyDate || 0).getTime();
+      const timeB = currentPortfolio[b]?.updatedAt || new Date(currentPortfolio[b]?.buyDate || 0).getTime();
+      return timeB - timeA;
+    });
+    const latestBought = sortedBought.find((t) => data.some((d) => d.ticker === t));
+    if (latestBought) return latestBought;
+  }
+
+  // Priority 2: Latest added favorite stock
+  if (Array.isArray(currentFavorites) && currentFavorites.length > 0) {
+    const latestFav = currentFavorites.find((t) => data.some((d) => d.ticker === t));
+    if (latestFav) return latestFav;
+  }
+
+  // Priority 3: The most hottest stock (highest expected return * model confidence)
+  const sortedByHeat = [...data].sort((a, b) => {
+    const heatA = (a.expected_return_pct || 0) * ((a.confidence || 50) / 100);
+    const heatB = (b.expected_return_pct || 0) * ((b.confidence || 50) / 100);
+    return heatB - heatA;
+  });
+
+  return sortedByHeat[0]?.ticker || data[0].ticker;
+}
+
 export default function App() {
   const [predictions, setPredictions] = useState([]);
   const [selectedTicker, setSelectedTicker] = useState("BBCA.JK");
@@ -18,6 +50,7 @@ export default function App() {
   const [isAddingTicker, setIsAddingTicker] = useState(false);
   const [activeTab, setActiveTab] = useState("signals");
   const [errorMessage, setErrorMessage] = useState("");
+  const isInitialLoadRef = useRef(true);
 
   // Portfolio State (Personal Broker bought stocks)
   const [portfolio, setPortfolio] = useState(() => {
@@ -33,9 +66,9 @@ export default function App() {
   const [favorites, setFavorites] = useState(() => {
     try {
       const saved = localStorage.getItem("chartsoff_favorites");
-      return saved ? JSON.parse(saved) : ["BBCA.JK", "BBRI.JK"];
+      return saved ? JSON.parse(saved) : [];
     } catch (e) {
-      return ["BBCA.JK", "BBRI.JK"];
+      return [];
     }
   });
 
@@ -44,8 +77,13 @@ export default function App() {
   const [modalTicker, setModalTicker] = useState("BBCA.JK");
 
   const savePortfolioHolding = (ticker, holdingData) => {
+    const holdingWithTimestamp = {
+      ...holdingData,
+      updatedAt: Date.now(),
+    };
+
     setPortfolio((prev) => {
-      const updated = { ...prev, [ticker]: holdingData };
+      const updated = { ...prev, [ticker]: holdingWithTimestamp };
       try {
         localStorage.setItem("chartsoff_portfolio", JSON.stringify(updated));
       } catch (e) {}
@@ -63,6 +101,8 @@ export default function App() {
       }
       return prev;
     });
+
+    setSelectedTicker(ticker);
   };
 
   const deletePortfolioHolding = (ticker) => {
@@ -115,8 +155,15 @@ export default function App() {
 
       if (Array.isArray(data) && data.length > 0) {
         setPredictions(data);
-        if (!data.some((d) => d.ticker === selectedTicker)) {
-          setSelectedTicker(data[0].ticker);
+
+        // Apply Priority on initial open / fresh refresh
+        if (isInitialLoadRef.current) {
+          const defaultTicker = determineDefaultTicker(data, portfolio, favorites);
+          setSelectedTicker(defaultTicker);
+          isInitialLoadRef.current = false;
+        } else if (!data.some((d) => d.ticker === selectedTicker)) {
+          const fallback = determineDefaultTicker(data, portfolio, favorites);
+          setSelectedTicker(fallback);
         }
       }
     } catch (err) {
@@ -180,7 +227,12 @@ export default function App() {
   const sortedPredictions = useMemo(() => {
     if (!predictions || predictions.length === 0) return [];
     
-    const boughtTickers = Object.keys(portfolio);
+    const boughtTickers = Object.keys(portfolio).sort((a, b) => {
+      const timeA = portfolio[a]?.updatedAt || new Date(portfolio[a]?.buyDate || 0).getTime();
+      const timeB = portfolio[b]?.updatedAt || new Date(portfolio[b]?.buyDate || 0).getTime();
+      return timeB - timeA;
+    });
+
     const boughtSet = new Set(boughtTickers);
     const favSet = new Set(favorites);
 
