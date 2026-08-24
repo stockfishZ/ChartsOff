@@ -1,5 +1,6 @@
 ﻿import logging
 import re
+import math
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -48,7 +49,7 @@ class SentimentFeatureEngine:
     @classmethod
     def aggregate_news_sentiment(cls, news_df: pd.DataFrame, ticker: str) -> dict:
         """
-        Mengagregasi sentimen berita terkini saham menjadi metrik ringkas.
+        Mengagregasi sentimen berita terkini saham menjadi metrik ringkas bebas NaN.
         """
         if news_df.empty:
             return {
@@ -63,7 +64,9 @@ class SentimentFeatureEngine:
         df["score"] = df.apply(lambda r: cls._score_text(f"{r['title']} {r['summary']}"), axis=1)
 
         avg_score = float(df["score"].mean()) if not df.empty else 0.0
-        
+        if math.isnan(avg_score):
+            avg_score = 0.0
+
         if avg_score > 0.10:
             sentiment_label = "Positif (Bullish)"
         elif avg_score < -0.10:
@@ -71,11 +74,28 @@ class SentimentFeatureEngine:
         else:
             sentiment_label = "Netral"
 
-        cols = ["title", "link", "published_at"]
+        # Sanitize text columns and ensure image_url is NEVER float('nan')
         if "image_url" in df.columns:
-            cols.append("image_url")
+            df["image_url"] = df["image_url"].apply(
+                lambda x: None if (pd.isna(x) or x is None or str(x).lower() in ["nan", "none", "null", ""]) else str(x)
+            )
+        else:
+            df["image_url"] = None
 
-        top_headlines = df[cols].head(5).to_dict(orient="records")
+        cols = ["title", "link", "published_at", "image_url"]
+        headlines_raw = df[cols].head(5).to_dict(orient="records")
+        
+        top_headlines = []
+        for h in headlines_raw:
+            img = h.get("image_url")
+            if img is not None and (pd.isna(img) or str(img).lower() in ["nan", "none", "null", ""]):
+                img = None
+            top_headlines.append({
+                "title": str(h.get("title") or ""),
+                "link": str(h.get("link") or ""),
+                "published_at": str(h.get("published_at") or ""),
+                "image_url": img
+            })
 
         return {
             "ticker": ticker,

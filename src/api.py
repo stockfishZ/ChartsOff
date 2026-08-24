@@ -1,4 +1,4 @@
-import json
+﻿import json
 import logging
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
@@ -11,7 +11,7 @@ from src.data.news_feed import NewsDataFeed
 from src.features.sentiment import SentimentFeatureEngine
 from src.ml.custom_trainer import CustomStockMLModel
 from src.ml.base import PredictionResult
-from src.storage.supabase_client import StorageManager
+from src.storage.supabase_client import StorageManager, sanitize_json_payload
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ChartsOff.API")
@@ -68,7 +68,8 @@ def get_all_predictions():
     output_file = config.LOCAL_OUTPUT_DIR / "latest_predictions.json"
     if output_file.exists():
         with open(output_file, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            return sanitize_json_payload(data)
     return []
 
 @app.get("/api/predict/{ticker}")
@@ -76,6 +77,7 @@ def predict_stock(ticker: str):
     """Calculates predictions on-the-fly for ANY Indonesian stock."""
     try:
         prediction = compute_prediction_for_ticker(ticker)
+        pred_dict = sanitize_json_payload(prediction.model_dump())
         
         # Update local cache
         output_file = config.LOCAL_OUTPUT_DIR / "latest_predictions.json"
@@ -86,18 +88,19 @@ def predict_stock(ticker: str):
                 
         # Upsert
         existing = [p for p in existing if p.get("ticker") != prediction.ticker]
-        existing.insert(0, prediction.model_dump())
+        existing.insert(0, pred_dict)
+        existing_sanitized = sanitize_json_payload(existing)
         
         with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(existing, f, indent=2)
+            json.dump(existing_sanitized, f, indent=2)
             
         # Copy to frontend public
         public_dest = Path("frontend/public/data/latest_predictions.json")
         if public_dest.parent.exists():
             with open(public_dest, "w", encoding="utf-8") as f:
-                json.dump(existing, f, indent=2)
+                json.dump(existing_sanitized, f, indent=2)
 
-        return prediction.model_dump()
+        return pred_dict
     except HTTPException:
         raise
     except Exception as e:
@@ -114,7 +117,7 @@ def get_live_stock_news(ticker: str):
 
         news_df = news_feed.fetch_news_for_ticker(clean_ticker, max_articles=8)
         news_summary = SentimentFeatureEngine.aggregate_news_sentiment(news_df, clean_ticker)
-        return news_summary
+        return sanitize_json_payload(news_summary)
     except Exception as e:
         logger.warning(f"Error fetching live news for {ticker}: {e}")
         return {
@@ -124,4 +127,3 @@ def get_live_stock_news(ticker: str):
             "sentiment_label": "Netral",
             "top_headlines": []
         }
-

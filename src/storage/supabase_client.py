@@ -1,10 +1,23 @@
 ﻿import json
 import logging
+import math
 from pathlib import Path
 from src.config import config
 from src.ml.base import PredictionResult
 
 logger = logging.getLogger(__name__)
+
+def sanitize_json_payload(obj):
+    """Recursively converts NaN and Infinity floats to None to guarantee 100% JSON compliance."""
+    if isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return None
+        return obj
+    elif isinstance(obj, dict):
+        return {k: sanitize_json_payload(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [sanitize_json_payload(v) for v in obj]
+    return obj
 
 class StorageManager:
     """
@@ -25,7 +38,8 @@ class StorageManager:
         """
         Saves a batch of stock predictions to cloud storage and/or local disk.
         """
-        results_dict = [p.model_dump() for p in predictions]
+        raw_results = [p.model_dump() for p in predictions]
+        results_dict = sanitize_json_payload(raw_results)
         
         # 1. Local JSON Output (Always available & 100% free)
         if config.SAVE_LOCAL_JSON:
