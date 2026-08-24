@@ -7,6 +7,8 @@ export default function Header({
   isRefreshing,
   onAddCustomTicker,
   isAddingTicker,
+  activeTab,
+  setActiveTab,
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -48,9 +50,10 @@ export default function Header({
   };
 
   return (
-    <header className="bg-white border-b border-[#121316] px-4 py-2.5 relative z-30" ref={searchRef}>
+    <header className="bg-white border-b border-[#121316] px-4 pt-2.5 pb-0 relative z-30" ref={searchRef}>
       <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between">
+        {/* Top Row: Brand + Search & Refresh */}
+        <div className="flex items-center justify-between pb-2">
           <div className="flex items-center">
             <span className="font-editorial font-bold text-xl tracking-tight text-[#121316]">CHARTSOFF</span>
           </div>
@@ -77,9 +80,9 @@ export default function Header({
           </div>
         </div>
 
-        {/* Search Input */}
+        {/* Search Input Bar */}
         {showSearch && (
-          <div className="mt-2.5 pt-2.5 border-t border-[#E5E3DC]">
+          <div className="pt-2 pb-3 border-t border-[#E5E3DC]">
             <form onSubmit={handleManualSubmit} className="relative flex items-center">
               <Search className="w-3.5 h-3.5 text-[#737168] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -145,6 +148,30 @@ export default function Header({
             )}
           </div>
         )}
+
+        {/* Header Navigation Tabs: "Forecast" and "List Saham" */}
+        <div className="flex border-t border-[#E5E3DC] -mx-4 px-4 bg-[#FAF9F6]">
+          <button
+            onClick={() => setActiveTab("signals")}
+            className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === "signals"
+                ? "border-[#121316] text-[#121316] bg-white"
+                : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
+            }`}
+          >
+            Forecast
+          </button>
+          <button
+            onClick={() => setActiveTab("watchlist")}
+            className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 ${
+              activeTab === "watchlist"
+                ? "border-[#121316] text-[#121316] bg-white"
+                : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
+            }`}
+          >
+            List Saham
+          </button>
+        </div>
       </div>
     </header>
   );

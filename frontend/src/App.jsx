@@ -6,7 +6,6 @@ import PredictionCard from "./components/PredictionCard";
 import StockChart from "./components/StockChart";
 import KeyFactors from "./components/KeyFactors";
 import NewsFeed from "./components/NewsFeed";
-import BottomNav from "./components/BottomNav";
 import { resolveTicker } from "./data/idx_companies";
 
 export default function App() {
@@ -157,6 +156,8 @@ export default function App() {
           isRefreshing={isRefreshing}
           onAddCustomTicker={handleAddCustomTicker}
           isAddingTicker={isAddingTicker}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
 
         {errorMessage && (
@@ -195,7 +196,7 @@ export default function App() {
               )}
             </div>
           ) : (
-            <div className="bg-white border border-[#121316] p-4 mb-20">
+            <div className="bg-white border border-[#121316] p-4 mb-8">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-mono text-xs font-bold uppercase text-[#121316]">
                   Daftar Saham Aktif ({predictions.length})
@@ -306,8 +307,6 @@ export default function App() {
           )}
         </main>
       </div>
-
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 }
