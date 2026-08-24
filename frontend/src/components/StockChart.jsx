@@ -1,5 +1,13 @@
 ﻿import React, { useState, useMemo } from "react";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 import { formatRupiah } from "./TickerList";
 
 // Custom SVG Candlestick component for precision rendering
@@ -8,10 +16,11 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
 
   if (!data || data.length === 0) return null;
 
-  const paddingLeft = 45;
-  const paddingRight = 15;
-  const paddingTop = 15;
-  const paddingBottom = 25;
+  // Unified padding aligned with LineChart margins
+  const paddingLeft = 48;
+  const paddingRight = 16;
+  const paddingTop = 12;
+  const paddingBottom = 22;
 
   const totalWidth = 600; // Reference viewBox width
   const plotWidth = totalWidth - paddingLeft - paddingRight;
@@ -25,7 +34,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
 
   const candleCount = data.length;
   const stepX = plotWidth / Math.max(1, candleCount);
-  const candleWidth = Math.max(2, Math.min(10, stepX * 0.7));
+  const candleWidth = Math.max(2, Math.min(9, stepX * 0.65));
 
   // Y-axis tick values (4 steps)
   const yTicks = [0, 0.33, 0.66, 1].map((pct) => {
@@ -36,7 +45,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
   const hoveredItem = hoveredIndex != null ? data[hoveredIndex] : null;
 
   return (
-    <div className="relative select-none">
+    <div className="relative select-none w-full">
       <svg
         viewBox={`0 0 ${totalWidth} ${height}`}
         className="w-full h-56 overflow-visible"
@@ -175,7 +184,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
             <text
               key={`x-lbl-${idx}`}
               x={cx}
-              y={paddingTop + plotHeight + 14}
+              y={paddingTop + plotHeight + 13}
               textAnchor="middle"
               fontSize="8.5"
               fill="#737168"
@@ -299,7 +308,7 @@ export default function StockChart({ prediction }) {
 
   return (
     <div className="bg-white border border-[#121316] p-4 mb-3">
-      {/* Header Grafik: Judul, Tipe Chart (Garis/Lilin) & Timeframe */}
+      {/* Header Grafik: Judul, Tipe Chart (Line Chart / Candlestick Chart) & Timeframe */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
           <span className="font-mono text-xs font-bold uppercase text-[#121316] block">
@@ -336,25 +345,25 @@ export default function StockChart({ prediction }) {
           </div>
         </div>
 
-        {/* Controls: Chart Type Toggle (Garis / Lilin) + Timeframe */}
+        {/* Controls: Chart Type Toggle (Line Chart / Candlestick Chart) + Timeframe */}
         <div className="flex items-center space-x-2">
-          {/* Toggle Garis vs Lilin */}
+          {/* Toggle Line Chart vs Candlestick Chart */}
           <div className="flex border border-[#121316] p-0.5 bg-[#FAF9F6]">
             <button
               onClick={() => setChartType("line")}
-              className={`px-2 py-0.5 text-[10px] font-mono font-bold transition ${
+              className={`px-2 py-0.5 text-[10px] font-sans font-bold transition ${
                 chartType === "line" ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
               }`}
             >
-              Garis
+              Line Chart
             </button>
             <button
               onClick={() => setChartType("candle")}
-              className={`px-2 py-0.5 text-[10px] font-mono font-bold transition ${
+              className={`px-2 py-0.5 text-[10px] font-sans font-bold transition ${
                 chartType === "candle" ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
               }`}
             >
-              Lilin
+              Candlestick Chart
             </button>
           </div>
 
@@ -388,9 +397,13 @@ export default function StockChart({ prediction }) {
           height={220}
         />
       ) : (
-        <div className="h-52 w-full mt-2">
+        <div className="h-56 w-full mt-2">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 5, right: 5, left: 10, bottom: 0 }}>
+            <LineChart
+              data={chartData}
+              margin={{ top: 12, right: 16, left: -10, bottom: 2 }}
+            >
+              <CartesianGrid stroke="#E5E3DC" strokeDasharray="2 2" vertical={false} />
               <XAxis
                 dataKey="date"
                 stroke="#737168"
@@ -402,10 +415,11 @@ export default function StockChart({ prediction }) {
               <YAxis
                 stroke="#737168"
                 fontSize={9}
+                width={48}
                 domain={[minPrice, maxPrice]}
                 tickLine={true}
                 axisLine={{ stroke: "#DCDAD4" }}
-                tickFormatter={(v) => `Rp ${v >= 1000 ? `${(v/1000).toFixed(1)}k` : v}`}
+                tickFormatter={(v) => `${v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v}`}
               />
               <Tooltip
                 content={({ active, payload }) => {
@@ -422,7 +436,7 @@ export default function StockChart({ prediction }) {
                         </p>
                         {!data.isProjected && data.high && data.low && (
                           <p className="text-[9px] text-[#737168] font-mono mt-0.5">
-                            Rentang Harian: {formatRupiah(data.low)} - {formatRupiah(data.high)}
+                            Rentang: {formatRupiah(data.low)} - {formatRupiah(data.high)}
                           </p>
                         )}
                       </div>
