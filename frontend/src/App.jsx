@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Star } from "lucide-react";
 import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
@@ -322,7 +322,10 @@ export default function App() {
                     holding={activeHolding}
                   />
                   <KeyFactors factors={activePrediction.key_factors} />
-                  <NewsFeed newsSentiment={activePrediction.news_sentiment} />
+                  <NewsFeed
+                    ticker={activePrediction.ticker}
+                    newsSentiment={activePrediction.news_sentiment}
+                  />
                 </>
               )}
             </div>

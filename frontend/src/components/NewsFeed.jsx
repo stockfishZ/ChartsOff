@@ -1,5 +1,5 @@
-﻿import React, { useState } from "react";
-import { ExternalLink, Newspaper } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ExternalLink, Newspaper, RefreshCw } from "lucide-react";
 
 // Curated high-quality editorial fallback thumbnails by category
 const FALLBACK_THUMBNAILS = [
@@ -10,10 +10,24 @@ const FALLBACK_THUMBNAILS = [
   "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&auto=format&fit=crop&q=80", // Business analysis
 ];
 
+function getValidImageUrl(url, fallback) {
+  if (!url || typeof url !== "string") return fallback;
+  const trimmed = url.trim();
+  if (trimmed === "" || trimmed === "nan" || trimmed === "None" || trimmed === "null") return fallback;
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
+  return fallback;
+}
+
 function NewsItem({ news, index }) {
   const fallbackUrl = FALLBACK_THUMBNAILS[index % FALLBACK_THUMBNAILS.length];
-  const [imgSrc, setImgSrc] = useState(news.image_url || fallbackUrl);
+  const initialUrl = getValidImageUrl(news.image_url, fallbackUrl);
+  const [imgSrc, setImgSrc] = useState(initialUrl);
   const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(getValidImageUrl(news.image_url, fallbackUrl));
+    setHasError(false);
+  }, [news.image_url, fallbackUrl]);
 
   const handleImageError = () => {
     if (!hasError && imgSrc !== fallbackUrl) {
@@ -38,7 +52,7 @@ function NewsItem({ news, index }) {
       rel="noopener noreferrer"
       className="py-3 px-1.5 flex items-start space-x-3 group hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition"
     >
-      {/* Left: News Article Image */}
+      {/* Left: Authentic Article Image */}
       <div className="w-18 h-18 sm:w-20 sm:h-20 shrink-0 border border-[#121316] bg-[#FAF9F6] overflow-hidden relative shadow-xs">
         <img
           src={imgSrc}
@@ -73,12 +87,69 @@ function NewsItem({ news, index }) {
   );
 }
 
-export default function NewsFeed({ newsSentiment }) {
-  if (!newsSentiment || !newsSentiment.top_headlines?.length) return null;
+export default function NewsFeed({ ticker, newsSentiment }) {
+  const [headlines, setHeadlines] = useState(() => newsSentiment?.top_headlines || []);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(() => new Date());
+
+  // Synchronize when initial newsSentiment changes
+  useEffect(() => {
+    if (newsSentiment?.top_headlines?.length) {
+      setHeadlines(newsSentiment.top_headlines);
+      setLastUpdated(new Date());
+    }
+  }, [newsSentiment]);
+
+  // Automated Real-Time Article Renewing Engine
+  const fetchLiveNews = async (silent = false) => {
+    if (!ticker) return;
+    const cleanTicker = ticker.replace(".JK", "").trim();
+    if (!silent) setIsUpdating(true);
+
+    try {
+      let data = null;
+      try {
+        const res = await fetch(`/api/news/${cleanTicker}`);
+        if (res.ok) data = await res.json();
+      } catch (e) {}
+
+      if (!data || !data.top_headlines || data.top_headlines.length === 0) {
+        const host = window.location.hostname || "localhost";
+        try {
+          const directRes = await fetch(`http://${host}:8000/api/news/${cleanTicker}`);
+          if (directRes.ok) data = await directRes.json();
+        } catch (e) {}
+      }
+
+      if (data && Array.isArray(data.top_headlines) && data.top_headlines.length > 0) {
+        setHeadlines(data.top_headlines);
+        setLastUpdated(new Date());
+      }
+    } catch (err) {
+      // Graceful fallback to cached headlines
+    } finally {
+      if (!silent) setIsUpdating(false);
+    }
+  };
+
+  // Trigger live fetch when stock ticker changes
+  useEffect(() => {
+    fetchLiveNews(false);
+  }, [ticker]);
+
+  // Automated recurring news poll every 3 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchLiveNews(true);
+    }, 180000); // 3 minutes
+    return () => clearInterval(interval);
+  }, [ticker]);
+
+  if (!headlines || headlines.length === 0) return null;
 
   return (
     <div className="bg-white border border-[#121316] p-4 mb-20">
-      {/* Header Panel */}
+      {/* Header Panel with Live Updating Status */}
       <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2.5 mb-2">
         <div className="flex items-center space-x-1.5">
           <Newspaper className="w-4 h-4 text-[#121316]" />
@@ -86,15 +157,24 @@ export default function NewsFeed({ newsSentiment }) {
             Sentimen Berita & Katalis Emiten
           </span>
         </div>
-        <span className="text-[10px] font-mono text-[#737168]">
-          {newsSentiment.top_headlines.length} Artikel Terpilih
-        </span>
+
+        {/* Live Renewal Indicator */}
+        <button
+          type="button"
+          onClick={() => fetchLiveNews(false)}
+          className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline"
+          title="Klik untuk memperbarui berita secara langsung"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20] animate-pulse"></span>
+          <span>{isUpdating ? "Memperbarui..." : "Live Update"}</span>
+          <RefreshCw className={`w-2.5 h-2.5 ml-0.5 text-[#737168] ${isUpdating ? "animate-spin" : ""}`} />
+        </button>
       </div>
 
       {/* News Article List */}
       <div className="divide-y divide-[#E5E3DC]">
-        {newsSentiment.top_headlines.slice(0, 5).map((news, idx) => (
-          <NewsItem key={idx} news={news} index={idx} />
+        {headlines.slice(0, 6).map((news, idx) => (
+          <NewsItem key={`${news.link}-${idx}`} news={news} index={idx} />
         ))}
       </div>
     </div>

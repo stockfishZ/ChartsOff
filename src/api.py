@@ -1,4 +1,4 @@
-﻿import json
+import json
 import logging
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
@@ -103,3 +103,25 @@ def predict_stock(ticker: str):
     except Exception as e:
         logger.error(f"Error analyzing {ticker}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/news/{ticker}")
+def get_live_stock_news(ticker: str):
+    """Fetches live, fresh news articles specifically for the requested Indonesian stock."""
+    try:
+        clean_ticker = ticker.upper().strip()
+        if not clean_ticker.endswith(".JK"):
+            clean_ticker += ".JK"
+
+        news_df = news_feed.fetch_news_for_ticker(clean_ticker, max_articles=8)
+        news_summary = SentimentFeatureEngine.aggregate_news_sentiment(news_df, clean_ticker)
+        return news_summary
+    except Exception as e:
+        logger.warning(f"Error fetching live news for {ticker}: {e}")
+        return {
+            "ticker": ticker,
+            "news_count": 0,
+            "avg_sentiment": 0.0,
+            "sentiment_label": "Netral",
+            "top_headlines": []
+        }
+
