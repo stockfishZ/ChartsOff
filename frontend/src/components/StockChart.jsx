@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from "react";
+﻿import React, { useState, useMemo, useRef } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -10,13 +10,13 @@ import {
 } from "recharts";
 import { formatRupiah } from "./TickerList";
 
-// Custom SVG Candlestick component for precision rendering
+// Precision Candlestick Canvas with Financial Crosshair Scrubber
 function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const svgRef = useRef(null);
 
   if (!data || data.length === 0) return null;
 
-  // Unified padding aligned with LineChart margins
   const paddingLeft = 48;
   const paddingRight = 16;
   const paddingTop = 12;
@@ -42,14 +42,42 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
     return { price: p, y: getY(p) };
   });
 
+  // Calculate index from mouse/touch event coordinates
+  const calculateIndexFromPointer = (clientX) => {
+    if (!svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const relX = ((clientX - rect.left) / rect.width) * totalWidth;
+    const boundedX = Math.max(paddingLeft, Math.min(totalWidth - paddingRight - 1, relX));
+    const idx = Math.floor(((boundedX - paddingLeft) / plotWidth) * candleCount);
+    const clamped = Math.max(0, Math.min(candleCount - 1, idx));
+    setHoveredIndex(clamped);
+  };
+
+  const handleMouseMove = (e) => {
+    calculateIndexFromPointer(e.clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      calculateIndexFromPointer(e.touches[0].clientX);
+    }
+  };
+
   const hoveredItem = hoveredIndex != null ? data[hoveredIndex] : null;
+  const activeCX = hoveredIndex != null ? paddingLeft + hoveredIndex * stepX + stepX / 2 : null;
+  const activePrice = hoveredItem ? (hoveredItem.isProjected ? hoveredItem.projectedPrice : hoveredItem.close) : null;
+  const activeCY = activePrice != null ? getY(activePrice) : null;
 
   return (
-    <div className="relative select-none w-full">
+    <div className="relative select-none w-full touch-none">
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${totalWidth} ${height}`}
-        className="w-full h-56 overflow-visible"
+        className="w-full h-56 overflow-visible cursor-crosshair"
+        onMouseMove={handleMouseMove}
         onMouseLeave={() => setHoveredIndex(null)}
+        onTouchStart={handleTouchMove}
+        onTouchMove={handleTouchMove}
         onTouchEnd={() => setHoveredIndex(null)}
       >
         {/* Horizontal grid lines & Y-ticks */}
@@ -85,9 +113,47 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
           stroke="#DCDAD4"
         />
 
-        {/* Candles and Projection Lines */}
+        {/* Active Inspection Highlight Column (Crosshair Scrubber) */}
+        {hoveredIndex != null && activeCX != null && (
+          <g>
+            {/* Vertical column highlight */}
+            <rect
+              x={activeCX - stepX / 2}
+              y={paddingTop}
+              width={stepX}
+              height={plotHeight}
+              fill="#121316"
+              fillOpacity="0.05"
+            />
+            {/* Vertical crosshair line */}
+            <line
+              x1={activeCX}
+              y1={paddingTop}
+              x2={activeCX}
+              y2={paddingTop + plotHeight}
+              stroke="#121316"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+            />
+            {/* Horizontal price crosshair line */}
+            {activeCY != null && (
+              <line
+                x1={paddingLeft}
+                y1={activeCY}
+                x2={totalWidth - paddingRight}
+                y2={activeCY}
+                stroke={hoveredItem?.isProjected ? "#D97706" : "#737168"}
+                strokeWidth="0.75"
+                strokeDasharray="2 2"
+              />
+            )}
+          </g>
+        )}
+
+        {/* Candles and Forecast Projections */}
         {data.map((item, idx) => {
           const cx = paddingLeft + idx * stepX + stepX / 2;
+          const isInspected = hoveredIndex === idx;
 
           if (item.isProjected) {
             // Projected point
@@ -104,20 +170,17 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
                     x2={cx}
                     y2={py}
                     stroke="#D97706"
-                    strokeWidth="2"
+                    strokeWidth={isInspected ? "2.5" : "1.8"}
                     strokeDasharray="4 2"
                   />
                 )}
-                <circle cx={cx} cy={py} r="2.5" fill="#D97706" />
-                {/* Hit area */}
-                <rect
-                  x={cx - stepX / 2}
-                  y={0}
-                  width={stepX}
-                  height={height}
-                  fill="transparent"
-                  onMouseEnter={() => setHoveredIndex(idx)}
-                  onTouchStart={() => setHoveredIndex(idx)}
+                <circle
+                  cx={cx}
+                  cy={py}
+                  r={isInspected ? 4 : 2.5}
+                  fill="#D97706"
+                  stroke="#FFFFFF"
+                  strokeWidth={isInspected ? 1.5 : 0}
                 />
               </g>
             );
@@ -142,16 +205,16 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
 
           return (
             <g key={`candle-${idx}`}>
-              {/* Wick line */}
+              {/* Wick */}
               <line
                 x1={cx}
                 y1={yHigh}
                 x2={cx}
                 y2={yLow}
                 stroke={candleColor}
-                strokeWidth="1.2"
+                strokeWidth={isInspected ? "1.8" : "1.2"}
               />
-              {/* Body */}
+              {/* Candle Body */}
               <rect
                 x={cx - candleWidth / 2}
                 y={topBody}
@@ -159,32 +222,53 @@ function CandlestickCanvas({ data, minPrice, maxPrice, height = 220 }) {
                 height={bodyHeight}
                 fill={isBull ? "#E8F5E9" : "#FFEBEE"}
                 stroke={candleColor}
-                strokeWidth="1"
-              />
-              {/* Invisible interactive hover slice */}
-              <rect
-                x={cx - stepX / 2}
-                y={0}
-                width={stepX}
-                height={height}
-                fill="transparent"
-                onMouseEnter={() => setHoveredIndex(idx)}
-                onTouchStart={() => setHoveredIndex(idx)}
+                strokeWidth={isInspected ? 1.8 : 1}
               />
             </g>
           );
         })}
 
-        {/* X-axis date labels (sampled) */}
+        {/* X-axis date labels */}
         {data.map((item, idx) => {
           const sampleInterval = Math.max(1, Math.floor(data.length / 5));
-          if (idx % sampleInterval !== 0 && idx !== data.length - 1) return null;
+          const isSampled = idx % sampleInterval === 0 || idx === data.length - 1;
+          const isInspected = hoveredIndex === idx;
           const cx = paddingLeft + idx * stepX + stepX / 2;
+
+          if (isInspected) {
+            // Pill badge for the active inspected date
+            return (
+              <g key={`x-active-${idx}`}>
+                <rect
+                  x={cx - 24}
+                  y={paddingTop + plotHeight + 4}
+                  width={48}
+                  height={14}
+                  fill="#121316"
+                  rx={2}
+                />
+                <text
+                  x={cx}
+                  y={paddingTop + plotHeight + 14}
+                  textAnchor="middle"
+                  fontSize="8.5"
+                  fill="#FFFFFF"
+                  fontWeight="bold"
+                  fontFamily="sans-serif"
+                >
+                  {item.date.replace(" (P)", "")}
+                </text>
+              </g>
+            );
+          }
+
+          if (!isSampled) return null;
+
           return (
             <text
               key={`x-lbl-${idx}`}
               x={cx}
-              y={paddingTop + plotHeight + 13}
+              y={paddingTop + plotHeight + 14}
               textAnchor="middle"
               fontSize="8.5"
               fill="#737168"
