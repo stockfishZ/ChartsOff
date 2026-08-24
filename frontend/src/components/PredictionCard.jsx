@@ -3,7 +3,7 @@ import { Star, Plus, Edit2 } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
 
-const COMPANY_NAMES = {
+export const COMPANY_NAMES = {
   "BBCA.JK": "Bank Central Asia Tbk",
   "BBRI.JK": "Bank Rakyat Indonesia (Persero) Tbk",
   "BMRI.JK": "Bank Mandiri (Persero) Tbk",

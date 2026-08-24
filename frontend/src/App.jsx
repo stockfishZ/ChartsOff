@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
 import TickerList, { formatRupiah } from "./components/TickerList";
-import PredictionCard from "./components/PredictionCard";
+import PredictionCard, { COMPANY_NAMES } from "./components/PredictionCard";
 import StockChart from "./components/StockChart";
 import KeyFactors from "./components/KeyFactors";
 import NewsFeed from "./components/NewsFeed";
@@ -327,136 +327,262 @@ export default function App() {
               )}
             </div>
           ) : (
-            <div className="bg-white border border-[#121316] p-4 mb-8">
-              <div className="flex items-center justify-between mb-3">
-                <span className="font-mono text-xs font-bold uppercase text-[#121316]">
-                  Daftar Saham Aktif ({predictions.length})
-                </span>
-                <span className="text-[10px] text-[#737168] font-mono">Bursa Efek Indonesia</span>
+            <div className="bg-white border border-[#121316] p-3 sm:p-4 mb-8">
+              {/* Header List Saham */}
+              <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2.5 mb-3">
+                <div>
+                  <span className="font-mono text-xs font-bold uppercase text-[#121316] block">
+                    Daftar Saham Aktif ({predictions.length})
+                  </span>
+                  <span className="text-[10px] text-[#737168] font-mono">Bursa Efek Indonesia (IDX)</span>
+                </div>
+                <div className="flex items-center space-x-2 text-[10px] font-mono text-[#737168]">
+                  <span className="flex items-center">
+                    <HoldingIcon className="w-3 h-3 mr-1" color="#1B5E20" /> Portofolio
+                  </span>
+                  <span className="flex items-center">
+                    <Star className="w-3 h-3 text-[#D97706] fill-[#D97706] mr-1" /> Favorit
+                  </span>
+                </div>
               </div>
 
-              <table className="w-full text-left text-xs font-sans border-collapse">
-                <thead>
-                  <tr className="border-b border-[#121316] text-[10px] uppercase text-[#737168]">
-                    <th className="py-2 w-7">Status</th>
-                    <th className="py-2">Kode</th>
-                    <th className="py-2">Harga</th>
-                    <th className="py-2">Sinyal ML</th>
-                    <th className="py-2 text-right">Keyakinan</th>
-                    <th className="py-2 text-right">Target 20 Hari</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#E5E3DC]">
-                  {sortedPredictions.map((item) => {
-                    const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
-                    const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
-                    const isBought = Boolean(portfolio[item.ticker]);
-                    const isFav = favorites.includes(item.ticker);
-                    const cleanTicker = item.ticker.replace(".JK", "");
+              {/* Mobile View: Native Stock Rows (< md) */}
+              <div className="md:hidden divide-y divide-[#E5E3DC]">
+                {sortedPredictions.map((item) => {
+                  const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
+                  const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
+                  const isBought = Boolean(portfolio[item.ticker]);
+                  const isFav = favorites.includes(item.ticker);
+                  const cleanTicker = item.ticker.replace(".JK", "");
+                  const companyName = COMPANY_NAMES[item.ticker] || `${cleanTicker} • Emiten BEI`;
 
-                    return (
-                      <tr
-                        key={item.ticker}
-                        className="hover:bg-[#FAF9F6] transition"
-                      >
-                        <td className="py-2.5 text-center">
-                          {isBought ? (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setModalTicker(item.ticker);
-                                setIsModalOpen(true);
-                              }}
-                              className="p-1 hover:bg-[#E8F5E9] rounded flex items-center justify-center mx-auto"
-                              title="Saham Dimiliki di Portofolio (Klik untuk edit)"
-                            >
-                              <HoldingIcon className="w-3.5 h-3.5" color="#1B5E20" />
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(item.ticker);
-                              }}
-                              className="p-1 hover:bg-[#E5E3DC] rounded"
-                              title={isFav ? "Hapus Favorit" : "Sematkan ke Favorit"}
-                            >
-                              <Star
-                                className={`w-3.5 h-3.5 ${
-                                  isFav ? "text-[#D97706] fill-[#D97706]" : "text-[#DCDAD4]"
-                                }`}
-                              />
-                            </button>
-                          )}
-                        </td>
-                        <td
-                          onClick={() => {
-                            setSelectedTicker(item.ticker);
-                            setActiveTab("signals");
-                          }}
-                          className="py-2.5 font-bold font-editorial cursor-pointer"
-                        >
+                  return (
+                    <div
+                      key={item.ticker}
+                      onClick={() => {
+                        setSelectedTicker(item.ticker);
+                        setActiveTab("signals");
+                      }}
+                      className="py-2.5 px-1 flex items-center justify-between hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition cursor-pointer"
+                    >
+                      {/* Left: Icon + Ticker + Company Name */}
+                      <div className="flex items-center space-x-2.5 min-w-0 pr-2">
+                        {isBought ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalTicker(item.ticker);
+                              setIsModalOpen(true);
+                            }}
+                            className="p-1.5 hover:bg-[#E8F5E9] rounded shrink-0"
+                            title="Saham Dimiliki di Portofolio (Klik untuk ubah)"
+                          >
+                            <HoldingIcon className="w-4 h-4" color="#1B5E20" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(item.ticker);
+                            }}
+                            className="p-1.5 hover:bg-[#E5E3DC] rounded shrink-0"
+                            title={isFav ? "Hapus Favorit" : "Sematkan ke Favorit"}
+                          >
+                            <Star
+                              className={`w-4 h-4 ${
+                                isFav ? "text-[#D97706] fill-[#D97706]" : "text-[#DCDAD4]"
+                              }`}
+                            />
+                          </button>
+                        )}
+
+                        <div className="min-w-0">
                           <div className="flex items-center space-x-1.5">
-                            <span>{cleanTicker}</span>
+                            <span className="font-editorial font-bold text-base text-[#121316] tracking-tight">
+                              {cleanTicker}
+                            </span>
                             {isBought && (
                               <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
                                 Dimiliki
                               </span>
                             )}
                           </div>
-                        </td>
-                        <td
-                          onClick={() => {
-                            setSelectedTicker(item.ticker);
-                            setActiveTab("signals");
-                          }}
-                          className="py-2.5 font-mono-num cursor-pointer"
-                        >
+                          <p className="text-[11px] text-[#737168] truncate max-w-[140px] font-sans">
+                            {companyName}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right: Current Price + Target / Sinyal Badge */}
+                      <div className="text-right shrink-0">
+                        <div className="font-mono-num font-bold text-sm text-[#121316]">
                           {formatRupiah(item.current_price)}
-                        </td>
-                        <td
-                          onClick={() => {
-                            setSelectedTicker(item.ticker);
-                            setActiveTab("signals");
-                          }}
-                          className="py-2.5 cursor-pointer"
-                        >
+                        </div>
+                        <div className="flex items-center justify-end space-x-1.5 mt-0.5">
                           <span
-                            className={`px-1 py-0.5 text-[10px] font-mono font-bold uppercase ${
-                              isBull ? "text-[#1B5E20]" : isBear ? "text-[#B71C1C]" : "text-[#5D4037]"
+                            className={`px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase border ${
+                              isBull
+                                ? "text-[#1B5E20] border-[#1B5E20]/30 bg-[#E8F5E9]"
+                                : isBear
+                                ? "text-[#B71C1C] border-[#B71C1C]/30 bg-[#FFEBEE]"
+                                : "text-[#5D4037] border-[#5D4037]/30 bg-[#EFEBE9]"
                             }`}
                           >
-                            {item.signal}
+                            {item.signal.split(" ")[0]}
                           </span>
-                        </td>
-                        <td
-                          onClick={() => {
-                            setSelectedTicker(item.ticker);
-                            setActiveTab("signals");
-                          }}
-                          className="py-2.5 font-mono-num text-right cursor-pointer"
+                          <span
+                            className={`font-mono-num text-xs font-bold ${
+                              item.expected_return_pct >= 0 ? "text-[#1B5E20]" : "text-[#B71C1C]"
+                            }`}
+                          >
+                            {item.expected_return_pct >= 0 ? "+" : ""}
+                            {item.expected_return_pct}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop View: Full Table (md+) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-xs font-sans border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#121316] text-[10px] uppercase text-[#737168]">
+                      <th className="py-2 w-8 text-center">Status</th>
+                      <th className="py-2">Kode Saham</th>
+                      <th className="py-2">Nama Perusahaan</th>
+                      <th className="py-2">Harga Saat Ini</th>
+                      <th className="py-2">Sinyal ML</th>
+                      <th className="py-2 text-right">Keyakinan</th>
+                      <th className="py-2 text-right">Target 20 Hari</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#E5E3DC]">
+                    {sortedPredictions.map((item) => {
+                      const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
+                      const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
+                      const isBought = Boolean(portfolio[item.ticker]);
+                      const isFav = favorites.includes(item.ticker);
+                      const cleanTicker = item.ticker.replace(".JK", "");
+                      const companyName = COMPANY_NAMES[item.ticker] || `${cleanTicker} • Emiten BEI`;
+
+                      return (
+                        <tr
+                          key={item.ticker}
+                          className="hover:bg-[#FAF9F6] transition"
                         >
-                          {item.confidence}%
-                        </td>
-                        <td
-                          onClick={() => {
-                            setSelectedTicker(item.ticker);
-                            setActiveTab("signals");
-                          }}
-                          className={`py-2.5 font-mono-num font-bold text-right cursor-pointer ${
-                            item.expected_return_pct >= 0 ? "text-[#1B5E20]" : "text-[#B71C1C]"
-                          }`}
-                        >
-                          {item.expected_return_pct >= 0 ? "+" : ""}
-                          {item.expected_return_pct}%
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                          <td className="py-2.5 text-center">
+                            {isBought ? (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setModalTicker(item.ticker);
+                                  setIsModalOpen(true);
+                                }}
+                                className="p-1 hover:bg-[#E8F5E9] rounded flex items-center justify-center mx-auto"
+                                title="Saham Dimiliki di Portofolio (Klik untuk edit)"
+                              >
+                                <HoldingIcon className="w-3.5 h-3.5" color="#1B5E20" />
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleFavorite(item.ticker);
+                                }}
+                                className="p-1 hover:bg-[#E5E3DC] rounded"
+                                title={isFav ? "Hapus Favorit" : "Sematkan ke Favorit"}
+                              >
+                                <Star
+                                  className={`w-3.5 h-3.5 ${
+                                    isFav ? "text-[#D97706] fill-[#D97706]" : "text-[#DCDAD4]"
+                                  }`}
+                                />
+                              </button>
+                            )}
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className="py-2.5 font-bold font-editorial cursor-pointer"
+                          >
+                            <div className="flex items-center space-x-1.5">
+                              <span className="text-sm">{cleanTicker}</span>
+                              {isBought && (
+                                <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
+                                  Dimiliki
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className="py-2.5 text-[11px] text-[#595750] cursor-pointer truncate max-w-[180px]"
+                          >
+                            {companyName}
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className="py-2.5 font-mono-num cursor-pointer"
+                          >
+                            {formatRupiah(item.current_price)}
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className="py-2.5 cursor-pointer"
+                          >
+                            <span
+                              className={`px-1.5 py-0.5 text-[10px] font-mono font-bold uppercase ${
+                                isBull ? "text-[#1B5E20]" : isBear ? "text-[#B71C1C]" : "text-[#5D4037]"
+                              }`}
+                            >
+                              {item.signal}
+                            </span>
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className="py-2.5 font-mono-num text-right cursor-pointer"
+                          >
+                            {item.confidence}%
+                          </td>
+                          <td
+                            onClick={() => {
+                              setSelectedTicker(item.ticker);
+                              setActiveTab("signals");
+                            }}
+                            className={`py-2.5 font-mono-num font-bold text-right cursor-pointer ${
+                              item.expected_return_pct >= 0 ? "text-[#1B5E20]" : "text-[#B71C1C]"
+                            }`}
+                          >
+                            {item.expected_return_pct >= 0 ? "+" : ""}
+                            {item.expected_return_pct}%
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </main>
