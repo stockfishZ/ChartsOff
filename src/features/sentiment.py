@@ -71,7 +71,11 @@ class SentimentFeatureEngine:
         else:
             sentiment_label = "Netral"
 
-        top_headlines = df[["title", "link", "published_at"]].head(5).to_dict(orient="records")
+        cols = ["title", "link", "published_at"]
+        if "image_url" in df.columns:
+            cols.append("image_url")
+
+        top_headlines = df[cols].head(5).to_dict(orient="records")
 
         return {
             "ticker": ticker,

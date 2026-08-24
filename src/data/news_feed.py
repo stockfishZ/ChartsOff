@@ -1,5 +1,6 @@
 ﻿import logging
 import urllib.parse
+import re
 import feedparser
 import pandas as pd
 
@@ -36,6 +37,22 @@ class NewsDataFeed:
                     link = getattr(entry, "link", "")
                     published = getattr(entry, "published", "")
                     
+                    # Extract image thumbnail from media tags or summary HTML
+                    image_url = None
+                    if hasattr(entry, "media_thumbnail") and entry.media_thumbnail:
+                        image_url = entry.media_thumbnail[0].get("url")
+                    elif hasattr(entry, "media_content") and entry.media_content:
+                        image_url = entry.media_content[0].get("url")
+                    elif hasattr(entry, "enclosures") and entry.enclosures:
+                        for enc in entry.enclosures:
+                            if "image" in enc.get("type", ""):
+                                image_url = enc.get("href") or enc.get("url")
+                                break
+                    if not image_url and summary:
+                        img_match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', summary)
+                        if img_match:
+                            image_url = img_match.group(1)
+
                     if title:
                         articles.append({
                             "ticker": ticker,
@@ -43,13 +60,14 @@ class NewsDataFeed:
                             "summary": summary,
                             "link": link,
                             "published_at": published,
+                            "image_url": image_url,
                             "source_feed": url
                         })
             except Exception as e:
                 logger.warning(f"Gagal mengambil RSS dari {url} untuk {ticker}: {e}")
 
         if not articles:
-            return pd.DataFrame(columns=["ticker", "title", "summary", "link", "published_at", "source_feed"])
+            return pd.DataFrame(columns=["ticker", "title", "summary", "link", "published_at", "image_url", "source_feed"])
 
         df = pd.DataFrame(articles)
         df.drop_duplicates(subset=["title"], inplace=True)
