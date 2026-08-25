@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Trash2 } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
@@ -146,7 +146,7 @@ export default function PortfolioModal({
           </div>
 
           {/* Tombol Aksi */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-2.5 flex-wrap gap-2">
             {existingHolding && onDelete ? (
               <button
                 type="button"
@@ -154,10 +154,10 @@ export default function PortfolioModal({
                   onDelete(ticker);
                   onClose();
                 }}
-                className="px-3 py-2 border border-[#B71C1C] text-[#B71C1C] hover:bg-[#FFEBEE] font-mono text-[11px] flex items-center space-x-1 transition active:scale-95"
+                className="px-3.5 py-2.5 border border-[#B71C1C] text-[#B71C1C] hover:bg-[#FFEBEE] font-mono text-xs flex items-center space-x-1.5 transition active:scale-95 min-h-[40px] cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Hapus Portofolio</span>
+                <span>Hapus</span>
               </button>
             ) : <div />}
 
@@ -165,15 +165,15 @@ export default function PortfolioModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3 py-2 border border-[#121316] text-[#121316] hover:bg-[#F1EFEA] font-mono text-[11px] transition"
+                className="px-3.5 py-2.5 border border-[#121316] text-[#121316] hover:bg-[#F1EFEA] font-mono text-xs transition min-h-[40px] cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#121316] text-white hover:bg-black font-mono font-bold text-[11px] transition active:scale-95 shadow"
+                className="px-4 py-2.5 bg-[#121316] text-white hover:bg-black font-mono font-bold text-xs transition active:scale-95 shadow min-h-[40px] cursor-pointer"
               >
-                Simpan ke Portofolio
+                Simpan Posisi
               </button>
             </div>
           </div>

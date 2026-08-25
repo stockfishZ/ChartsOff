@@ -110,18 +110,18 @@ export default function NotificationCenterModal({
                 <button
                   type="button"
                   onClick={onMarkAllAsRead}
-                  className="px-2 py-1 border border-[#E5E3DC] hover:border-[#121316] bg-[#FAF9F6] text-[10px] font-mono text-[#595750] transition cursor-pointer"
-                  title="Tandai Sudah Dibaca"
+                  className="p-2 border border-[#E5E3DC] hover:border-[#121316] bg-[#FAF9F6] text-[#737168] hover:text-[#121316] transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                  title="Tandai Semua Dibaca"
                 >
-                  Tandai Dibaca
+                  <CheckCircle2 className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
                   onClick={onClearAll}
-                  className="p-1 border border-[#E5E3DC] hover:border-[#B71C1C] hover:text-[#B71C1C] bg-[#FAF9F6] text-[#737168] transition cursor-pointer"
+                  className="p-2 border border-[#E5E3DC] hover:border-[#B71C1C] hover:text-[#B71C1C] bg-[#FAF9F6] text-[#737168] transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                   title="Hapus Semua Riwayat"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </>
             )}
@@ -129,7 +129,7 @@ export default function NotificationCenterModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-1 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white transition active:scale-95 cursor-pointer ml-1"
+              className="p-2 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white transition active:scale-95 cursor-pointer ml-1 min-h-[36px] min-w-[36px] flex items-center justify-center"
               title="Tutup"
             >
               <X className="w-4 h-4" />
@@ -138,11 +138,11 @@ export default function NotificationCenterModal({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center space-x-1 px-4 py-2 bg-[#F1EFEA] border-b border-[#E5E3DC] overflow-x-auto text-[10px] font-mono shrink-0">
+        <div className="flex items-center space-x-1.5 px-4 py-2.5 bg-[#F1EFEA] border-b border-[#E5E3DC] overflow-x-auto text-[11px] font-mono shrink-0">
           <button
             type="button"
             onClick={() => setFilter("ALL")}
-            className={`px-2 py-0.5 border transition cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 border transition active:scale-95 cursor-pointer shrink-0 min-h-[32px] ${
               filter === "ALL"
                 ? "bg-[#121316] text-white border-[#121316]"
                 : "bg-white text-[#595750] border-[#DCDAD4] hover:border-[#121316]"
@@ -153,7 +153,7 @@ export default function NotificationCenterModal({
           <button
             type="button"
             onClick={() => setFilter("URGENT_SELL")}
-            className={`px-2 py-0.5 border transition cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 border transition active:scale-95 cursor-pointer shrink-0 min-h-[32px] ${
               filter === "URGENT_SELL"
                 ? "bg-[#B71C1C] text-white border-[#B71C1C]"
                 : "bg-white text-[#B71C1C] border-[#DCDAD4] hover:border-[#B71C1C]"
@@ -164,18 +164,18 @@ export default function NotificationCenterModal({
           <button
             type="button"
             onClick={() => setFilter("PRIME_BUY")}
-            className={`px-2 py-0.5 border transition cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 border transition active:scale-95 cursor-pointer shrink-0 min-h-[32px] ${
               filter === "PRIME_BUY"
                 ? "bg-[#1B5E20] text-white border-[#1B5E20]"
                 : "bg-white text-[#1B5E20] border-[#DCDAD4] hover:border-[#1B5E20]"
             }`}
           >
-            Peluang Beli
+            Prospek Bagus
           </button>
           <button
             type="button"
             onClick={() => setFilter("PRICE_SWING")}
-            className={`px-2 py-0.5 border transition cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 border transition active:scale-95 cursor-pointer shrink-0 min-h-[32px] ${
               filter === "PRICE_SWING"
                 ? "bg-[#121316] text-white border-[#121316]"
                 : "bg-white text-[#595750] border-[#DCDAD4] hover:border-[#121316]"
@@ -186,7 +186,7 @@ export default function NotificationCenterModal({
           <button
             type="button"
             onClick={() => setFilter("NEWS_CATALYST")}
-            className={`px-2 py-0.5 border transition cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 border transition active:scale-95 cursor-pointer shrink-0 min-h-[32px] ${
               filter === "NEWS_CATALYST"
                 ? "bg-[#E65100] text-white border-[#E65100]"
                 : "bg-white text-[#E65100] border-[#DCDAD4] hover:border-[#E65100]"

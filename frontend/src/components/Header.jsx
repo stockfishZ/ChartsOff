@@ -239,34 +239,35 @@ export default function Header({
   };
 
   return (
-    <header className="bg-white border-b border-[#121316] px-4 pt-2.5 pb-0 relative z-30" ref={searchRef}>
+    <header className="bg-white border-b border-[#121316] px-3.5 sm:px-4 pt-[calc(0.65rem+env(safe-area-inset-top,0px))] pb-0 relative z-30" ref={searchRef}>
       <div className="max-w-2xl mx-auto">
         {/* Top Row: Brand + How It Works + Notifications + Search & Refresh */}
-        <div className="flex items-center justify-between pb-2">
+        <div className="flex items-center justify-between pb-2.5">
           <div className="flex items-center">
-            <span className="font-editorial font-bold text-xl tracking-tight text-[#121316]">CHARTSOFF</span>
+            <span className="font-editorial font-bold text-xl sm:text-2xl tracking-tight text-[#121316]">CHARTSOFF</span>
           </div>
 
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-1.5 sm:space-x-2">
             {/* Quick Runthrough "How CHARTSOFF Works" Button */}
             <button
               type="button"
               onClick={onOpenHowItWorks}
-              className="px-2.5 py-1.5 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer shadow-2xs group"
+              className="px-2.5 sm:px-3 py-2 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer shadow-2xs group min-h-[38px]"
               title="Dokumentasi Cara Kerja CHARTSOFF & Panduan Indikator"
             >
               <Info className="w-3.5 h-3.5 text-[#121316] group-hover:text-white transition shrink-0" />
-              <span className="text-[11px] font-sans font-medium">How CHARTSOFF Works</span>
+              <span className="text-[11px] font-sans font-medium hidden sm:inline">How CHARTSOFF Works</span>
+              <span className="text-[11px] font-sans font-medium sm:hidden">Panduan</span>
             </button>
 
             {/* Notification Center Button */}
             <button
               type="button"
               onClick={onOpenNotifications}
-              className="p-1.5 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center relative cursor-pointer group"
+              className="p-2 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center justify-center relative cursor-pointer group min-h-[38px] min-w-[38px]"
               title="Notifikasi"
             >
-              <Bell className="w-3.5 h-3.5 text-[#121316] group-hover:text-white transition" />
+              <Bell className="w-4 h-4 text-[#121316] group-hover:text-white transition" />
               {unreadNotifCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-[#B71C1C] text-white text-[9px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
                   {unreadNotifCount > 9 ? "9+" : unreadNotifCount}
@@ -274,26 +275,28 @@ export default function Header({
               )}
             </button>
 
+            {/* Search Button */}
             <button
               type="button"
               onClick={() => setShowSearch(!showSearch)}
-              className={`px-2.5 py-1.5 border border-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-2 border border-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer min-h-[38px] ${
                 showSearch ? "bg-[#121316] text-white" : "bg-white hover:bg-[#F1EFEA] text-[#121316]"
               }`}
               title="Cari Saham / Emiten"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-4 h-4" />
               <span className="text-[11px] font-sans font-medium hidden sm:inline">Cari Saham</span>
             </button>
 
+            {/* Refresh Sync Button */}
             <button
               type="button"
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="p-1.5 hover:bg-[#F1EFEA] border border-[#121316] text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1 cursor-pointer"
+              className="p-2 hover:bg-[#F1EFEA] border border-[#121316] text-[#121316] transition active:scale-95 text-xs flex items-center justify-center cursor-pointer min-h-[38px] min-w-[38px]"
               title="Sinkronisasi Data"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
             </button>
           </div>
         </div>

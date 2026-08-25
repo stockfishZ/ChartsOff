@@ -421,9 +421,9 @@ export default function StockChart({ prediction, holding = null }) {
   const maxPrice = allPrices.length > 0 ? Math.ceil(Math.max(...allPrices) * 1.02) : 1000;
 
   return (
-    <div className="bg-white border border-[#121316] p-4 mb-3">
+    <div className="bg-white border border-[#121316] p-3.5 sm:p-5 mb-4 shadow-xs">
       {/* Header Grafik: Judul, Tipe Chart (Line Chart / Candlestick Chart) & Timeframe */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3.5">
         <div>
           <span className="font-mono text-xs font-bold uppercase text-[#121316] block">
             Pergerakan Harga & Proyeksi 20 Hari
@@ -467,12 +467,12 @@ export default function StockChart({ prediction, holding = null }) {
         </div>
 
         {/* Controls: Chart Type Toggle (Line Chart / Candlestick Chart) + Timeframe */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 flex-wrap gap-y-1.5">
           {/* Toggle Line Chart vs Candlestick Chart */}
           <div className="flex border border-[#121316] p-0.5 bg-[#FAF9F6]">
             <button
               onClick={() => setChartType("line")}
-              className={`px-2 py-0.5 text-[10px] font-sans font-bold transition ${
+              className={`px-2.5 sm:px-3 py-1.5 text-xs font-sans font-bold transition active:scale-95 min-h-[32px] cursor-pointer ${
                 chartType === "line" ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
               }`}
             >
@@ -480,25 +480,25 @@ export default function StockChart({ prediction, holding = null }) {
             </button>
             <button
               onClick={() => setChartType("candle")}
-              className={`px-2 py-0.5 text-[10px] font-sans font-bold transition ${
+              className={`px-2.5 sm:px-3 py-1.5 text-xs font-sans font-bold transition active:scale-95 min-h-[32px] cursor-pointer ${
                 chartType === "candle" ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
               }`}
             >
-              Candlestick Chart
+              Candlestick
             </button>
           </div>
 
           {/* Filter Timeframe */}
-          <div className="flex space-x-1 border border-[#121316] p-0.5 bg-[#FAF9F6]">
+          <div className="flex space-x-0.5 border border-[#121316] p-0.5 bg-[#FAF9F6]">
             {[
-              { id: "1B", label: "1 Bln" },
-              { id: "3B", label: "3 Bln" },
-              { id: "6B", label: "6 Bln" },
+              { id: "1B", label: "1B" },
+              { id: "3B", label: "3B" },
+              { id: "6B", label: "6B" },
             ].map((tf) => (
               <button
                 key={tf.id}
                 onClick={() => setTimeframe(tf.id)}
-                className={`px-2 py-0.5 text-[10px] font-mono font-bold transition ${
+                className={`px-2.5 py-1.5 text-xs font-mono font-bold transition active:scale-95 min-h-[32px] cursor-pointer ${
                   timeframe === tf.id ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
                 }`}
               >

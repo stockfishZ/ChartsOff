@@ -52,10 +52,10 @@ function NewsItem({ news, index }) {
       href={news.link || "#"}
       target="_blank"
       rel="noopener noreferrer"
-      className="py-3 px-1.5 flex items-start space-x-3 group hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition"
+      className="py-3.5 px-2 sm:px-3 flex items-start space-x-3 group hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition"
     >
       {/* Left: Authentic Article Image Thumbnail */}
-      <div className="w-[76px] h-[76px] sm:w-20 sm:h-20 shrink-0 border border-[#121316] bg-[#FAF9F6] overflow-hidden relative shadow-xs">
+      <div className="w-20 h-20 sm:w-20 sm:h-20 shrink-0 border border-[#121316] bg-[#FAF9F6] overflow-hidden relative shadow-xs">
         <img
           src={imgSrc}
           alt={displayTitle}
@@ -166,9 +166,9 @@ export default function NewsFeed({ ticker, newsSentiment }) {
   if (!sortedHeadlines || sortedHeadlines.length === 0) return null;
 
   return (
-    <div className="bg-white border border-[#121316] p-4 mb-20">
+    <div className="bg-white border border-[#121316] p-3.5 sm:p-5 mb-8 shadow-xs">
       {/* Header Panel with Live Updating Status */}
-      <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2.5 mb-2">
+      <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-3 mb-2.5">
         <div className="flex items-center space-x-1.5">
           <Newspaper className="w-4 h-4 text-[#121316]" />
           <span className="font-mono text-xs font-bold uppercase text-[#121316]">
@@ -180,7 +180,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
         <button
           type="button"
           onClick={() => fetchLiveNews(false)}
-          className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline cursor-pointer"
+          className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline cursor-pointer p-1 min-h-[30px]"
           title="Klik untuk memperbarui berita secara langsung"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20] animate-pulse"></span>

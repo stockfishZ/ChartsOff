@@ -106,20 +106,20 @@ export default function PredictionCard({
   }
 
   return (
-    <div className="bg-white border border-[#121316] p-4 mb-3">
+    <div className="bg-white border border-[#121316] p-3.5 sm:p-5 mb-4 shadow-xs">
       {/* 1. Header Saham & Indikator Portofolio / Favorit */}
-      <div className="border-b border-[#E5E3DC] pb-3 mb-3">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center space-x-2">
-              <h2 className="font-editorial font-bold text-3xl text-[#121316] tracking-tight">{cleanTicker}</h2>
+      <div className="border-b border-[#E5E3DC] pb-3.5 mb-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+              <h2 className="font-editorial font-bold text-2xl sm:text-3xl text-[#121316] tracking-tight">{cleanTicker}</h2>
               
               {/* Bought / Portfolio Priority Icon */}
               {holding ? (
                 <button
                   type="button"
                   onClick={onOpenPortfolioModal}
-                  className="px-2 py-0.5 hover:bg-[#E8F5E9] rounded transition active:scale-95 flex items-center space-x-1.5 border border-[#1B5E20]/40 bg-[#E8F5E9]/60"
+                  className="px-2.5 py-1 hover:bg-[#E8F5E9] rounded transition active:scale-95 flex items-center space-x-1.5 border border-[#1B5E20]/40 bg-[#E8F5E9]/60 min-h-[32px] cursor-pointer"
                   title="Saham Dimiliki di Portofolio (Klik untuk edit)"
                 >
                   <HoldingIcon className="w-3.5 h-3.5" color="#1B5E20" />
@@ -133,7 +133,7 @@ export default function PredictionCard({
               <button
                 type="button"
                 onClick={() => onToggleFavorite && onToggleFavorite(prediction.ticker)}
-                className="p-1 hover:bg-[#F1EFEA] rounded transition active:scale-95"
+                className="p-2 hover:bg-[#F1EFEA] rounded transition active:scale-90 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                 title={isFavorite ? "Hapus dari Favorit" : "Sematkan ke Favorit"}
               >
                 <Star
@@ -145,14 +145,14 @@ export default function PredictionCard({
                 />
               </button>
             </div>
-            <p className="text-xs text-[#737168] font-sans mt-0.5">{companyName}</p>
+            <p className="text-xs text-[#737168] font-sans mt-0.5 truncate">{companyName}</p>
           </div>
 
-          <div className="text-right">
+          <div className="text-right shrink-0">
             <span className="text-[10px] uppercase tracking-wider text-[#737168] block">
-              {getIdxMarketStatus().isOpen ? "Harga Pasar Live" : "Harga Penutupan (Pasar Tutup)"}
+              {getIdxMarketStatus().isOpen ? "Harga Pasar Live" : "Harga Penutupan"}
             </span>
-            <span className="font-mono-num text-2xl font-bold text-[#121316]">
+            <span className="font-mono-num text-xl sm:text-2xl font-bold text-[#121316]">
               {formatRupiah(prediction.current_price)}
             </span>
           </div>
@@ -274,10 +274,10 @@ export default function PredictionCard({
       )}
 
       {/* 3. Banner Sinyal & Target */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-left mb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 text-left mb-3.5">
         {/* Sinyal ML */}
         <div
-          className={`p-2.5 border ${
+          className={`p-3 border ${
             isBull
               ? "border-[#1B5E20] bg-[#E8F5E9]"
               : isBear
@@ -299,7 +299,7 @@ export default function PredictionCard({
         </div>
 
         {/* Target 20 Hari */}
-        <div className="p-2.5 border border-[#121316] bg-[#FAF9F6]">
+        <div className="p-3 border border-[#121316] bg-[#FAF9F6]">
           <span className="text-[9px] uppercase font-bold tracking-wider text-[#737168] block">Target {horizon} Hari (1 Bln)</span>
           <div className="font-mono-num font-bold text-sm text-[#121316] mt-0.5">
             {formatRupiah(targetPrice)}
@@ -314,7 +314,7 @@ export default function PredictionCard({
         </div>
 
         {/* Kondisi / Regime Pasar */}
-        <div className="p-2.5 border border-[#121316] bg-[#FAF9F6]">
+        <div className="p-3 border border-[#121316] bg-[#FAF9F6]">
           <span className="text-[9px] uppercase font-bold tracking-wider text-[#737168] block">Kondisi Pasar</span>
           <div className="font-serif font-bold text-sm text-[#121316] mt-0.5 truncate">
             {prediction.market_regime}
@@ -325,42 +325,42 @@ export default function PredictionCard({
         </div>
       </div>
 
-      {/* 4. Dynamic ATR Risk Management & Adaptive Exit Brackets (Upgrade #5) */}
+      {/* 4. Dynamic ATR Risk Management & Adaptive Exit Brackets */}
       {prediction.risk_management && (
-        <div className="mb-3 p-3 bg-white border border-[#121316] shadow-xs">
-          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2.5">
+        <div className="mb-3.5 p-3.5 sm:p-4 bg-white border border-[#121316] shadow-xs">
+          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-3">
             <span className="font-mono text-xs font-bold uppercase text-[#121316] flex items-center">
-              <span className="w-2 h-2 rounded-full bg-[#121316] mr-1.5 inline-block"></span>
+              <span className="w-2 h-2 rounded-full bg-[#121316] mr-1.5 inline-block shrink-0"></span>
               Manajemen Risiko & Batas Keluar (ATR 14)
             </span>
-            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 border text-[#121316] bg-[#F1EFEA]">
+            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 border text-[#121316] bg-[#F1EFEA]">
               Risk:Reward {prediction.risk_management.risk_reward_ratio}
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 text-left">
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#B71C1C] block">Batas Stop Loss</span>
-              <span className="font-mono-num text-xs font-bold text-[#B71C1C]">
+              <span className="text-[9px] uppercase font-mono text-[#B71C1C] block font-semibold">Batas Stop Loss</span>
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#B71C1C] block mt-0.5">
                 {formatRupiah(prediction.risk_management.stop_loss_price)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#1B5E20] block">Target Optimal (TP)</span>
-              <span className="font-mono-num text-xs font-bold text-[#1B5E20]">
+              <span className="text-[9px] uppercase font-mono text-[#1B5E20] block font-semibold">Target Optimal (TP)</span>
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#1B5E20] block mt-0.5">
                 {formatRupiah(prediction.risk_management.take_profit_price)}
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">Target Konservatif</span>
-              <span className="font-mono-num text-xs font-bold text-[#121316]">
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#121316] block mt-0.5">
                 {formatRupiah(prediction.risk_management.conservative_target_price)}
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">Tingkat Risiko</span>
               <span
-                className="font-mono text-xs font-bold block"
+                className="font-mono text-xs sm:text-sm font-bold block mt-0.5"
                 style={{ color: prediction.risk_management.risk_color || "#121316" }}
               >
                 {prediction.risk_management.risk_level.split(" ")[0]} ({prediction.risk_management.risk_pct}%)
@@ -370,16 +370,16 @@ export default function PredictionCard({
         </div>
       )}
 
-      {/* 5. Fundamental Valuation Multiples & Health Snapshot (Upgrade #1 & #2) */}
+      {/* 5. Fundamental Valuation Multiples & Health Snapshot */}
       {prediction.fundamentals && (
-        <div className="p-3 bg-[#FAF9F6] border border-[#121316]">
-          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2">
-            <div className="flex items-center space-x-1.5">
+        <div className="p-3.5 sm:p-4 bg-[#FAF9F6] border border-[#121316]">
+          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2.5">
+            <div className="flex items-center space-x-1.5 flex-wrap gap-y-1">
               <span className="font-mono text-xs font-bold uppercase text-[#121316]">
                 Kesehatan Fundamental & Arus Institusi
               </span>
               <span
-                className="text-[9px] font-mono font-bold px-1.5 py-0.2 border uppercase"
+                className="text-[9px] font-mono font-bold px-1.5 py-0.5 border uppercase"
                 style={{
                   color: prediction.fundamentals.status_color || "#121316",
                   borderColor: `${prediction.fundamentals.status_color || "#121316"}40`,
@@ -396,40 +396,40 @@ export default function PredictionCard({
             )}
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-left text-xs mb-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3 text-left text-xs mb-2">
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">P/E Ratio</span>
-              <span className="font-mono-num font-bold text-[#121316]">
+              <span className="font-mono-num font-bold text-[#121316] block mt-0.5">
                 {prediction.fundamentals.pe_ratio > 0 ? `${prediction.fundamentals.pe_ratio}x` : "N/A"}
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">PBV Ratio</span>
-              <span className="font-mono-num font-bold text-[#121316]">
+              <span className="font-mono-num font-bold text-[#121316] block mt-0.5">
                 {prediction.fundamentals.pbv_ratio}x
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">ROE (%)</span>
-              <span className={`font-mono-num font-bold ${prediction.fundamentals.roe_pct >= 15 ? "text-[#1B5E20]" : "text-[#121316]"}`}>
+              <span className={`font-mono-num font-bold block mt-0.5 ${prediction.fundamentals.roe_pct >= 15 ? "text-[#1B5E20]" : "text-[#121316]"}`}>
                 {prediction.fundamentals.roe_pct}%
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">DER (Utang)</span>
-              <span className={`font-mono-num font-bold ${prediction.fundamentals.der_ratio > 2.0 ? "text-[#B71C1C]" : "text-[#121316]"}`}>
+              <span className={`font-mono-num font-bold block mt-0.5 ${prediction.fundamentals.der_ratio > 2.0 ? "text-[#B71C1C]" : "text-[#121316]"}`}>
                 {prediction.fundamentals.der_ratio}x
               </span>
             </div>
             <div>
               <span className="text-[9px] uppercase font-mono text-[#737168] block">Dividen Yield</span>
-              <span className="font-mono-num font-bold text-[#1B5E20]">
+              <span className="font-mono-num font-bold text-[#1B5E20] block mt-0.5">
                 {prediction.fundamentals.dividend_yield_pct > 0 ? `${prediction.fundamentals.dividend_yield_pct}%` : "-"}
               </span>
             </div>
           </div>
 
-          <div className="text-[10px] font-mono text-[#595750] mt-1 pt-1 border-t border-[#E5E3DC]/60 flex items-center justify-between">
+          <div className="text-[10px] font-mono text-[#595750] mt-2 pt-2 border-t border-[#E5E3DC] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
             <span>💡 {prediction.fundamentals.highlight_reason}</span>
             {prediction.macro_context && (
               <span className="text-[#737168]">

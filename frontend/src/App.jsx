@@ -478,13 +478,13 @@ export default function App() {
           </div>
         )}
 
-        <main className="max-w-2xl mx-auto px-3 py-3">
+        <main className="max-w-2xl mx-auto px-3.5 sm:px-4 py-3.5 sm:py-4">
           {loading ? (
             <div className="text-center py-20 font-mono text-xs text-[#737168]">
               Memuat Data Saham & Sentimen Bibit (BEI)...
             </div>
           ) : activeTab === "signals" ? (
-            <div>
+            <div className="space-y-3.5 sm:space-y-4">
               <TickerList
                 predictions={sortedPredictions}
                 selectedTicker={selectedTicker}
@@ -520,21 +520,21 @@ export default function App() {
               )}
             </div>
           ) : (
-            <div className="bg-white border border-[#121316] p-3 sm:p-4 mb-8">
+            <div className="bg-white border border-[#121316] p-3.5 sm:p-5 mb-8 shadow-xs">
               {/* Header List Saham */}
-              <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2.5 mb-3">
+              <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-3 mb-3">
                 <div>
                   <span className="font-mono text-xs font-bold uppercase text-[#121316] block">
                     Daftar Saham Aktif ({predictions.length})
                   </span>
                   <span className="text-[10px] text-[#737168] font-mono">Bursa Efek Indonesia (IDX)</span>
                 </div>
-                <div className="flex items-center space-x-2 text-[10px] font-mono text-[#737168]">
+                <div className="flex items-center space-x-2.5 text-[10px] font-mono text-[#737168]">
                   <span className="flex items-center">
-                    <HoldingIcon className="w-3 h-3 mr-1" color="#1B5E20" /> Portofolio
+                    <HoldingIcon className="w-3.5 h-3.5 mr-1" color="#1B5E20" /> Portofolio
                   </span>
                   <span className="flex items-center">
-                    <Star className="w-3 h-3 text-[#D97706] fill-[#D97706] mr-1" /> Favorit
+                    <Star className="w-3.5 h-3.5 text-[#D97706] fill-[#D97706] mr-1" /> Favorit
                   </span>
                 </div>
               </div>
@@ -553,7 +553,7 @@ export default function App() {
                     <div
                       key={item.ticker}
                       onClick={() => handleSelectStock(item.ticker, true)}
-                      className="py-2.5 px-1 flex items-center justify-between hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition cursor-pointer"
+                      className="py-3 px-2 sm:px-3 flex items-center justify-between hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition cursor-pointer min-h-[58px]"
                     >
                       {/* Left: Icon + Ticker + Company Name */}
                       <div className="flex items-center space-x-2.5 min-w-0 pr-2">
@@ -565,7 +565,7 @@ export default function App() {
                               setModalTicker(item.ticker);
                               setIsModalOpen(true);
                             }}
-                            className="p-1.5 hover:bg-[#E8F5E9] rounded shrink-0"
+                            className="p-2 hover:bg-[#E8F5E9] rounded shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                             title="Saham Dimiliki di Portofolio (Klik untuk ubah)"
                           >
                             <HoldingIcon className="w-4 h-4" color="#1B5E20" />
@@ -577,7 +577,7 @@ export default function App() {
                               e.stopPropagation();
                               toggleFavorite(item.ticker);
                             }}
-                            className="p-1.5 hover:bg-[#E5E3DC] rounded shrink-0"
+                            className="p-2 hover:bg-[#E5E3DC] rounded shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                             title={isFav ? "Hapus Favorit" : "Sematkan ke Favorit"}
                           >
                             <Star
@@ -594,12 +594,12 @@ export default function App() {
                               {cleanTicker}
                             </span>
                             {isBought && (
-                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
+                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.5 border border-[#1B5E20]/30 uppercase">
                                 Dimiliki
                               </span>
                             )}
                             {item.action_alert?.type === "PRIME_BUY" && (
-                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20] uppercase flex items-center" title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi">
+                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.5 border border-[#1B5E20] uppercase flex items-center" title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi">
                                 <Sparkles className="w-2.5 h-2.5 mr-0.5 text-[#1B5E20]" />
                                 Prospek Bagus
                               </span>
@@ -618,7 +618,7 @@ export default function App() {
                         </div>
                         <div className="flex items-center justify-end space-x-1.5 mt-0.5">
                           <span
-                            className={`px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase border ${
+                            className={`px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase border ${
                               isBull
                                 ? "text-[#1B5E20] border-[#1B5E20]/30 bg-[#E8F5E9]"
                                 : isBear
@@ -768,7 +768,7 @@ export default function App() {
       </div>
 
       {/* Main Page Footer */}
-      <footer className="py-4 border-t border-[#E5E3DC] text-center bg-[#FAF9F6] mt-6">
+      <footer className="py-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 border-t border-[#E5E3DC] text-center bg-[#FAF9F6] mt-6">
         <span className="text-[11px] font-mono text-[#737168]">
           © StockfishZ
         </span>

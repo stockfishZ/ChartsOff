@@ -21,7 +21,7 @@ export default function TickerList({
   return (
     <div className="border-b border-[#DCDAD4] bg-[#F1EFEA]">
       <div className="max-w-2xl mx-auto">
-        <div className="flex items-center space-x-1.5 overflow-x-auto px-3 py-2 no-scrollbar">
+        <div className="flex items-center space-x-2 overflow-x-auto px-3.5 py-2.5 no-scrollbar">
           {predictions.map((item) => {
             const isSelected = selectedTicker === item.ticker;
             const isBought = Boolean(portfolio[item.ticker]);
@@ -35,7 +35,7 @@ export default function TickerList({
               <button
                 key={item.ticker}
                 onClick={() => onSelectTicker(item.ticker)}
-                className={`flex-shrink-0 px-3 py-1.5 border transition-all text-left ${
+                className={`flex-shrink-0 px-3.5 py-2 min-h-[46px] border transition-all text-left active:scale-[0.98] cursor-pointer ${
                   isSelected
                     ? "bg-white border-[#121316] shadow-sm ring-1 ring-[#121316]"
                     : isPrimeBuy
