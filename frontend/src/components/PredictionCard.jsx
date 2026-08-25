@@ -1,7 +1,8 @@
 import React from "react";
-import { Star, Plus, Edit2 } from "lucide-react";
+import { Star, Plus, Edit2, ShieldAlert, Sparkles } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
+import { getIdxMarketStatus } from "./Header";
 
 export const COMPANY_NAMES = {
   "BBCA.JK": "Bank Central Asia Tbk",
@@ -148,13 +149,48 @@ export default function PredictionCard({
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] uppercase tracking-wider text-[#737168] block">Harga Pasar Saat Ini</span>
+            <span className="text-[10px] uppercase tracking-wider text-[#737168] block">
+              {getIdxMarketStatus().isOpen ? "Harga Pasar Live" : "Harga Penutupan (Pasar Tutup)"}
+            </span>
             <span className="font-mono-num text-2xl font-bold text-[#121316]">
               {formatRupiah(prediction.current_price)}
             </span>
           </div>
         </div>
       </div>
+
+      {/* High-Precision ML Action Alert Banner (Urgent Sell / Prime Buy) */}
+      {prediction.action_alert && prediction.action_alert.type === "URGENT_SELL" && (
+        <div className="mb-3 p-3 bg-[#FFEBEE] border border-[#B71C1C] flex items-start space-x-2.5">
+          <ShieldAlert className="w-4 h-4 text-[#B71C1C] shrink-0 mt-0.5" />
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-[10px] font-bold uppercase text-[#B71C1C]">
+                Peringatan Jual Darurat (Presisi ML {prediction.action_alert.precision_score}%)
+              </span>
+            </div>
+            <p className="text-xs text-[#B71C1C] mt-0.5 leading-snug">
+              {prediction.action_alert.message}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {prediction.action_alert && prediction.action_alert.type === "PRIME_BUY" && (
+        <div className="mb-3 p-3 bg-[#E8F5E9] border border-[#1B5E20] flex items-start space-x-2.5">
+          <Sparkles className="w-4 h-4 text-[#1B5E20] shrink-0 mt-0.5" />
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-[10px] font-bold uppercase text-[#1B5E20]">
+                Peluang Beli Emas Terkonfirmasi (Presisi ML {prediction.action_alert.precision_score}%)
+              </span>
+            </div>
+            <p className="text-xs text-[#1B5E20] mt-0.5 leading-snug">
+              {prediction.action_alert.message}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* 2. Personal Broker Position Panel (If User Bought This Stock) */}
       {holdingStats ? (

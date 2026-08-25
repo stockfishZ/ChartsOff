@@ -1,4 +1,4 @@
-﻿import json
+import json
 import logging
 import math
 from pathlib import Path
@@ -47,6 +47,19 @@ class StorageManager:
             with open(output_file, "w", encoding="utf-8") as f:
                 json.dump(results_dict, f, indent=2)
             logger.info(f"Saved {len(predictions)} predictions locally to {output_file}")
+
+            # Also sync to frontend public & dist assets
+            for frontend_path in [
+                Path("frontend/public/data/latest_predictions.json"),
+                Path("frontend/dist/data/latest_predictions.json"),
+                Path("frontend/android/app/src/main/assets/public/data/latest_predictions.json")
+            ]:
+                if frontend_path.parent.exists():
+                    try:
+                        with open(frontend_path, "w", encoding="utf-8") as f:
+                            json.dump(results_dict, f, indent=2)
+                    except Exception as e:
+                        logger.debug(f"Could not copy to {frontend_path}: {e}")
 
         # 2. Supabase Storage (If configured)
         if self.client:

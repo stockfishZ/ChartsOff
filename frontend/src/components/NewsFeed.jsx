@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { ExternalLink, Newspaper, RefreshCw } from "lucide-react";
 
-// Curated high-quality editorial fallback thumbnails by category
+// Curated high-quality editorial fallback thumbnails for Indonesian and global financial markets
 const FALLBACK_THUMBNAILS = [
-  "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&auto=format&fit=crop&q=80", // Stock charts
-  "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=300&auto=format&fit=crop&q=80", // Trading desk
-  "https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=300&auto=format&fit=crop&q=80", // Financial broadsheet
-  "https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=300&auto=format&fit=crop&q=80", // Market exchange
-  "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&auto=format&fit=crop&q=80", // Business analysis
+  "https://akcdn.detik.net.id/visual/2026/06/30/layar-menampilkan-pergerakan-indeks-harga-saham-gabungan-ihsg-di-bursa-efek-indonesia-bei-jakarta-selasa-3062026-1782797019138_169.jpeg?w=1200&q=90",
+  "https://akcdn.detik.net.id/visual/2026/06/08/layar-menampilkan-pergerakan-indeks-harga-saham-gabungan-ihsg-di-gedung-bursa-efek-indonesia-bei-jakarta-senin-862026-cnbc-ind-1780893013553_169.jpeg?w=1200&q=90",
+  "https://cdn.antaranews.com/cache/800x533/2026/08/14/pergerakan-indeks-harga-saham-gabungan-270726-dr-02.jpg",
+  "https://akcdn.detik.net.id/community/media/visual/2026/08/24/bursa-dan-valas-1787534173-1787534173931.jpeg?w=360&q=90",
+  "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=400&auto=format&fit=crop&q=80"
 ];
 
 function getValidImageUrl(url, fallback) {
@@ -37,7 +39,7 @@ function NewsItem({ news, index }) {
   };
 
   // Clean publisher source name if available in title (e.g. "Judul Berita - CNBC Indonesia")
-  let displayTitle = news.title;
+  let displayTitle = news.title || "Berita Pasar Modal Terkini";
   let sourceName = "Berita Pasar";
   if (displayTitle.includes(" - ")) {
     const parts = displayTitle.split(" - ");
@@ -47,13 +49,13 @@ function NewsItem({ news, index }) {
 
   return (
     <a
-      href={news.link}
+      href={news.link || "#"}
       target="_blank"
       rel="noopener noreferrer"
       className="py-3 px-1.5 flex items-start space-x-3 group hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition"
     >
-      {/* Left: Authentic Article Image */}
-      <div className="w-18 h-18 sm:w-20 sm:h-20 shrink-0 border border-[#121316] bg-[#FAF9F6] overflow-hidden relative shadow-xs">
+      {/* Left: Authentic Article Image Thumbnail */}
+      <div className="w-[76px] h-[76px] sm:w-20 sm:h-20 shrink-0 border border-[#121316] bg-[#FAF9F6] overflow-hidden relative shadow-xs">
         <img
           src={imgSrc}
           alt={displayTitle}
@@ -145,7 +147,23 @@ export default function NewsFeed({ ticker, newsSentiment }) {
     return () => clearInterval(interval);
   }, [ticker]);
 
-  if (!headlines || headlines.length === 0) return null;
+  const cleanTicker = ticker ? ticker.replace(".JK", "").trim() : "Saham";
+
+  // Sort articles descending by timestamp (freshest and newest articles at the top)
+  const sortedHeadlines = useMemo(() => {
+    if (!headlines || !Array.isArray(headlines)) return [];
+    return [...headlines].sort((a, b) => {
+      const parseDate = (d) => {
+        if (!d || typeof d !== "string") return 0;
+        if (d.toLowerCase().includes("terkini")) return Date.now();
+        const parsed = Date.parse(d);
+        return isNaN(parsed) ? 0 : parsed;
+      };
+      return parseDate(b.published_at) - parseDate(a.published_at);
+    });
+  }, [headlines]);
+
+  if (!sortedHeadlines || sortedHeadlines.length === 0) return null;
 
   return (
     <div className="bg-white border border-[#121316] p-4 mb-20">
@@ -154,7 +172,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
         <div className="flex items-center space-x-1.5">
           <Newspaper className="w-4 h-4 text-[#121316]" />
           <span className="font-mono text-xs font-bold uppercase text-[#121316]">
-            Sentimen Berita & Katalis Emiten
+            Berita Berkaitan dengan {cleanTicker}
           </span>
         </div>
 
@@ -162,7 +180,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
         <button
           type="button"
           onClick={() => fetchLiveNews(false)}
-          className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline"
+          className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline cursor-pointer"
           title="Klik untuk memperbarui berita secara langsung"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20] animate-pulse"></span>
@@ -173,7 +191,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
 
       {/* News Article List */}
       <div className="divide-y divide-[#E5E3DC]">
-        {headlines.slice(0, 6).map((news, idx) => (
+        {sortedHeadlines.slice(0, 8).map((news, idx) => (
           <NewsItem key={`${news.link}-${idx}`} news={news} index={idx} />
         ))}
       </div>

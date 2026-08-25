@@ -1,6 +1,183 @@
-﻿import React, { useState, useMemo, useRef, useEffect } from "react";
-import { RefreshCw, Search, X } from "lucide-react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import { RefreshCw, Search, X, Info, Bell } from "lucide-react";
 import { IDX_COMPANIES, resolveTicker } from "../data/idx_companies";
+import { getHolidayInfo } from "../services/holidayService";
+
+/**
+ * Calculates current market session status for the Indonesia Stock Exchange (IDX / BEI)
+ * Trading hours based on Western Indonesian Time (WIB / UTC+7)
+ */
+export function getIdxMarketStatus() {
+  const now = new Date();
+  // Compute current time in WIB (UTC+7)
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const wibDate = new Date(utc + 7 * 3600000);
+
+  const day = wibDate.getDay(); // 0 = Sun, 1 = Mon, ..., 5 = Fri, 6 = Sat
+  const hours = wibDate.getHours();
+  const minutes = wibDate.getMinutes();
+  const timeInMinutes = hours * 60 + minutes;
+
+  // Check Official BEI / National Holidays (Live Dynamic Feed + Cache)
+  const yyyy = wibDate.getFullYear();
+  const mm = String(wibDate.getMonth() + 1).padStart(2, "0");
+  const dd = String(wibDate.getDate()).padStart(2, "0");
+  const dateStr = `${yyyy}-${mm}-${dd}`;
+
+  // 1. Dynamic Live/Cached Holiday Lookup (Auto-refreshed from SKB 3 Menteri & Global ISO feeds)
+  const dynamicHoliday = getHolidayInfo(dateStr);
+  if (dynamicHoliday) {
+    return {
+      isOpen: false,
+      status: "HOLIDAY",
+      label: "BEI Libur",
+      sublabel: dynamicHoliday,
+      color: "gray",
+    };
+  }
+
+  // 2. Fixed Annual National Holidays Fallback
+  const FIXED_ANNUAL_HOLIDAYS = {
+    "01-01": "Tahun Baru Masehi",
+    "05-01": "Hari Buruh Internasional",
+    "06-01": "Hari Lahir Pancasila",
+    "08-17": "Hari Kemerdekaan RI",
+    "12-25": "Hari Raya Natal",
+  };
+  const monthDay = `${mm}-${dd}`;
+  if (FIXED_ANNUAL_HOLIDAYS[monthDay]) {
+    return {
+      isOpen: false,
+      status: "HOLIDAY",
+      label: "BEI Libur",
+      sublabel: FIXED_ANNUAL_HOLIDAYS[monthDay],
+      color: "gray",
+    };
+  }
+
+  // Weekend: Saturday or Sunday
+  if (day === 0 || day === 6) {
+    return {
+      isOpen: false,
+      status: "CLOSED",
+      label: "BEI Tutup",
+      sublabel: "Buka Senin 09:00 WIB",
+      color: "gray",
+    };
+  }
+
+  // Friday Trading Hours
+  if (day === 5) {
+    if (timeInMinutes >= 525 && timeInMinutes < 540) {
+      return {
+        isOpen: true,
+        status: "PRE_OPEN",
+        label: "BEI Pra-Buka",
+        sublabel: "Sesi 1 09:00 WIB",
+        color: "blue",
+      };
+    }
+    if (timeInMinutes >= 540 && timeInMinutes < 690) {
+      return {
+        isOpen: true,
+        status: "SESSION_1",
+        label: "BEI Buka (Sesi 1)",
+        sublabel: "Istirahat 11:30 WIB",
+        color: "green",
+      };
+    }
+    if (timeInMinutes >= 690 && timeInMinutes < 840) {
+      return {
+        isOpen: false,
+        status: "BREAK",
+        label: "BEI Istirahat",
+        sublabel: "Sesi 2 14:00 WIB",
+        color: "amber",
+      };
+    }
+    if (timeInMinutes >= 840 && timeInMinutes < 950) {
+      return {
+        isOpen: true,
+        status: "SESSION_2",
+        label: "BEI Buka (Sesi 2)",
+        sublabel: "Tutup 15:50 WIB",
+        color: "green",
+      };
+    }
+    if (timeInMinutes >= 950 && timeInMinutes < 975) {
+      return {
+        isOpen: true,
+        status: "PRE_CLOSE",
+        label: "BEI Pra-Tutup",
+        sublabel: "Selesai 16:15 WIB",
+        color: "blue",
+      };
+    }
+    return {
+      isOpen: false,
+      status: "CLOSED",
+      label: "BEI Tutup",
+      sublabel: "Buka Senin 09:00 WIB",
+      color: "gray",
+    };
+  }
+
+  // Monday - Thursday Trading Hours
+  if (timeInMinutes >= 525 && timeInMinutes < 540) {
+    return {
+      isOpen: true,
+      status: "PRE_OPEN",
+      label: "BEI Pra-Buka",
+      sublabel: "Sesi 1 09:00 WIB",
+      color: "blue",
+    };
+  }
+  if (timeInMinutes >= 540 && timeInMinutes < 720) {
+    return {
+      isOpen: true,
+      status: "SESSION_1",
+      label: "BEI Buka (Sesi 1)",
+      sublabel: "Istirahat 12:00 WIB",
+      color: "green",
+    };
+  }
+  if (timeInMinutes >= 720 && timeInMinutes < 810) {
+    return {
+      isOpen: false,
+      status: "BREAK",
+      label: "BEI Istirahat",
+      sublabel: "Sesi 2 13:30 WIB",
+      color: "amber",
+    };
+  }
+  if (timeInMinutes >= 810 && timeInMinutes < 950) {
+    return {
+      isOpen: true,
+      status: "SESSION_2",
+      label: "BEI Buka (Sesi 2)",
+      sublabel: "Tutup 15:50 WIB",
+      color: "green",
+    };
+  }
+  if (timeInMinutes >= 950 && timeInMinutes < 975) {
+    return {
+      isOpen: true,
+      status: "PRE_CLOSE",
+      label: "BEI Pra-Tutup",
+      sublabel: "Selesai 16:15 WIB",
+      color: "blue",
+    };
+  }
+
+  // Mon-Thu Closed
+  return {
+    isOpen: false,
+    status: "CLOSED",
+    label: "BEI Tutup",
+    sublabel: timeInMinutes < 525 ? "Buka Hari Ini 09:00 WIB" : "Buka Besok 09:00 WIB",
+    color: "gray",
+  };
+}
 
 export default function Header({
   onRefresh,
@@ -9,10 +186,22 @@ export default function Header({
   isAddingTicker,
   activeTab,
   setActiveTab,
+  onOpenHowItWorks,
+  unreadNotifCount = 0,
+  onOpenNotifications,
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [marketStatus, setMarketStatus] = useState(() => getIdxMarketStatus());
   const searchRef = useRef(null);
+
+  // Update market status every 30 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setMarketStatus(getIdxMarketStatus());
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
 
   const searchResults = useMemo(() => {
     if (!searchInput.trim()) return [];
@@ -52,27 +241,56 @@ export default function Header({
   return (
     <header className="bg-white border-b border-[#121316] px-4 pt-2.5 pb-0 relative z-30" ref={searchRef}>
       <div className="max-w-2xl mx-auto">
-        {/* Top Row: Brand + Search & Refresh */}
+        {/* Top Row: Brand + How It Works + Notifications + Search & Refresh */}
         <div className="flex items-center justify-between pb-2">
           <div className="flex items-center">
             <span className="font-editorial font-bold text-xl tracking-tight text-[#121316]">CHARTSOFF</span>
           </div>
 
           <div className="flex items-center space-x-1.5">
+            {/* Quick Runthrough "How CHARTSOFF Works" Button */}
             <button
-              onClick={() => setShowSearch(!showSearch)}
-              className={`px-2.5 py-1.5 border border-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 ${
-                showSearch ? "bg-[#121316] text-white" : "bg-white hover:bg-[#F1EFEA] text-[#121316]"
-              }`}
+              type="button"
+              onClick={onOpenHowItWorks}
+              className="px-2.5 py-1.5 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer shadow-2xs group"
+              title="Dokumentasi Cara Kerja CHARTSOFF & Panduan Indikator"
             >
-              <Search className="w-3.5 h-3.5" />
-              <span className="text-[11px] font-sans font-medium">Cari Saham / Emiten</span>
+              <Info className="w-3.5 h-3.5 text-[#121316] group-hover:text-white transition shrink-0" />
+              <span className="text-[11px] font-sans font-medium">How CHARTSOFF Works</span>
+            </button>
+
+            {/* Notification Center Button */}
+            <button
+              type="button"
+              onClick={onOpenNotifications}
+              className="p-1.5 border border-[#121316] bg-[#FAF9F6] hover:bg-[#121316] hover:text-white text-[#121316] transition active:scale-95 text-xs flex items-center relative cursor-pointer group"
+              title="Notifikasi"
+            >
+              <Bell className="w-3.5 h-3.5 text-[#121316] group-hover:text-white transition" />
+              {unreadNotifCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-[#B71C1C] text-white text-[9px] font-mono font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
+                  {unreadNotifCount > 9 ? "9+" : unreadNotifCount}
+                </span>
+              )}
             </button>
 
             <button
+              type="button"
+              onClick={() => setShowSearch(!showSearch)}
+              className={`px-2.5 py-1.5 border border-[#121316] transition active:scale-95 text-xs flex items-center space-x-1.5 cursor-pointer ${
+                showSearch ? "bg-[#121316] text-white" : "bg-white hover:bg-[#F1EFEA] text-[#121316]"
+              }`}
+              title="Cari Saham / Emiten"
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span className="text-[11px] font-sans font-medium hidden sm:inline">Cari Saham</span>
+            </button>
+
+            <button
+              type="button"
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="p-1.5 hover:bg-[#F1EFEA] border border-[#121316] text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1"
+              className="p-1.5 hover:bg-[#F1EFEA] border border-[#121316] text-[#121316] transition active:scale-95 text-xs flex items-center space-x-1 cursor-pointer"
               title="Sinkronisasi Data"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
@@ -149,28 +367,57 @@ export default function Header({
           </div>
         )}
 
-        {/* Header Navigation Tabs: "Forecast" and "List Saham" */}
-        <div className="flex border-t border-[#E5E3DC] -mx-4 px-4 bg-[#FAF9F6]">
-          <button
-            onClick={() => setActiveTab("signals")}
-            className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === "signals"
-                ? "border-[#121316] text-[#121316] bg-white"
-                : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
-            }`}
+        {/* Header Navigation Tabs: "Forecast" and "List Saham" + Real-Time BEI Market Status Badge */}
+        <div className="flex items-center justify-between border-t border-[#E5E3DC] -mx-4 px-4 bg-[#FAF9F6]">
+          <div className="flex items-center">
+            <button
+              type="button"
+              onClick={() => setActiveTab("signals")}
+              className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+                activeTab === "signals"
+                  ? "border-[#121316] text-[#121316] bg-white"
+                  : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
+              }`}
+            >
+              Forecast
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("watchlist")}
+              className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+                activeTab === "watchlist"
+                  ? "border-[#121316] text-[#121316] bg-white"
+                  : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
+              }`}
+            >
+              List Saham
+            </button>
+          </div>
+
+          {/* Real-Time BEI / IDX Market Status Indicator */}
+          <div
+            className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none"
+            title={`Status Pasar Bursa Efek Indonesia: ${marketStatus.label} (${marketStatus.sublabel})`}
           >
-            Forecast
-          </button>
-          <button
-            onClick={() => setActiveTab("watchlist")}
-            className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === "watchlist"
-                ? "border-[#121316] text-[#121316] bg-white"
-                : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
-            }`}
-          >
-            List Saham
-          </button>
+            <span className="relative flex h-2 w-2">
+              {marketStatus.isOpen && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B5E20] opacity-75"></span>
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${
+                  marketStatus.color === "green"
+                    ? "bg-[#1B5E20]"
+                    : marketStatus.color === "amber"
+                    ? "bg-[#D97706]"
+                    : marketStatus.color === "blue"
+                    ? "bg-[#1565C0]"
+                    : "bg-[#737168]"
+                }`}
+              ></span>
+            </span>
+            <span className="font-bold text-[#121316]">{marketStatus.label}</span>
+            <span className="text-[#737168] hidden sm:inline">• {marketStatus.sublabel}</span>
+          </div>
         </div>
       </div>
     </header>

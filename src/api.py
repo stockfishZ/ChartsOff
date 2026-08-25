@@ -1,4 +1,4 @@
-﻿import json
+import json
 import logging
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
@@ -105,6 +105,19 @@ def predict_stock(ticker: str):
         raise
     except Exception as e:
         logger.error(f"Error analyzing {ticker}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/quote/{ticker}")
+def get_live_quote(ticker: str):
+    """Fetches real-time market quote and price action for an IDX ticker."""
+    try:
+        clean_ticker = ticker.upper().strip()
+        if not clean_ticker.endswith(".JK"):
+            clean_ticker += ".JK"
+        quote = market_feed.fetch_current_quote(clean_ticker)
+        return sanitize_json_payload(quote)
+    except Exception as e:
+        logger.warning(f"Error fetching quote for {ticker}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/news/{ticker}")

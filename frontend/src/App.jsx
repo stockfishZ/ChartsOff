@@ -8,6 +8,10 @@ import StockChart from "./components/StockChart";
 import KeyFactors from "./components/KeyFactors";
 import NewsFeed from "./components/NewsFeed";
 import PortfolioModal from "./components/PortfolioModal";
+import HowItWorksModal from "./components/HowItWorksModal";
+import NotificationCenterModal from "./components/NotificationCenterModal";
+import { NotificationService } from "./services/notificationService";
+import { syncHolidaysForYear } from "./services/holidayService";
 import { resolveTicker } from "./data/idx_companies";
 
 // Helper to determine default stock based on 3-tier user priority
@@ -43,9 +47,25 @@ function determineDefaultTicker(data, currentPortfolio, currentFavorites) {
 }
 
 export default function App() {
-  const [predictions, setPredictions] = useState([]);
+  const [predictions, setPredictions] = useState(() => {
+    try {
+      const cached = localStorage.getItem("chartsoff_cached_predictions");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return [];
+  });
   const [selectedTicker, setSelectedTicker] = useState("BBCA.JK");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem("chartsoff_cached_predictions");
+      return !cached;
+    } catch (e) {
+      return true;
+    }
+  });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAddingTicker, setIsAddingTicker] = useState(false);
   const [activeTab, setActiveTab] = useState("signals");
@@ -75,6 +95,105 @@ export default function App() {
   // Portfolio Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTicker, setModalTicker] = useState("BBCA.JK");
+
+  // How It Works Modal State
+  const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
+  const [howItWorksChapter, setHowItWorksChapter] = useState(null);
+
+  const handleOpenHowItWorks = (chapter = null) => {
+    setHowItWorksChapter(chapter);
+    setIsHowItWorksOpen(true);
+  };
+
+  // Notification Center State
+  const [notifications, setNotifications] = useState(() => NotificationService.getHistory());
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
+  const unreadNotifCount = useMemo(
+    () => notifications.filter((n) => !n.isRead).length,
+    [notifications]
+  );
+
+  // Request notification permissions and initialize background/foreground lifecycle + Dynamic Holiday Sync
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    syncHolidaysForYear(currentYear);
+    syncHolidaysForYear(currentYear + 1);
+
+    window.__onChartsOffStockSelect = (ticker) => {
+      if (ticker) {
+        handleSelectStock(ticker, true);
+      }
+    };
+
+    NotificationService.requestPermission((ticker) => {
+      if (ticker) {
+        handleSelectStock(ticker, true);
+      }
+    });
+
+    NotificationService.initLifecycle(
+      // On Foreground (user opens/resumes app): sync predictions
+      () => {
+        fetchPredictions();
+      },
+      // On Background (user minimizes / switches app): evaluate notifications
+      () => {
+        if (predictions.length > 0) {
+          NotificationService.evaluateAndSendNotifications(predictions, portfolio, favorites);
+        }
+      }
+    );
+
+    return () => {
+      delete window.__onChartsOffStockSelect;
+    };
+  }, [predictions, portfolio, favorites]);
+
+  // Universal stock selector that always resets view scroll to the very top
+  const handleSelectStock = (ticker, switchTab = true) => {
+    if (!ticker) return;
+    setSelectedTicker(ticker);
+    if (switchTab) {
+      setActiveTab("signals");
+    }
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } catch (e) {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  // Always guarantee page starts at the very top when activeTab or selectedTicker changes
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } catch (e) {
+      window.scrollTo(0, 0);
+    }
+  }, [selectedTicker, activeTab]);
+
+  // Real-time evaluation of notifications when predictions/portfolio/favorites update
+  useEffect(() => {
+    if (predictions.length > 0) {
+      NotificationService.evaluateAndSendNotifications(predictions, portfolio, favorites).then(() => {
+        setNotifications(NotificationService.getHistory());
+      });
+    }
+  }, [predictions, portfolio, favorites]);
+
+  const handleClearAllNotifications = () => {
+    NotificationService.clearHistory();
+    setNotifications([]);
+  };
+
+  const handleMarkAllNotificationsAsRead = () => {
+    const updated = NotificationService.markAllAsRead();
+    setNotifications(updated);
+  };
 
   const savePortfolioHolding = (ticker, holdingData) => {
     const holdingWithTimestamp = {
@@ -135,6 +254,8 @@ export default function App() {
     setIsRefreshing(true);
     try {
       let data = null;
+
+      // Tier 1: Try Local Development Proxy API (if running locally with FastAPI)
       try {
         const apiRes = await fetch("/api/predictions");
         if (apiRes.ok) data = await apiRes.json();
@@ -143,18 +264,47 @@ export default function App() {
       if (!data || data.length === 0) {
         try {
           const host = window.location.hostname || "localhost";
-          const directRes = await fetch(`http://${host}:8000/api/predictions`);
-          if (directRes.ok) data = await directRes.json();
+          if (host === "localhost" || host === "127.0.0.1") {
+            const directRes = await fetch(`http://${host}:8000/api/predictions`);
+            if (directRes.ok) data = await directRes.json();
+          }
         } catch (e) {}
       }
 
+      // Tier 2: Remote GitHub Raw Cloud Sync (Guarantees automatic updates for installed APKs)
       if (!data || data.length === 0) {
-        const res = await fetch(`/data/latest_predictions.json?t=${Date.now()}`);
-        if (res.ok) data = await res.json();
+        const cloudUrls = [
+          `https://raw.githubusercontent.com/stockfishZ/ChartsOff/main/outputs/latest_predictions.json?t=${Date.now()}`,
+          `https://cdn.jsdelivr.net/gh/stockfishZ/ChartsOff@main/outputs/latest_predictions.json?t=${Date.now()}`
+        ];
+        for (const cloudUrl of cloudUrls) {
+          try {
+            const cloudRes = await fetch(cloudUrl);
+            if (cloudRes.ok) {
+              const cloudData = await cloudRes.json();
+              if (Array.isArray(cloudData) && cloudData.length > 0) {
+                data = cloudData;
+                break;
+              }
+            }
+          } catch (e) {}
+        }
+      }
+
+      // Tier 3: Local APK Asset Bundle fallback (Offline mode)
+      if (!data || data.length === 0) {
+        try {
+          const res = await fetch(`/data/latest_predictions.json?t=${Date.now()}`);
+          if (res.ok) data = await res.json();
+        } catch (e) {}
       }
 
       if (Array.isArray(data) && data.length > 0) {
         setPredictions(data);
+        try {
+          localStorage.setItem("chartsoff_cached_predictions", JSON.stringify(data));
+          localStorage.setItem("chartsoff_last_sync", new Date().toISOString());
+        } catch (e) {}
 
         // Apply Priority on initial open / fresh refresh
         if (isInitialLoadRef.current) {
@@ -176,7 +326,42 @@ export default function App() {
 
   useEffect(() => {
     fetchPredictions();
+    // Recurring cloud auto-sync every 60 seconds (1 minute) while the app is active
+    const interval = setInterval(() => {
+      fetchPredictions();
+    }, 60000);
+    return () => clearInterval(interval);
   }, []);
+
+  // Check and update live price immediately every time a stock is selected
+  useEffect(() => {
+    if (selectedTicker) {
+      const clean = selectedTicker.replace(".JK", "");
+      const host = window.location.hostname || "localhost";
+      const quoteUrls = [`/api/quote/${clean}`, `http://${host}:8000/api/quote/${clean}`];
+
+      (async () => {
+        for (const url of quoteUrls) {
+          try {
+            const res = await fetch(url);
+            if (res.ok) {
+              const quote = await res.json();
+              if (quote && quote.current_price) {
+                setPredictions((prev) =>
+                  prev.map((p) =>
+                    p.ticker === selectedTicker
+                      ? { ...p, current_price: quote.current_price }
+                      : p
+                  )
+                );
+                break;
+              }
+            }
+          } catch (e) {}
+        }
+      })();
+    }
+  }, [selectedTicker]);
 
   const handleAddCustomTicker = async (queryOrTicker) => {
     const clean = resolveTicker(queryOrTicker).toUpperCase().trim();
@@ -209,8 +394,7 @@ export default function App() {
 
       const newPred = await res.json();
       setPredictions((prev) => [newPred, ...prev.filter((p) => p.ticker !== newPred.ticker)]);
-      setSelectedTicker(newPred.ticker);
-      setActiveTab("signals");
+      handleSelectStock(newPred.ticker, true);
     } catch (err) {
       console.error(err);
       setErrorMessage(`Saham [${clean}] tidak ditemukan di BEI atau terjadi gangguan koneksi data.`);
@@ -281,6 +465,9 @@ export default function App() {
           isAddingTicker={isAddingTicker}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          onOpenHowItWorks={() => handleOpenHowItWorks(null)}
+          unreadNotifCount={unreadNotifCount}
+          onOpenNotifications={() => setIsNotifModalOpen(true)}
         />
 
         {errorMessage && (
@@ -301,7 +488,7 @@ export default function App() {
               <TickerList
                 predictions={sortedPredictions}
                 selectedTicker={selectedTicker}
-                onSelectTicker={setSelectedTicker}
+                onSelectTicker={(t) => handleSelectStock(t, false)}
                 favorites={favorites}
                 portfolio={portfolio}
               />
@@ -321,7 +508,10 @@ export default function App() {
                     prediction={activePrediction}
                     holding={activeHolding}
                   />
-                  <KeyFactors factors={activePrediction.key_factors} />
+                  <KeyFactors
+                    factors={activePrediction.key_factors}
+                    onOpenHowItWorks={handleOpenHowItWorks}
+                  />
                   <NewsFeed
                     ticker={activePrediction.ticker}
                     newsSentiment={activePrediction.news_sentiment}
@@ -362,10 +552,7 @@ export default function App() {
                   return (
                     <div
                       key={item.ticker}
-                      onClick={() => {
-                        setSelectedTicker(item.ticker);
-                        setActiveTab("signals");
-                      }}
+                      onClick={() => handleSelectStock(item.ticker, true)}
                       className="py-2.5 px-1 flex items-center justify-between hover:bg-[#FAF9F6] active:bg-[#F1EFEA] transition cursor-pointer"
                     >
                       {/* Left: Icon + Ticker + Company Name */}
@@ -476,7 +663,8 @@ export default function App() {
                       return (
                         <tr
                           key={item.ticker}
-                          className="hover:bg-[#FAF9F6] transition"
+                          onClick={() => handleSelectStock(item.ticker, true)}
+                          className="hover:bg-[#FAF9F6] transition cursor-pointer"
                         >
                           <td className="py-2.5 text-center">
                             {isBought ? (
@@ -511,11 +699,7 @@ export default function App() {
                             )}
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className="py-2.5 font-bold font-editorial cursor-pointer"
+                            className="py-2.5 font-bold font-editorial"
                           >
                             <div className="flex items-center space-x-1.5">
                               <span className="text-sm">{cleanTicker}</span>
@@ -527,29 +711,17 @@ export default function App() {
                             </div>
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className="py-2.5 text-[11px] text-[#595750] cursor-pointer truncate max-w-[180px]"
+                            className="py-2.5 text-[11px] text-[#595750] truncate max-w-[180px]"
                           >
                             {companyName}
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className="py-2.5 font-mono-num cursor-pointer"
+                            className="py-2.5 font-mono-num"
                           >
                             {formatRupiah(item.current_price)}
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className="py-2.5 cursor-pointer"
+                            className="py-2.5"
                           >
                             <span
                               className={`px-1.5 py-0.5 text-[10px] font-mono font-bold uppercase ${
@@ -560,20 +732,12 @@ export default function App() {
                             </span>
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className="py-2.5 font-mono-num text-right cursor-pointer"
+                            className="py-2.5 font-mono-num text-right"
                           >
                             {item.confidence}%
                           </td>
                           <td
-                            onClick={() => {
-                              setSelectedTicker(item.ticker);
-                              setActiveTab("signals");
-                            }}
-                            className={`py-2.5 font-mono-num font-bold text-right cursor-pointer ${
+                            className={`py-2.5 font-mono-num font-bold text-right ${
                               item.expected_return_pct >= 0 ? "text-[#1B5E20]" : "text-[#B71C1C]"
                             }`}
                           >
@@ -591,6 +755,13 @@ export default function App() {
         </main>
       </div>
 
+      {/* Main Page Footer */}
+      <footer className="py-4 border-t border-[#E5E3DC] text-center bg-[#FAF9F6] mt-6">
+        <span className="text-[11px] font-mono text-[#737168]">
+          © StockfishZ
+        </span>
+      </footer>
+
       {/* Portfolio Modal Dialog */}
       <PortfolioModal
         isOpen={isModalOpen}
@@ -600,6 +771,26 @@ export default function App() {
         existingHolding={portfolio[modalTicker]}
         onSave={savePortfolioHolding}
         onDelete={deletePortfolioHolding}
+      />
+
+      {/* How ChartsOff Works Educational Modal */}
+      <HowItWorksModal
+        isOpen={isHowItWorksOpen}
+        onClose={() => {
+          setIsHowItWorksOpen(false);
+          setHowItWorksChapter(null);
+        }}
+        initialChapter={howItWorksChapter}
+      />
+
+      {/* Notification Center Modal */}
+      <NotificationCenterModal
+        isOpen={isNotifModalOpen}
+        onClose={() => setIsNotifModalOpen(false)}
+        notifications={notifications}
+        onSelectTicker={(t) => handleSelectStock(t, true)}
+        onClearAll={handleClearAllNotifications}
+        onMarkAllAsRead={handleMarkAllNotificationsAsRead}
       />
     </div>
   );

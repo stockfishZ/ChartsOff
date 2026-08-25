@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -307,7 +307,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, holding = null, height = 
       {hoveredItem && (
         <div className="absolute top-1 right-2 bg-white border border-[#121316] p-2 text-xs shadow-md pointer-events-none z-20">
           <div className="font-mono text-[10px] text-[#737168]">
-            {hoveredItem.isProjected ? "[PROYEKSI 20 HARI]" : "[LILIN HARIAN]"}: {hoveredItem.date}
+            {hoveredItem.isProjected ? "[PROYEKSI 20 HARI]" : "[LILIN HARIAN]"}: {hoveredItem.fullDate || hoveredItem.date}
           </div>
           {hoveredItem.isProjected ? (
             <div className="font-mono font-bold text-sm text-[#D97706] mt-0.5">
@@ -343,15 +343,18 @@ export default function StockChart({ prediction, holding = null }) {
     if (selectedBars.length > 0) {
       selectedBars.forEach((bar, idx) => {
         let label = bar.date;
+        let fullDateLabel = bar.date;
         try {
           const d = new Date(bar.date);
           label = d.toLocaleDateString("id-ID", { month: "short", day: "numeric" });
+          fullDateLabel = d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
         } catch (e) {}
 
         const isLastBar = idx === selectedBars.length - 1;
 
         points.push({
           date: label,
+          fullDate: fullDateLabel,
           open: bar.open ? Math.round(bar.open) : Math.round(bar.close),
           high: bar.high ? Math.round(bar.high) : Math.round(bar.close),
           low: bar.low ? Math.round(bar.low) : Math.round(bar.close),
@@ -365,6 +368,7 @@ export default function StockChart({ prediction, holding = null }) {
       const d = new Date();
       points.push({
         date: d.toLocaleDateString("id-ID", { month: "short", day: "numeric" }),
+        fullDate: d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
         open: Math.round(basePrice),
         high: Math.round(basePrice),
         low: Math.round(basePrice),
@@ -384,10 +388,12 @@ export default function StockChart({ prediction, holding = null }) {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + d);
       const dayStr = futureDate.toLocaleDateString("id-ID", { month: "short", day: "numeric" });
+      const fullDateStr = futureDate.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
       const interpolated = lastRealPrice + ((targetPrice - lastRealPrice) * (d / horizon));
 
       points.push({
         date: `${dayStr} (P)`,
+        fullDate: `${fullDateStr} (Proyeksi)`,
         open: null,
         high: null,
         low: null,
@@ -545,7 +551,7 @@ export default function StockChart({ prediction, holding = null }) {
                     return (
                       <div className="bg-white border border-[#121316] p-2 text-xs shadow-lg">
                         <p className={`text-[10px] font-mono ${data.isProjected ? "text-[#D97706] font-bold" : "text-[#737168]"}`}>
-                          {data.isProjected ? "[PROYEKSI 20 HARI]" : "[HARGA RIIL BURSA]"}: {data.date}
+                          {data.isProjected ? "[PROYEKSI 20 HARI]" : "[HARGA RIIL BURSA]"}: {data.fullDate || data.date}
                         </p>
                         <p className="font-mono-num font-bold text-sm text-[#121316] mt-0.5">
                           {formatRupiah(price)}

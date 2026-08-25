@@ -1,4 +1,4 @@
-﻿from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 from datetime import datetime, timezone
 import pandas as pd
 from pydantic import BaseModel, Field
@@ -17,6 +17,7 @@ class PredictionResult(BaseModel):
     market_regime: str = Field(default="Normal", description="e.g. High_Volatility, Trending_Bull, Mean_Reverting")
     key_factors: list[dict] = Field(default_factory=list, description="Top indicators explaining this prediction")
     news_sentiment: dict = Field(default_factory=dict, description="Summary of news volume & sentiment score")
+    action_alert: dict = Field(default_factory=dict, description="Precision ML action alert for notifications (URGENT_SELL, PRIME_BUY, PRICE_SWING, NEWS_CATALYST)")
     historical_prices: list[dict] = Field(default_factory=list, description="Real historical daily OHLCV bars from market feed")
     model_version: str = "custom_v1"
 
@@ -50,7 +51,8 @@ class BaseStockModel(ABC):
         self,
         X_latest: pd.DataFrame,
         current_price: float,
-        news_summary: dict | None = None
+        news_summary: dict | None = None,
+        holding_info: dict | None = None
     ) -> PredictionResult:
         """
         Generate a standardized PredictionResult for the latest market bar.

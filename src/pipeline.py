@@ -1,4 +1,4 @@
-﻿import argparse
+import argparse
 import logging
 from src.config import config
 from src.data.market_feed import MarketDataFeed
@@ -10,7 +10,7 @@ from src.storage.supabase_client import StorageManager
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("ChartsOff.Pipeline")
 
-def run_pipeline(tickers: list[str] | None = None, train_model: bool = False):
+def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
     """
     Main orchestration loop for data ingestion, feature calculation, ML prediction, and export.
     """
@@ -19,13 +19,13 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = False):
 
     market_feed = MarketDataFeed(historical_days=config.HISTORICAL_DAYS)
     news_feed = NewsDataFeed(lookback_days=config.NEWS_LOOKBACK_DAYS)
-    ml_model = CustomStockMLModel()
     storage = StorageManager()
 
     all_predictions = []
 
     for ticker in tickers:
         logger.info(f"\n--- Processing {ticker} ---")
+        ml_model = CustomStockMLModel()
         
         # 1. Market Data Fetch
         ohlcv_df = market_feed.fetch_historical_ohlcv(ticker=ticker, interval="1d")

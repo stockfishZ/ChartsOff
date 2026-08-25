@@ -1,4 +1,4 @@
-﻿import pytest
+import pytest
 import pandas as pd
 import numpy as np
 from src.data.market_feed import MarketDataFeed
@@ -39,7 +39,7 @@ def test_sentiment_scoring():
     summary = SentimentFeatureEngine.aggregate_news_sentiment(news_data, "AAPL")
     assert summary["news_count"] == 2
     assert summary["avg_sentiment"] > 0.1
-    assert summary["sentiment_label"] == "Bullish"
+    assert "Bullish" in summary["sentiment_label"]
 
 def test_ml_vessel_train_and_predict():
     dates = pd.date_range("2024-01-01", periods=80)
@@ -67,6 +67,85 @@ def test_ml_vessel_train_and_predict():
     # Predict
     pred = model.predict(features_df, current_price=150.0, news_summary=news_summary)
     assert pred.ticker == "AAPL"
-    assert pred.signal in ["Bullish", "Bearish", "Neutral"]
+    assert any(s in pred.signal for s in ["Bullish", "Bearish", "Neutral", "Beli", "Jual", "Tahan", "Netral"])
     assert 0 <= pred.confidence <= 100
     assert len(pred.key_factors) > 0
+
+def test_dynamic_sentiment_recalibration():
+    # Verify that sudden negative breaking news dynamically flips/recalibrates the ML prediction
+    dates = pd.date_range("2024-01-01", periods=80)
+    prices = np.linspace(100, 150, 80)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 2000000,
+        "ticker": "BBCA.JK"
+    })
+
+    model = CustomStockMLModel()
+    
+    # 1. Prediction with positive sentiment
+    pos_news = {"avg_sentiment": 0.45, "news_count": 5, "sentiment_label": "Positif (Bullish)"}
+    features_pos = model.prepare_features(df, pos_news)
+    model.train(features_pos)
+    pred_pos = model.predict(features_pos, current_price=10000.0, news_summary=pos_news)
+    
+    # 2. Sudden breaking bad news arrives today (e.g. profit crash / lawsuit)
+    bad_news = {"avg_sentiment": -0.65, "news_count": 8, "sentiment_label": "Negatif (Bearish)"}
+    features_bad = model.prepare_features(df, bad_news)
+    pred_bad = model.predict(features_bad, current_price=10000.0, news_summary=bad_news)
+
+    # Assert that negative news dynamically dropped the expected return and shifted signal
+    assert pred_bad.expected_return_pct < pred_pos.expected_return_pct
+    assert pred_bad.signal != "Beli (Bullish)" or pred_bad.confidence < pred_pos.confidence
+    assert pred_bad.key_factors[2]["value"] == -0.65
+
+def test_precision_action_engine_urgent_sell_and_prime_buy():
+    from src.ml.precision_action_engine import PrecisionActionEngine
+    engine = PrecisionActionEngine()
+
+    # 1. Test Urgent Sell Emergency Condition
+    bad_features = {
+        "rsi_14": 28.0,
+        "macd_hist": -0.15,
+        "ma_trend_bullish": 0,
+        "volume_ratio": 1.6,
+        "bb_pct_b": 0.05,
+        "volatility_pct": 4.5,
+        "roc_5": -5.2
+    }
+    bad_news = {
+        "avg_sentiment": -0.6,
+        "news_count": 4,
+        "top_headlines": [{"title": "Emiten menghadapi gugatan PKPU dan pembengkakan utang"}]
+    }
+    holding = {"buyPrice": 5000, "shares": 100}
+    sell_alert = engine.evaluate_action_alert("BBCA.JK", current_price=4600, features_row=bad_features, news_summary=bad_news, holding_info=holding)
+    
+    assert sell_alert["type"] == "URGENT_SELL"
+    assert sell_alert["urgency"] == "HIGH"
+    assert "Jual Darurat" in sell_alert["title"] or "URGENT" in sell_alert["title"]
+
+    # 2. Test Prime Buy Golden Setup Condition
+    prime_features = {
+        "rsi_14": 56.0,
+        "macd_hist": 0.08,
+        "ma_trend_bullish": 1,
+        "volume_ratio": 1.45,
+        "bb_pct_b": 0.65,
+        "volatility_pct": 2.1,
+        "roc_5": 2.8
+    }
+    good_news = {
+        "avg_sentiment": 0.55,
+        "news_count": 6,
+        "top_headlines": [{"title": "Laba bersih melonjak 35% dan pembagian dividen interim"}]
+    }
+    buy_alert = engine.evaluate_action_alert("TLKM.JK", current_price=3500, features_row=prime_features, news_summary=good_news)
+    
+    assert buy_alert["type"] == "PRIME_BUY"
+    assert buy_alert["urgency"] == "HIGH"
+    assert "Peluang Beli" in buy_alert["title"] or "PRIME" in buy_alert["title"]

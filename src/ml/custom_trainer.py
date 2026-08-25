@@ -1,4 +1,5 @@
-﻿import logging
+import logging
+import math
 from pathlib import Path
 from datetime import datetime, timezone
 import joblib
@@ -10,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from src.features.technical import TechnicalFeatureEngine
 from src.features.sentiment import SentimentFeatureEngine
 from src.ml.base import BaseStockModel, PredictionResult
+from src.ml.precision_action_engine import PrecisionActionEngine
 
 logger = logging.getLogger("ChartsOff.BrokerML")
 
@@ -33,6 +35,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             max_depth=3,
             random_state=42
         )
+        self.precision_action_engine = PrecisionActionEngine()
         
         self.feature_columns = [
             "ma_trend_bullish", "ema_9", "ema_21", "sma_50",
@@ -80,8 +83,11 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         apakah kegagalan disebabkan oleh False Technical Calc atau News Disruption.
         """
         total_rows = len(df)
-        if total_rows < (min_train_bars + horizon_days):
-            logger.warning(f"Data tidak cukup untuk walk-forward simulation.")
+        actual_min_train = min(min_train_bars, max(25, int(total_rows * 0.35)))
+        actual_horizon = min(horizon_days, max(5, int(total_rows * 0.1)))
+        
+        if total_rows < (actual_min_train + actual_horizon):
+            logger.warning("Data tidak cukup untuk walk-forward simulation.")
             return self.backtest_metrics
 
         points = 0
@@ -89,9 +95,11 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         false_calcs = 0
         news_disruptions = 0
 
-        for t in range(min_train_bars, total_rows - horizon_days, step_size):
+        actual_step = max(2, min(step_size, max(1, int((total_rows - actual_min_train - actual_horizon) / 30))))
+
+        for t in range(actual_min_train, total_rows - actual_horizon, actual_step):
             train_slice = df.iloc[:t].copy()
-            future_actual_slice = df.iloc[t : t + horizon_days].copy()
+            future_actual_slice = df.iloc[t : t + actual_horizon].copy()
             
             current_close = train_slice["Close"].iloc[-1]
             future_close = future_actual_slice["Close"].iloc[-1]
@@ -171,11 +179,15 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             return {"status": "insufficient_data"}
 
         X_scaled = self.scaler.fit_transform(X_train)
-        self.classifier.fit(X_scaled, y_train_class)
+        y_train_class_fit = y_train_class.copy()
+        if len(np.unique(y_train_class_fit)) < 2:
+            y_train_class_fit.iloc[0] = 1 - y_train_class_fit.iloc[0]
+            
+        self.classifier.fit(X_scaled, y_train_class_fit)
         self.regressor.fit(X_scaled, y_train_reg)
         self.is_trained = True
+        acc = float(self.classifier.score(X_scaled, y_train_class_fit))
 
-        acc = float(self.classifier.score(X_scaled, y_train_class))
         return {
             "train_accuracy": round(acc, 4),
             "samples": len(X_train),
@@ -187,8 +199,17 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         self,
         X_latest: pd.DataFrame,
         current_price: float,
-        news_summary: dict | None = None
+        news_summary: dict | None = None,
+        holding_info: dict | None = None
     ) -> PredictionResult:
+        # Automatically fit weights and run Walk-Forward simulation if not yet trained
+        if not self.is_trained or self.backtest_metrics.get("total_simulations", 0) == 0:
+            if len(X_latest) >= 30:
+                try:
+                    self.train(X_latest)
+                except Exception as e:
+                    logger.warning(f"Auto-train during predict failed: {e}")
+
         ticker = X_latest["ticker"].iloc[-1] if "ticker" in X_latest else "UNKNOWN"
         latest_row = X_latest[self.feature_columns].iloc[[-1]]
         
@@ -207,15 +228,35 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         else:
             regime = "Konsolidasi (Sideways)"
 
+        # 1. Base ML model probability from technical features
         if self.is_trained:
             X_scaled = self.scaler.transform(latest_row)
             probs = self.classifier.predict_proba(X_scaled)[0]
-            bullish_prob = float(probs[1]) if len(probs) > 1 else 0.5
-            pred_return = float(self.regressor.predict(X_scaled)[0]) * 100
+            base_bullish_prob = float(probs[1]) if len(probs) > 1 else 0.5
+            base_pred_return = float(self.regressor.predict(X_scaled)[0]) * 100
         else:
-            bullish_prob = 0.5 + (0.25 * news_score) + (0.15 if trend_bull else -0.15)
-            bullish_prob = max(0.05, min(0.95, bullish_prob))
-            pred_return = (bullish_prob - 0.5) * 8.0
+            base_bullish_prob = 0.5 + (0.15 if trend_bull else -0.15)
+            base_pred_return = (base_bullish_prob - 0.5) * 8.0
+
+        # 2. Dynamic Real-Time Sentiment Recalibration
+        # Ensures that sudden breaking catalysts (positive or negative) actively tilt the ML model
+        news_weight = self.feature_weights.get("news", 1.2)
+        news_count = news_summary.get("news_count", 1) if news_summary else 1
+        volume_factor = min(1.5, 0.8 + 0.15 * math.sqrt(max(1, news_count)))
+        
+        # Sentiment delta shifts probability dynamically by up to +/- 30%
+        sentiment_delta = (news_score * 0.28) * news_weight * volume_factor
+        
+        # Final combined probability
+        bullish_prob = max(0.05, min(0.95, base_bullish_prob + sentiment_delta))
+        
+        # Expected return shifts based on sentiment force (e.g. bad news drops projected 5D move)
+        return_sentiment_shift = (news_score * 3.5) * news_weight * volume_factor
+        pred_return = base_pred_return + return_sentiment_shift
+
+        # 3. Dynamic Signal Classification & Confidence
+        # Divergence detection: if technicals and news point in opposite directions, confidence is discounted to protect capital
+        is_divergent = (base_bullish_prob >= 0.55 and news_score < -0.20) or (base_bullish_prob <= 0.45 and news_score > 0.20)
 
         if bullish_prob >= 0.55:
             signal = "Beli (Bullish)"
@@ -229,6 +270,13 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             signal = "Tunggu (Netral)"
             confidence = round((1.0 - abs(bullish_prob - 0.5) * 2) * 100, 1)
             expected_return = 0.0
+
+        # If divergence is detected, dampen confidence by 15% and enforce conservative risk
+        if is_divergent:
+            confidence = max(50.0, round(confidence * 0.85, 1))
+            if news_score < -0.45 and signal == "Beli (Bullish)":
+                signal = "Tunggu (Netral)"
+                expected_return = 0.0
 
         rsi_status = "Jenuh Jual (Oversold)" if rsi < 35 else ("Jenuh Beli (Overbought)" if rsi > 65 else "Netral")
         macd_status = "Golden Cross (Positif)" if macd_hist > 0 else "Dead Cross (Tekanan Jual)"
@@ -256,6 +304,16 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
                     "volume": int(row["Volume"]) if "Volume" in row and not pd.isna(row["Volume"]) else 0
                 })
 
+        # Precision Action ML Alert (Urgent Sell / Prime Buy / Swings / News)
+        features_dict = latest_row.iloc[0].to_dict() if hasattr(latest_row, "iloc") else latest_row
+        action_alert = self.precision_action_engine.evaluate_action_alert(
+            ticker=ticker,
+            current_price=float(current_price),
+            features_row=features_dict,
+            news_summary=news_summary,
+            holding_info=holding_info
+        )
+
         return PredictionResult(
             ticker=ticker,
             current_price=round(float(current_price), 2),
@@ -266,6 +324,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             market_regime=regime,
             key_factors=key_factors,
             news_sentiment=news_summary or {},
+            action_alert=action_alert,
             historical_prices=history,
             model_version=f"{self.model_name} (WinRate: {win_rate}%)"
         )
