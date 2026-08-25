@@ -201,13 +201,13 @@ export class NotificationService {
       }
 
       // =======================================================================
-      // SCENARIO 2: PRIME BUY (High-Conviction Buying Setup on Starred Stocks)
+      // SCENARIO 2: PRIME BUY / PROSPEK BAGUS (High-Conviction Buying Setup on Starred Stocks)
       // =======================================================================
       else if (alertType === "PRIME_BUY" && (isStarred || !isHolding)) {
         const hash = `PRIME_BUY_${ticker}_${alert.precision_score}`;
         if (!sentHashes[hash] || (now - sentHashes[hash]) > COOLDOWN_MS) {
-          const title = `🎯 Peluang Beli: ${cleanTicker}`;
-          const body = `Setup kuantitatif ${cleanTicker} sangat potensial. Terkonfirmasi Golden Cross & akumulasi volume (Keyakinan ${pred.confidence}%).`;
+          const title = `🎯 Prospek Bagus: ${cleanTicker}`;
+          const body = `Setup kuantitatif ${cleanTicker} menunjukkan prospek bagus. Terkonfirmasi Golden Cross & akumulasi volume (Keyakinan ${pred.confidence}%).`;
 
           newAlerts.push({
             id: hash,

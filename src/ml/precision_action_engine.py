@@ -151,15 +151,15 @@ class PrecisionActionEngine:
 
         buy_precision_pct = min(99.0, max(0.0, round(buy_score * 100, 1)))
 
-        # Ambang Batas Presisi Tinggi: Score >= 0.72 untuk memicu Peluang Beli Emas
+        # Ambang Batas Presisi Tinggi: Score >= 0.72 untuk memicu Prospek Bagus (PRIME_BUY)
         if buy_score >= 0.72:
             primary_reason = buy_reasons[0] if buy_reasons else "Konfluensi teknikal dan momentum kuat terkonfirmasi"
             return {
                 "ticker": f"{clean_ticker}.JK",
                 "type": "PRIME_BUY",
                 "urgency": "HIGH",
-                "title": f"🎯 Peluang Beli Terkonfirmasi: {clean_ticker}",
-                "message": f"Setup kuantitatif {clean_ticker} sangat potensial. {primary_reason}. Probabilitas kenaikan tinggi.",
+                "title": f"🎯 Prospek Bagus: {clean_ticker}",
+                "message": f"Setup kuantitatif {clean_ticker} menunjukkan prospek bagus. {primary_reason}. Probabilitas kenaikan tinggi.",
                 "precision_score": buy_precision_pct,
                 "roc_5": round(roc_5, 2),
                 "current_price": current_price

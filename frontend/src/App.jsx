@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Star } from "lucide-react";
+import { Star, Sparkles } from "lucide-react";
 import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
 import TickerList, { formatRupiah } from "./components/TickerList";
@@ -589,13 +589,19 @@ export default function App() {
                         )}
 
                         <div className="min-w-0">
-                          <div className="flex items-center space-x-1.5">
+                          <div className="flex items-center space-x-1.5 flex-wrap gap-y-0.5">
                             <span className="font-editorial font-bold text-base text-[#121316] tracking-tight">
                               {cleanTicker}
                             </span>
                             {isBought && (
                               <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
                                 Dimiliki
+                              </span>
+                            )}
+                            {item.action_alert?.type === "PRIME_BUY" && (
+                              <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20] uppercase flex items-center" title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi">
+                                <Sparkles className="w-2.5 h-2.5 mr-0.5 text-[#1B5E20]" />
+                                Prospek Bagus
                               </span>
                             )}
                           </div>
@@ -701,11 +707,17 @@ export default function App() {
                           <td
                             className="py-2.5 font-bold font-editorial"
                           >
-                            <div className="flex items-center space-x-1.5">
+                            <div className="flex items-center space-x-1.5 flex-wrap gap-y-0.5">
                               <span className="text-sm">{cleanTicker}</span>
                               {isBought && (
                                 <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20]/30 uppercase">
                                   Dimiliki
+                                </span>
+                              )}
+                              {item.action_alert?.type === "PRIME_BUY" && (
+                                <span className="text-[8px] font-mono font-bold text-[#1B5E20] bg-[#E8F5E9] px-1 py-0.2 border border-[#1B5E20] uppercase flex items-center" title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi">
+                                  <Sparkles className="w-2.5 h-2.5 mr-0.5 text-[#1B5E20]" />
+                                  Prospek Bagus
                                 </span>
                               )}
                             </div>

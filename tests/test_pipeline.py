@@ -148,4 +148,4 @@ def test_precision_action_engine_urgent_sell_and_prime_buy():
     
     assert buy_alert["type"] == "PRIME_BUY"
     assert buy_alert["urgency"] == "HIGH"
-    assert "Peluang Beli" in buy_alert["title"] or "PRIME" in buy_alert["title"]
+    assert "Prospek Bagus" in buy_alert["title"] or "PRIME" in buy_alert["title"]

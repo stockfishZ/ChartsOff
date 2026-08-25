@@ -63,7 +63,7 @@ export default function NotificationCenterModal({
       case "PRIME_BUY":
         return (
           <span className="text-[9px] font-mono font-bold uppercase text-[#1B5E20] bg-[#E8F5E9] px-1.5 py-0.5 border border-[#1B5E20]/30">
-            Peluang Beli
+            Prospek Bagus
           </span>
         );
       case "PRICE_SWING":

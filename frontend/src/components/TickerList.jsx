@@ -1,5 +1,5 @@
-﻿import React from "react";
-import { Star } from "lucide-react";
+import React from "react";
+import { Star, Sparkles } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 
 export function formatRupiah(val) {
@@ -26,6 +26,7 @@ export default function TickerList({
             const isSelected = selectedTicker === item.ticker;
             const isBought = Boolean(portfolio[item.ticker]);
             const isFavorite = favorites.includes(item.ticker);
+            const isPrimeBuy = item.action_alert?.type === "PRIME_BUY";
             const isBull = item.signal.toLowerCase().includes("beli") || item.signal.toLowerCase().includes("bull");
             const isBear = item.signal.toLowerCase().includes("waspada") || item.signal.toLowerCase().includes("bear");
             const cleanCode = item.ticker.replace(".JK", "");
@@ -37,6 +38,8 @@ export default function TickerList({
                 className={`flex-shrink-0 px-3 py-1.5 border transition-all text-left ${
                   isSelected
                     ? "bg-white border-[#121316] shadow-sm ring-1 ring-[#121316]"
+                    : isPrimeBuy
+                    ? "bg-white border-[#1B5E20]/60 hover:bg-white text-[#121316]"
                     : isBought
                     ? "bg-white/80 border-[#1B5E20]/40 hover:bg-white text-[#595750]"
                     : "bg-transparent border-transparent hover:bg-white/60 text-[#595750]"
@@ -59,17 +62,27 @@ export default function TickerList({
                       {cleanCode}
                     </span>
                   </div>
-                  <span
-                    className={`text-[9px] uppercase font-bold tracking-wider px-1 py-0.2 border ${
-                      isBull
-                        ? "text-[#1B5E20] border-[#1B5E20]/30 bg-[#E8F5E9]"
-                        : isBear
-                        ? "text-[#B71C1C] border-[#B71C1C]/30 bg-[#FFEBEE]"
-                        : "text-[#5D4037] border-[#5D4037]/30 bg-[#EFEBE9]"
-                    }`}
-                  >
-                    {item.signal.split(" ")[0]}
-                  </span>
+                  {isPrimeBuy ? (
+                    <span
+                      className="text-[8.5px] uppercase font-mono font-bold tracking-wider px-1 py-0.2 border text-[#1B5E20] border-[#1B5E20] bg-[#E8F5E9] flex items-center"
+                      title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi"
+                    >
+                      <Sparkles className="w-2.5 h-2.5 mr-0.5 text-[#1B5E20]" />
+                      Prospek Bagus
+                    </span>
+                  ) : (
+                    <span
+                      className={`text-[9px] uppercase font-bold tracking-wider px-1 py-0.2 border ${
+                        isBull
+                          ? "text-[#1B5E20] border-[#1B5E20]/30 bg-[#E8F5E9]"
+                          : isBear
+                          ? "text-[#B71C1C] border-[#B71C1C]/30 bg-[#FFEBEE]"
+                          : "text-[#5D4037] border-[#5D4037]/30 bg-[#EFEBE9]"
+                      }`}
+                    >
+                      {item.signal.split(" ")[0]}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-baseline justify-between space-x-2 mt-0.5">

@@ -182,7 +182,7 @@ export default function PredictionCard({
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-mono text-[10px] font-bold uppercase text-[#1B5E20]">
-                Peluang Beli Emas Terkonfirmasi (Presisi ML {prediction.action_alert.precision_score}%)
+                Prospek Bagus (Presisi ML {prediction.action_alert.precision_score}%)
               </span>
             </div>
             <p className="text-xs text-[#1B5E20] mt-0.5 leading-snug">
