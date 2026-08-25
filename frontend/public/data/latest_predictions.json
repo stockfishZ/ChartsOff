@@ -1,11 +1,11 @@
 [
   {
     "ticker": "BBCA.JK",
-    "timestamp": "2026-08-25T16:22:24.061969+00:00",
+    "timestamp": "2026-08-25T16:29:41.563954+00:00",
     "current_price": 6400.0,
     "signal": "Beli (Bullish)",
     "confidence": 50.0,
-    "expected_return_pct": 2.79,
+    "expected_return_pct": 2.83,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -43,7 +43,7 @@
     "news_sentiment": {
       "ticker": "BBCA.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6778,
+      "avg_sentiment": 0.6833,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "DIVIDEN",
       "top_headlines": [
@@ -137,8 +137,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.9,
-      "oil_current": 82.06,
+      "gold_current": 4700.0,
+      "oil_current": 82.22,
       "beta_ihsg_30": 0.67
     },
     "historical_prices": [
@@ -867,7 +867,7 @@
   },
   {
     "ticker": "BBRI.JK",
-    "timestamp": "2026-08-25T16:22:26.716955+00:00",
+    "timestamp": "2026-08-25T16:29:44.252011+00:00",
     "current_price": 3180.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -1003,8 +1003,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.3,
-      "oil_current": 82.08,
+      "gold_current": 4699.9,
+      "oil_current": 82.21,
       "beta_ihsg_30": 0.99
     },
     "historical_prices": [
@@ -1733,11 +1733,11 @@
   },
   {
     "ticker": "BMRI.JK",
-    "timestamp": "2026-08-25T16:22:29.570944+00:00",
+    "timestamp": "2026-08-25T16:29:46.656325+00:00",
     "current_price": 4200.0,
     "signal": "Beli (Bullish)",
-    "confidence": 75.4,
-    "expected_return_pct": -0.84,
+    "confidence": 76.3,
+    "expected_return_pct": -0.74,
     "target_horizon_days": 20,
     "market_regime": "Konsolidasi (Sideways)",
     "key_factors": [
@@ -1763,7 +1763,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.39,
+        "value": 0.41,
         "status": "Positif (Bullish)"
       },
       {
@@ -1775,7 +1775,7 @@
     "news_sentiment": {
       "ticker": "BMRI.JK",
       "news_count": 15,
-      "avg_sentiment": 0.3944,
+      "avg_sentiment": 0.4111,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "BERITA_UMUM",
       "top_headlines": [
@@ -1869,8 +1869,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.5,
-      "oil_current": 82.11,
+      "gold_current": 4699.9,
+      "oil_current": 82.21,
       "beta_ihsg_30": 1.25
     },
     "historical_prices": [
@@ -2599,7 +2599,7 @@
   },
   {
     "ticker": "BBNI.JK",
-    "timestamp": "2026-08-25T16:22:32.729866+00:00",
+    "timestamp": "2026-08-25T16:29:49.763534+00:00",
     "current_price": 3680.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -2689,11 +2689,11 @@
     },
     "action_alert": {
       "ticker": "BBNI.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: BBNI",
-      "message": "Setup kuantitatif BBNI menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 99.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: BBNI",
+      "message": "Laba Bank Only BNI Tumbuh 6 Persen hingga Juli 2026 - SuaraGarut.ID",
+      "precision_score": 80.0,
       "roc_5": 1.38,
       "current_price": 3680.0
     },
@@ -2735,8 +2735,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.8,
-      "oil_current": 82.12,
+      "gold_current": 4699.6,
+      "oil_current": 82.18,
       "beta_ihsg_30": 1.01
     },
     "historical_prices": [
@@ -3465,7 +3465,7 @@
   },
   {
     "ticker": "BRIS.JK",
-    "timestamp": "2026-08-25T16:22:35.615454+00:00",
+    "timestamp": "2026-08-25T16:29:52.233265+00:00",
     "current_price": 1805.0,
     "signal": "Tunggu (Netral)",
     "confidence": 79.0,
@@ -3564,9 +3564,9 @@
       "current_price": 1805.0
     },
     "risk_management": {
-      "stop_loss_price": 1860.0,
-      "take_profit_price": 1713.0,
-      "conservative_target_price": 1750.0,
+      "stop_loss_price": 1750.0,
+      "take_profit_price": 1897.0,
+      "conservative_target_price": 1860.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -3601,8 +3601,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.8,
-      "oil_current": 82.16,
+      "gold_current": 4699.6,
+      "oil_current": 82.18,
       "beta_ihsg_30": 1.22
     },
     "historical_prices": [
@@ -4331,7 +4331,7 @@
   },
   {
     "ticker": "BBTN.JK",
-    "timestamp": "2026-08-25T16:22:38.428015+00:00",
+    "timestamp": "2026-08-25T16:29:56.057890+00:00",
     "current_price": 1210.0,
     "signal": "Waspada (Bearish)",
     "confidence": 50.0,
@@ -4430,9 +4430,9 @@
       "current_price": 1210.0
     },
     "risk_management": {
-      "stop_loss_price": 1245.0,
-      "take_profit_price": 1151.0,
-      "conservative_target_price": 1175.0,
+      "stop_loss_price": 1175.0,
+      "take_profit_price": 1269.0,
+      "conservative_target_price": 1245.0,
       "risk_reward_ratio": "1 : 1.69",
       "risk_level": "Rendah (Terkendali)",
       "risk_color": "#1B5E20",
@@ -4467,8 +4467,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.6,
-      "oil_current": 82.16,
+      "gold_current": 4699.5,
+      "oil_current": 82.18,
       "beta_ihsg_30": 0.84
     },
     "historical_prices": [
@@ -5197,11 +5197,11 @@
   },
   {
     "ticker": "ARTO.JK",
-    "timestamp": "2026-08-25T16:22:41.399128+00:00",
+    "timestamp": "2026-08-25T16:30:00.524840+00:00",
     "current_price": 1005.0,
-    "signal": "Tunggu (Netral)",
-    "confidence": 81.3,
-    "expected_return_pct": -0.69,
+    "signal": "Beli (Bullish)",
+    "confidence": 50.0,
+    "expected_return_pct": -1.37,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -5227,30 +5227,22 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.67,
+        "value": 0.72,
         "status": "Positif (Bullish)"
       },
       {
         "factor": "Win Rate Simulasi",
-        "value": "57.6%",
-        "status": "19/33 Poin"
+        "value": "24.2%",
+        "status": "8/33 Poin"
       }
     ],
     "news_sentiment": {
       "ticker": "ARTO.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6694,
+      "avg_sentiment": 0.725,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
-        {
-          "title": "4 Anak Michael Bambang Hartono Terima Warisan Rp 52 T per Orang",
-          "link": "https://finance.detik.com/bursa-dan-valas/d-8616678/4-anak-michael-bambang-hartono-terima-warisan-rp-52-t-per-orang",
-          "published_at": "Thu, 13 Aug 2026 13:19:04 +0700",
-          "image_url": "https://akcdn.detik.net.id/community/media/visual/2018/08/11/4e00cbff-898d-4a36-b182-2a3bf0c71a02_169.jpeg?w=360&q=90",
-          "sentiment_score": 0.0,
-          "catalyst_tag": "BERITA_UMUM"
-        },
         {
           "title": "Transaksi Saham Dominasi 88 Persen Investasi Nasabah Bank Jago (ARTO) di Ekosistem Bibit-Stockbit - KabarBursa.com",
           "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPcmNsdnNLeTBNcGs2ak5OYzRGWmR6WWdZYmFTeUFVMXlTWjB0WFNqSGhfRXQ4S184by1saFhIamhsVHlPNmhiLVNWRkxCVjdFQlIxVGtfamtkVDJGajBLbFl6cE16Tjh3TFFvcGhwUVFxcE9yRE5iWmhCbDBXQnJIUG5yXzZQenNLeW41aGV5TWFycjRENFBoX205M1h2SHQtU19RMDJPb3A1TUVWY3BDQ0VqSVNXemZMWWE2MWNTanAycDhFcmdZdTI4eWtWMVB4WHktVg?oc=5",
@@ -5282,6 +5274,14 @@
           "image_url": "https://akcdn.detik.net.id/visual/2022/03/15/pt-bank-jago-tbk-arto-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.833,
           "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "ARTO Bukukan Laba Rp189 Miliar, Nasabah Tembus 20,1 Juta - KabarBursa.com",
+          "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPd2R3c1ZQbk5sQ2pqSXZZMzBaRFoxOWxFNFd1QTRJTk1aM2hVemlKRnBZaklabnFUU2NHMXNCbGUta2dkNXFwTlp1SUh3WGQ0X1RuWjdHUmI4dlZ3T0hMQ2NSMk9oWHpqdC1lOXkxQkxkVW9GMG1laE5lU3ZWdTRKSEJhTTN5OXNPOTVtM21ZNHQ3SnlCSVNQWVlTcnFZUQ?oc=5",
+          "published_at": "Thu, 23 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/03/15/pt-bank-jago-tbk-arto-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
@@ -5296,9 +5296,9 @@
       "current_price": 1005.0
     },
     "risk_management": {
-      "stop_loss_price": 1096.0,
-      "take_profit_price": 854.0,
-      "conservative_target_price": 914.0,
+      "stop_loss_price": 914.0,
+      "take_profit_price": 1156.0,
+      "conservative_target_price": 1096.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -5333,8 +5333,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.6,
-      "oil_current": 82.16,
+      "gold_current": 4699.8,
+      "oil_current": 82.19,
       "beta_ihsg_30": 2.54
     },
     "historical_prices": [
@@ -6059,11 +6059,11 @@
         "volume": 17219500
       }
     ],
-    "model_version": "BrokerInstitutionalHybrid (WinRate: 57.6%)"
+    "model_version": "BrokerInstitutionalHybrid (WinRate: 24.2%)"
   },
   {
     "ticker": "BDMN.JK",
-    "timestamp": "2026-08-25T16:22:44.233969+00:00",
+    "timestamp": "2026-08-25T16:30:03.672720+00:00",
     "current_price": 4270.0,
     "signal": "Waspada (Bearish)",
     "confidence": 52.1,
@@ -6142,29 +6142,29 @@
           "catalyst_tag": "BERITA_UMUM"
         },
         {
-          "title": "Saham Kena Korting Setengah Harga, Dividennya Rp 142 per Saham - Lotus Andalan Sekuritas",
-          "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOQzZlSTVIZW1RTUNNUWNiUXBWVWZnRUZTZmM3QThHdXR1SHNMeUE3NE5BN2s5TzUzY3o3dXJiUk40SWtaTV9VbC05X2JrdE9HRnJ0UzJUMzdLRWhrcGNHSmRqRWhzTkdSUVRDTmZKS0IwU0VOYS16bzRxSHVrTDRvelJ0ZFVRQ3BoMlpmNFE0N0Y2T256OUJEY0M5aGhnQVQzRjBJ?oc=5",
-          "published_at": "Tue, 07 Apr 2026 07:00:00 GMT",
+          "title": "Analisa Saham BDMN: Laba Bersih Bank Danamon Melonjak di Kuartal I-2026 - PintarSaham",
+          "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQOFZzamYzYl9UQlQ5N01iN2NYMklYM1FLTVMxTWE0RmZGTFVxVnNDalpTbXg4dGhxRWFRcC0wWEMzLTk2OUIyS1JNakZrb2RDNmUyWk42dUVmVWc2UGt1Ync4QndyN2toQUc1NlA1TWZrVEE5QmJJVVBvd3RDcXdMT0x1VVgwUTFUak5aS18teVVZQTdLZkotVGZB?oc=5",
+          "published_at": "Thu, 07 May 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2022/07/21/pt-bank-danamon-indonesia-tbk-bdmn-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.5,
-          "catalyst_tag": "DIVIDEN"
+          "sentiment_score": 0.75,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
     "action_alert": {
       "ticker": "BDMN.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: BDMN",
-      "message": "Setup kuantitatif BDMN menunjukkan prospek bagus. RSI 14 (54.1) berada di zona ekspansi ideal. Probabilitas kenaikan tinggi.",
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: BDMN",
+      "message": "Jelang Integrasi Danamon-MUFG Makin Dekat, Asing Agresif Masuk ke Bank Danamon (BDMN) - InvestorTrust",
       "precision_score": 80.0,
       "roc_5": 2.89,
       "current_price": 4270.0
     },
     "risk_management": {
-      "stop_loss_price": 4469.0,
-      "take_profit_price": 3938.0,
-      "conservative_target_price": 4071.0,
+      "stop_loss_price": 4071.0,
+      "take_profit_price": 4602.0,
+      "conservative_target_price": 4469.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -6199,8 +6199,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.6,
-      "oil_current": 82.15,
+      "gold_current": 4699.8,
+      "oil_current": 82.18,
       "beta_ihsg_30": 0.75
     },
     "historical_prices": [
@@ -6929,7 +6929,7 @@
   },
   {
     "ticker": "TLKM.JK",
-    "timestamp": "2026-08-25T16:22:47.245295+00:00",
+    "timestamp": "2026-08-25T16:30:06.436934+00:00",
     "current_price": 2620.0,
     "signal": "Waspada (Bearish)",
     "confidence": 62.6,
@@ -7028,9 +7028,9 @@
       "current_price": 2620.0
     },
     "risk_management": {
-      "stop_loss_price": 2706.0,
-      "take_profit_price": 2477.0,
-      "conservative_target_price": 2534.0,
+      "stop_loss_price": 2534.0,
+      "take_profit_price": 2763.0,
+      "conservative_target_price": 2706.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -7065,8 +7065,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.0,
-      "oil_current": 82.16,
+      "gold_current": 4699.8,
+      "oil_current": 82.21,
       "beta_ihsg_30": 0.83
     },
     "historical_prices": [
@@ -7795,7 +7795,7 @@
   },
   {
     "ticker": "ISAT.JK",
-    "timestamp": "2026-08-25T16:22:50.848575+00:00",
+    "timestamp": "2026-08-25T16:30:09.219362+00:00",
     "current_price": 2630.0,
     "signal": "Tunggu (Netral)",
     "confidence": 81.8,
@@ -7885,18 +7885,18 @@
     },
     "action_alert": {
       "ticker": "ISAT.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ISAT",
-      "message": "Setup kuantitatif ISAT menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan ISAT: +3.5%",
+      "message": "Saham ISAT tercatat menguat 3.5% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 3.54,
       "current_price": 2630.0
     },
     "risk_management": {
-      "stop_loss_price": 2889.0,
-      "take_profit_price": 2199.0,
-      "conservative_target_price": 2371.0,
+      "stop_loss_price": 2371.0,
+      "take_profit_price": 3061.0,
+      "conservative_target_price": 2889.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -7931,8 +7931,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.2,
-      "oil_current": 82.14,
+      "gold_current": 4699.9,
+      "oil_current": 82.21,
       "beta_ihsg_30": 1.15
     },
     "historical_prices": [
@@ -8661,11 +8661,11 @@
   },
   {
     "ticker": "EXCL.JK",
-    "timestamp": "2026-08-25T16:22:53.831212+00:00",
+    "timestamp": "2026-08-25T16:30:12.418591+00:00",
     "current_price": 2700.0,
     "signal": "Beli (Bullish)",
-    "confidence": 80.4,
-    "expected_return_pct": 20.82,
+    "confidence": 73.5,
+    "expected_return_pct": 19.99,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -8691,7 +8691,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.45,
+        "value": 0.32,
         "status": "Positif (Bullish)"
       },
       {
@@ -8703,7 +8703,7 @@
     "news_sentiment": {
       "ticker": "EXCL.JK",
       "news_count": 15,
-      "avg_sentiment": 0.45,
+      "avg_sentiment": 0.3167,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -8714,14 +8714,6 @@
           "image_url": "https://akcdn.detik.net.id/visual/2022/02/21/gedung-xl-axiata-tower-di-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
-        },
-        {
-          "title": "EXCL dan INPP Jadi Sorotan, IHSG Menguat 1,69%, serta MSCI Ubah Konstituen Saham",
-          "link": "https://finance.detik.com/bursa-dan-valas/d-8616192/excl-dan-inpp-jadi-sorotan-ihsg-menguat-1-69-serta-msci-ubah-konstituen-saham",
-          "published_at": "Thu, 13 Aug 2026 08:40:29 +0700",
-          "image_url": "https://akcdn.detik.net.id/community/media/visual/2026/08/13/bursa-dan-valas-1786585149-1786585150458.jpeg?w=360&q=90",
-          "sentiment_score": 0.75,
-          "catalyst_tag": "DIVIDEN"
         },
         {
           "title": "Rugi XL Smart (EXCL) Menyempit - investor.id",
@@ -8746,6 +8738,14 @@
           "image_url": "https://akcdn.detik.net.id/visual/2022/02/21/gedung-xl-axiata-tower-di-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.167,
           "catalyst_tag": "BERITA_UMUM"
+        },
+        {
+          "title": "Pasca Merger Laba EXCL Melonjak 63%, Analis Rekomendasi Beli Dengan Target Rp 3.500 - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOT09pLWZMTDA4c242SGdvYTlydXQ2SXJfZXA1ODF1dmcwQXVzTms0T1RXU01TNXhQc054NGJDSG15S21aTWdLT1ZUMzQ3YkI5cXZyVlJSLUVCMGJhS003cklrUDd6OE9GUEt2dE5RQjRUcHRCdG4teWkwVWJuREN5dnZ5TW0wNGg5WFNCenNTNllvblJmYzVJZW1BNzByTGdoZWZNUG4zd0VRTlpYLU9zYXJ0WkVHT0HSAa8BQVVfeXFMTUtLdmlMY0Exc3JUSG5jOTF6WDFWemFNaG5QQ1dTZm1raEE3UDN5VHpoeHlTaV9IbXFLbF9fX3ZCaXhvbnRVaGpvZEZjZ0tMU3l6S1V2RnV3Y05vUUpNY05RLWhtZERyYWtMNjRQVlFnVnpqSWxIRGNUYUpLazAwRmJpMmdmWmhnZnRnc1JfT1pEbVFoRTRVZnk1OWE0czBXVkpXYTY0SU1NZlA4RTNFSQ?oc=5",
+          "published_at": "Wed, 20 May 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/02/21/gedung-xl-axiata-tower-di-jakarta-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.833,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
@@ -8797,8 +8797,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.2,
-      "oil_current": 82.13,
+      "gold_current": 4700.1,
+      "oil_current": 82.23,
       "beta_ihsg_30": 1.26
     },
     "historical_prices": [
@@ -9527,11 +9527,11 @@
   },
   {
     "ticker": "GOTO.JK",
-    "timestamp": "2026-08-25T16:22:57.215540+00:00",
+    "timestamp": "2026-08-25T16:30:14.835663+00:00",
     "current_price": 50.0,
     "signal": "Waspada (Bearish)",
-    "confidence": 67.2,
-    "expected_return_pct": 2.17,
+    "confidence": 57.5,
+    "expected_return_pct": 3.53,
     "target_horizon_days": 20,
     "market_regime": "Tren Melemah (Bearish)",
     "key_factors": [
@@ -9557,27 +9557,27 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.4,
+        "value": 0.61,
         "status": "Positif (Bullish)"
       },
       {
         "factor": "Win Rate Simulasi",
-        "value": "30.3%",
-        "status": "10/33 Poin"
+        "value": "24.2%",
+        "status": "8/33 Poin"
       }
     ],
     "news_sentiment": {
       "ticker": "GOTO.JK",
       "news_count": 15,
-      "avg_sentiment": 0.395,
+      "avg_sentiment": 0.6139,
       "sentiment_label": "Positif (Bullish)",
-      "catalyst_tag": "BERITA_UMUM",
+      "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
         {
           "title": "Batas Harga Saham Rp50 Akan Dihapus, Bagaimana Nasib GOTO yang Masih Terkunci di Gocap? - AFU.id",
           "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPWDVaTFBTd2VRVzlRSGpORENhOEFLbDVUdFZnNGMtMG0tT1ZCRzR5QXlsVGZOOWZUUWhTRGRZZFh1UEFoYTFmdGJRcDZ6RF9vb0M0aDdKRHNQN1FGendOQ3JOWXg0OHNhVjUwbUdHeXFCX0U4aDhFOTc3ZFhnN2xDUzdjOWFyZk5qWjU4MVBpUEVDNjQzOEtPT1B1SEkyMFh0SUM3SzVvTWJKMTB3?oc=5",
           "published_at": "Tue, 25 Aug 2026 05:59:47 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/03/19/goto-gojek-tokopedia-tbk_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/12/11/kantor-pusat-goto-di-pasaraya-blok-m-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
         },
@@ -9585,7 +9585,7 @@
           "title": "Batas Harga Saham akan Dihapus, Saham GOTO Bisa Diuntungkan, Ini Analisisnya? - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQd0Q4ZldzTnZKRUxvZkxZMWZvX3JxRVpDbTVNMW1ua0hibkpGRnczU2lIY21zclFxeFAtQnpTaHNmcXFBcGFRdnowdzdKYzY5eHVjUXJHRVRFZ3QwaldvWlJpdXk4UlB2R3JDbVhQbW5wT2VHSHNSdS1Fck5RTXpibldidkxPa3k2NXRBUnMyZW1wNkRxb1htNE42VW0zblhRVkE1X2gtWng3UW5xek5z0gGnAUFVX3lxTE1MWERaRzlxZHlCbzlNOFJ1QTNMXzczRUZXaG52ZVBSdGdORUR2QTk3ZmY3Unc4WTRSbk5ubzByQUFmaERBLWtVRDljR012UWRXZUdyYy1neWo4TlE2aWl1S2NsaW4yVzZudURVelA0T1BjRU82dlZrUWdHY2tDNi1McDZCZWRQNmY4NThtcHlfVGwzVXByYkdzLWhnTkJEYjBLaFA1R2Iw?oc=5",
           "published_at": "Mon, 24 Aug 2026 10:38:09 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/12/11/kantor-pusat-goto-di-pasaraya-blok-m-jakarta-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2024/03/19/goto-gojek-tokopedia-tbk_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
         },
@@ -9593,7 +9593,7 @@
           "title": "Saham GOTO Terancam Turun di Bawah Rp 50, Ini Target Harga Berikutnya - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOeVdhMVk4UXRQQmNpTW9HNTc4V19kdkZXb21RbUZjc1BHbFZsU1JIZFl5amQ0WmJ4dFFjM1VrVWJBLUZVUE84OVVKUWNYRTZsclc4bGs0ajRkZHhoSmNRZEVYaTF6ZkI3QVdEMmdDZDNoN3IzdUJxdm9Hd3V1UjdyNDBIMXZNWnI0YmVqOVU2azZSbVJRNWV1RG5YLWl3aWlUODA3VmpCZ9IBnwFBVV95cUxNUGIwNjlDczZReTYyck56Q0ZmUE11MTlEcS1YcmlRei1iOGRRT1dFcS1pd3J6a3FYRGpEbXgzX0RpeDdzUXl1YzlnOG5Uc002QTdQaTFqcUxjb2RyeVo2VjlDTmp5WTZrTVZPWU5xVTBfZTZOdG5qMVNNUmFKVjdQSDM1dHczWGZ3cjAzTm5lQUFXWnZiS1A3MWx1amYzazQ?oc=5",
           "published_at": "Mon, 24 Aug 2026 09:52:27 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/03/19/goto-gojek-tokopedia-tbk_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/12/11/kantor-pusat-goto-di-pasaraya-blok-m-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.167,
           "catalyst_tag": "BERITA_UMUM"
         },
@@ -9601,7 +9601,7 @@
           "title": "Muncul Transaksi Saham GoTo Gojek (GOTO) di Rp 21 - investor.id",
           "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOWXhGcjUxWWJESjVCZjZSbFBiNDYxSWwtNi1NekgxeHdmelcwdW9VTGFHdGQ3Z29iMlFzQmxBaTFmRFFKZEVkTGMydE5vV21GeEl5Tm81RG5RcVNkelRLZklodVBQQ0V5ZEcxcEtIZF9kdGs2Q096bDA4NVBoclZ0SDNCRm54anpP?oc=5",
           "published_at": "Thu, 20 Aug 2026 06:31:24 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/03/19/goto-gojek-tokopedia-tbk_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/12/11/kantor-pusat-goto-di-pasaraya-blok-m-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
         },
@@ -9663,8 +9663,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.2,
-      "oil_current": 82.12,
+      "gold_current": 4700.0,
+      "oil_current": 82.22,
       "beta_ihsg_30": -0.0
     },
     "historical_prices": [
@@ -10389,15 +10389,15 @@
         "volume": 7613300
       }
     ],
-    "model_version": "BrokerInstitutionalHybrid (WinRate: 30.3%)"
+    "model_version": "BrokerInstitutionalHybrid (WinRate: 24.2%)"
   },
   {
     "ticker": "BUKA.JK",
-    "timestamp": "2026-08-25T16:23:00.405351+00:00",
+    "timestamp": "2026-08-25T16:30:17.458668+00:00",
     "current_price": 113.0,
     "signal": "Waspada (Bearish)",
-    "confidence": 62.4,
-    "expected_return_pct": 15.65,
+    "confidence": 75.2,
+    "expected_return_pct": 15.37,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -10423,7 +10423,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.23,
+        "value": 0.18,
         "status": "Positif (Bullish)"
       },
       {
@@ -10435,7 +10435,7 @@
     "news_sentiment": {
       "ticker": "BUKA.JK",
       "news_count": 15,
-      "avg_sentiment": 0.2278,
+      "avg_sentiment": 0.1833,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "BERITA_UMUM",
       "top_headlines": [
@@ -10492,9 +10492,9 @@
       "current_price": 113.0
     },
     "risk_management": {
-      "stop_loss_price": 120.0,
-      "take_profit_price": 102.0,
-      "conservative_target_price": 106.0,
+      "stop_loss_price": 106.0,
+      "take_profit_price": 124.0,
+      "conservative_target_price": 120.0,
       "risk_reward_ratio": "1 : 1.57",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -10529,8 +10529,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.3,
-      "oil_current": 82.12,
+      "gold_current": 4699.8,
+      "oil_current": 82.23,
       "beta_ihsg_30": 0.87
     },
     "historical_prices": [
@@ -11259,7 +11259,7 @@
   },
   {
     "ticker": "EMTK.JK",
-    "timestamp": "2026-08-25T16:23:03.452023+00:00",
+    "timestamp": "2026-08-25T16:30:20.640321+00:00",
     "current_price": 525.0,
     "signal": "Beli (Bullish)",
     "confidence": 53.4,
@@ -11349,11 +11349,11 @@
     },
     "action_alert": {
       "ticker": "EMTK.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: EMTK",
-      "message": "Setup kuantitatif EMTK menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 99.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan EMTK: +4.0%",
+      "message": "Saham EMTK tercatat menguat 4.0% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 3.96,
       "current_price": 525.0
     },
@@ -11395,8 +11395,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.3,
-      "oil_current": 82.13,
+      "gold_current": 4699.9,
+      "oil_current": 82.24,
       "beta_ihsg_30": 1.43
     },
     "historical_prices": [
@@ -12125,7 +12125,7 @@
   },
   {
     "ticker": "ADRO.JK",
-    "timestamp": "2026-08-25T16:23:06.934821+00:00",
+    "timestamp": "2026-08-25T16:30:23.200276+00:00",
     "current_price": 2630.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -12215,11 +12215,11 @@
     },
     "action_alert": {
       "ticker": "ADRO.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ADRO",
-      "message": "Setup kuantitatif ADRO menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 80.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan ADRO: +4.0%",
+      "message": "Saham ADRO tercatat menguat 4.0% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 3.95,
       "current_price": 2630.0
     },
@@ -12261,8 +12261,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.4,
-      "oil_current": 82.11,
+      "gold_current": 4699.2,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.6
     },
     "historical_prices": [
@@ -12991,11 +12991,11 @@
   },
   {
     "ticker": "PTBA.JK",
-    "timestamp": "2026-08-25T16:23:09.868109+00:00",
+    "timestamp": "2026-08-25T16:30:26.573479+00:00",
     "current_price": 2480.0,
     "signal": "Beli (Bullish)",
-    "confidence": 55.0,
-    "expected_return_pct": 4.67,
+    "confidence": 54.2,
+    "expected_return_pct": 4.57,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -13021,7 +13021,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.68,
+        "value": 0.66,
         "status": "Positif (Bullish)"
       },
       {
@@ -13033,7 +13033,7 @@
     "news_sentiment": {
       "ticker": "PTBA.JK",
       "news_count": 15,
-      "avg_sentiment": 0.675,
+      "avg_sentiment": 0.6583,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "DIVIDEN",
       "top_headlines": [
@@ -13054,6 +13054,14 @@
           "catalyst_tag": "DIVIDEN"
         },
         {
+          "title": "Nasib Laporan Keuangan Bukit Asam (PTBA) - investor.id",
+          "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTFA0TXRRUkRLdDlYUEVKMGpad0VILW9HZnZkQU55WVVvUjZtLVAtMDA4VUttT2RuRDAxV21KSEszeExmUUtlc202cTBsUUFTYjFjLWNVbExNczdYSkI1UHZuY0ZlZm55MUVRYXpELXBhdUV3YzBKdllNVnUzX2w?oc=5",
+          "published_at": "Sat, 18 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/06/15/pt-bukit-asam-tbk-ptba-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.5,
+          "catalyst_tag": "BERITA_UMUM"
+        },
+        {
           "title": "Bukit Asam (PTBA) Guyur Duit Triliunan - Lotus Andalan Sekuritas",
           "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNa2IxVzBqdTFJSXNXRjllQ1JNSUZHQUVKTXVMOFh5RHd6Z3pFS0dQRFVkdUNSOGUybXB0UVVTY3dSTHpRbGZGZFBBSFV4RHB0RnprVHRVR2huTUZxcVdYN1FrVHcwaW9sWnp1NVVWWXRrVU5HTGYxRTZiWWFkNTUyS3hBQno?oc=5",
           "published_at": "Mon, 13 Jul 2026 07:00:00 GMT",
@@ -13068,24 +13076,16 @@
           "image_url": "https://akcdn.detik.net.id/visual/2023/06/15/pt-bukit-asam-tbk-ptba-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "DIVIDEN"
-        },
-        {
-          "title": "PTBA bagi dividen Rp1,32 triliun, payout ratio turun jadi 45% - idnfinancials.com",
-          "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPcjFyTFRKNHptMVZIMktUaGtvcDlzMmlvdU93X3hyYzBfQ0g2SzZ6R01aQUQ2ZjJaNk1JZ3JqbDF3TUZ6a0IwQ2REMmpOd2V0dUZOMDRrV2dqQ01uRDFiV3VKbThnUmw2RWhFVDFvVFRvM2J1UzJvRGgtNFdzb1N0bEdVeTJNVm1xX2k2UGgyN0tBdmZBVWxlSTNqOHh3bElXOHRLVzhB?oc=5",
-          "published_at": "Fri, 12 Jun 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/06/15/pt-bukit-asam-tbk-ptba-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.167,
-          "catalyst_tag": "DIVIDEN"
         }
       ]
     },
     "action_alert": {
       "ticker": "PTBA.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: PTBA",
-      "message": "Setup kuantitatif PTBA menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan PTBA: +5.1%",
+      "message": "Saham PTBA tercatat menguat 5.1% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 5.08,
       "current_price": 2480.0
     },
@@ -13127,8 +13127,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.1,
-      "oil_current": 82.1,
+      "gold_current": 4700.1,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.44
     },
     "historical_prices": [
@@ -13857,7 +13857,7 @@
   },
   {
     "ticker": "ITMG.JK",
-    "timestamp": "2026-08-25T16:23:12.746263+00:00",
+    "timestamp": "2026-08-25T16:30:30.456819+00:00",
     "current_price": 25400.0,
     "signal": "Tunggu (Netral)",
     "confidence": 79.5,
@@ -13947,18 +13947,18 @@
     },
     "action_alert": {
       "ticker": "ITMG.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ITMG",
-      "message": "Setup kuantitatif ITMG menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 99.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: ITMG",
+      "message": "Indo Tambangraya (ITMG) Raih Kinerja Positif Semester I-2026,Cek Rekomendasi Sahamnya - kontan.co.id",
+      "precision_score": 80.0,
       "roc_5": 1.6,
       "current_price": 25400.0
     },
     "risk_management": {
-      "stop_loss_price": 26051.0,
-      "take_profit_price": 24315.0,
-      "conservative_target_price": 24749.0,
+      "stop_loss_price": 24749.0,
+      "take_profit_price": 26485.0,
+      "conservative_target_price": 26051.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Rendah (Terkendali)",
       "risk_color": "#1B5E20",
@@ -13993,8 +13993,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.2,
-      "oil_current": 82.1,
+      "gold_current": 4699.3,
+      "oil_current": 82.23,
       "beta_ihsg_30": 0.43
     },
     "historical_prices": [
@@ -14723,7 +14723,7 @@
   },
   {
     "ticker": "ANTM.JK",
-    "timestamp": "2026-08-25T16:23:16.062013+00:00",
+    "timestamp": "2026-08-25T16:30:32.909137+00:00",
     "current_price": 3190.0,
     "signal": "Beli (Bullish)",
     "confidence": 94.7,
@@ -14813,11 +14813,11 @@
     },
     "action_alert": {
       "ticker": "ANTM.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ANTM",
-      "message": "Setup kuantitatif ANTM menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan ANTM: +3.9%",
+      "message": "Saham ANTM tercatat menguat 3.9% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 3.91,
       "current_price": 3190.0
     },
@@ -14859,8 +14859,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.6,
-      "oil_current": 82.11,
+      "gold_current": 4698.3,
+      "oil_current": 82.23,
       "beta_ihsg_30": 1.16
     },
     "historical_prices": [
@@ -15589,11 +15589,11 @@
   },
   {
     "ticker": "INCO.JK",
-    "timestamp": "2026-08-25T16:23:19.467292+00:00",
+    "timestamp": "2026-08-25T16:30:36.185002+00:00",
     "current_price": 5275.0,
     "signal": "Beli (Bullish)",
-    "confidence": 91.4,
-    "expected_return_pct": 4.02,
+    "confidence": 95.0,
+    "expected_return_pct": 4.92,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -15619,19 +15619,19 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.6,
+        "value": 0.74,
         "status": "Positif (Bullish)"
       },
       {
         "factor": "Win Rate Simulasi",
-        "value": "42.4%",
-        "status": "14/33 Poin"
+        "value": "36.4%",
+        "status": "12/33 Poin"
       }
     ],
     "news_sentiment": {
       "ticker": "INCO.JK",
       "news_count": 15,
-      "avg_sentiment": 0.5972,
+      "avg_sentiment": 0.7417,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -15660,20 +15660,20 @@
           "catalyst_tag": "BERITA_UMUM"
         },
         {
-          "title": "Direktur Vale Budiawansyah Mundur",
-          "link": "https://finance.detik.com/bursa-dan-valas/d-8629811/direktur-vale-budiawansyah-mundur",
-          "published_at": "Sat, 22 Aug 2026 17:00:34 +0700",
-          "image_url": "https://akcdn.detik.net.id/community/media/visual/2024/07/02/direktur-strategic-corporate-affair-vale-indonesia-budiawansyah_169.jpeg?w=360&q=90",
-          "sentiment_score": 0.0,
-          "catalyst_tag": "BERITA_UMUM"
-        },
-        {
           "title": "Saham INCO Melejit di Tengah Rencana Pembagian Dividen Rp569 Miliar, Target Berapa? - TrenAsia",
           "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOVHhkUkVLYTJ1Rnl5blIzMTBlOERZSlhTOWZiWG9TSTBhUFMzZzRRSzRINUowNnVxTkx5am5jWFZ1RTluMnhrSFRqU25iWDRGN3hfMjBJM1JjOGFadVdub0tLVzBxSWx1dEUwNGxnNThqV0pNSEZrVjFYVHVxMFg5ei1PbmhjRDFhLVprWlJRLW5tcFBXUy1weXM4ZmFhUlBpRDdkcHM3dWZoZ9IBrwFBVV95cUxPclFBN05FUENTdnJRaDhDVXBEOVZuS3FBeVluZ1paVTR6S1ZTcGFkV09YbzZ3T3lXYnBISDI1SUd5QjZKZkF0Q05TOTlKQTFzLTZOaFlpckNzcW5veVZBalhOQ0xpVHZjZ0xWS3ZyWTJYeUNwaHJOcC1sX0kycnB0MGdqeG9iSjNhSVIzeDNJQlNQNU1vMFBzOFZhd1RZTDBDUnVPeElkdjFyUlpnQWow?oc=5",
           "published_at": "Thu, 20 Aug 2026 12:28:59 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2024/02/26/pt-vale-indonesia-tbk-inco-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.833,
           "catalyst_tag": "DIVIDEN"
+        },
+        {
+          "title": "Kinerja Keuangan Vale (INCO) Diprediksi Melesat, Bagaimana dengan Sahamnya? - InvestorTrust",
+          "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOaml0WE5kTmlhMEM4bXVueUQyNjh1S1JyV0l0TlVnT0d2Q3RyenY3OVhubmlZR2licGhsdm5IcHNuQS1ENEo5bXhSRW9ENkNrQjF4TG9PYVRYQU9YbVRSNTI0N01mTXVkMzRFOWRnTnFNSk8wT0dTd19aOFpyUXVXQmxYOXlaVFpITnhoaTVNWHpzV1V1ZmU0a2JGdHRnUjVjdHJkNUlvMmROcEhFWE1z?oc=5",
+          "published_at": "Sun, 09 Aug 2026 11:43:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2024/02/26/pt-vale-indonesia-tbk-inco-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 1.0,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
@@ -15725,8 +15725,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.6,
-      "oil_current": 82.11,
+      "gold_current": 4697.9,
+      "oil_current": 82.24,
       "beta_ihsg_30": 1.71
     },
     "historical_prices": [
@@ -16451,15 +16451,15 @@
         "volume": 9759400
       }
     ],
-    "model_version": "BrokerInstitutionalHybrid (WinRate: 42.4%)"
+    "model_version": "BrokerInstitutionalHybrid (WinRate: 36.4%)"
   },
   {
     "ticker": "MDKA.JK",
-    "timestamp": "2026-08-25T16:23:22.451063+00:00",
+    "timestamp": "2026-08-25T16:30:39.161804+00:00",
     "current_price": 2960.0,
     "signal": "Beli (Bullish)",
-    "confidence": 88.1,
-    "expected_return_pct": 10.33,
+    "confidence": 85.8,
+    "expected_return_pct": 10.05,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -16485,7 +16485,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.66,
+        "value": 0.62,
         "status": "Positif (Bullish)"
       },
       {
@@ -16497,7 +16497,7 @@
     "news_sentiment": {
       "ticker": "MDKA.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6639,
+      "avg_sentiment": 0.6194,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -16526,20 +16526,20 @@
           "catalyst_tag": "BERITA_UMUM"
         },
         {
-          "title": "Catat Kinerja Operasional Positif, Simak Prospek Saham Emiten Grup Merdeka - kontan.co.id",
-          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOOV9pYkdKaEdtU2Z5Qlo3bl85cFkyWFA1VWtEYnhIMmhEZlF5RzF3RnNFVlpoOGhoNWw1V2ZHMnBEdVlXRHZLdDk1bkdRQ0RpVzJIUmI5cjZvX2ZuTjdHaHFweHZxbVVUSXdYdjJTS0Z1OWlFWGM0Sk5vN3h4ekZTNXhqUFUtbU9WY1VfSlBBeUQ1OGlDVTJ4SUNodHpjZTRZUHo5dXE0S2huNzQ0VFHSAaYBQVVfeXFMT0kyZlJrNFhCVUdpV09IT2c2M2FVR3BLbVkzdk42WWxGTV9KOWNsclZEVF9LcUg3Vkc4VUROV0RQMFpIV2tlMVVQbHpmaFVvN2Jub3Raa2FiQmxmZnZUWDQ3UHU2dmwxNmtMUWp3MTVpX0xEcXpsRnktZGhZa055aXRDTHJvZ1VpdjRhY0dHQll6LUJpN0ZvdE1nT09SNGRad0pubUJTUQ?oc=5",
-          "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2022/09/21/pt-merdeka-copper-gold-tbk-mdka-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.833,
-          "catalyst_tag": "KINERJA_KEUANGAN"
-        },
-        {
           "title": "Laba Bersih Merdeka Copper Gold MDKA Tumbuh Kuartal I-2026 - achmadnurhidayat.id",
           "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE44cTVmWFdIZlJ1MGtNYWU2WWM2UkdZMmtZVUdlSFg4NXJEdkFOWC1oRW9sOG84UnRpZzZBUkdPTUZHcmNIMDZLRUFLWHJNeUhaRG1uY0YzdmpPOVRuY2ZMbU9GZHNDbWdETzFJ?oc=5",
           "published_at": "Mon, 13 Jul 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2022/09/21/pt-merdeka-copper-gold-tbk-mdka-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.833,
           "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "MDKA Jadi Sorotan: Prospek Terangkat, Target Harga Melonjak - investor.id",
+          "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQdkVuZG01RjBUTV9Pa3IzNmJkaDFRczBOcE1CaHRyemdvRU1oUlpBS1h1OWt0aFNzM0RKSkk0bUpvaTc4RUxOcTVLVW9YUkNkNFB3eWdJYWhLbm1pMFNpQWRLOGJ4eUdOc2FBbFFpZ09la0ZqalpHdXBVQ3lKLUI3aUFyNjVHYzFNeVFIcTZJdW9objBvM1E?oc=5",
+          "published_at": "Thu, 09 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/09/21/pt-merdeka-copper-gold-tbk-mdka-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "BERITA_UMUM"
         }
       ]
     },
@@ -16591,8 +16591,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4702.3,
-      "oil_current": 82.11,
+      "gold_current": 4697.6,
+      "oil_current": 82.24,
       "beta_ihsg_30": 1.64
     },
     "historical_prices": [
@@ -17321,11 +17321,11 @@
   },
   {
     "ticker": "AMMN.JK",
-    "timestamp": "2026-08-25T16:23:25.310330+00:00",
+    "timestamp": "2026-08-25T16:30:42.256272+00:00",
     "current_price": 4500.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
-    "expected_return_pct": 2.49,
+    "expected_return_pct": 2.53,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -17363,7 +17363,7 @@
     "news_sentiment": {
       "ticker": "AMMN.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6556,
+      "avg_sentiment": 0.6611,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "BERITA_UMUM",
       "top_headlines": [
@@ -17373,14 +17373,6 @@
           "published_at": "Thu, 20 Aug 2026 06:19:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/07/07/amman-mineral-internasional-ammn-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
-          "catalyst_tag": "BERITA_UMUM"
-        },
-        {
-          "title": "IHSG Naik 1,47% ke 6.488, Saham AMMN-BBRI Diborong Asing",
-          "link": "https://finance.detik.com/bursa-dan-valas/d-8626880/ihsg-naik-1-47-ke-6-488-saham-ammn-bbri-diborong-asing",
-          "published_at": "Thu, 20 Aug 2026 13:06:25 +0700",
-          "image_url": "https://akcdn.detik.net.id/community/media/visual/2024/04/22/jelang-putusan-mk-ihsg-menguat-3_169.jpeg?w=360&q=90",
-          "sentiment_score": 0.667,
           "catalyst_tag": "BERITA_UMUM"
         },
         {
@@ -17405,6 +17397,14 @@
           "published_at": "Mon, 06 Jul 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/07/07/amman-mineral-internasional-ammn-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
+          "catalyst_tag": "BERITA_UMUM"
+        },
+        {
+          "title": "Sebanyak 1,4 Juta Saham AMMN Diserok - investor.id",
+          "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBlNUJ3bGdjU0lUcHZlR3F4WnMweUM0b05EVDRBcm1fWENRZnlXNEM2VVc5NGxxSUdrRkZSLXIxNlFYSmJZN2p0OEJPYlF4N1BRTWpNR1lXZmZtM19FTDdESmhMZEIySTNXLTFtZUFxV2FHektBaEl3Ug?oc=5",
+          "published_at": "Fri, 03 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/07/07/amman-mineral-internasional-ammn-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
         }
       ]
@@ -17457,8 +17457,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.5,
-      "oil_current": 82.11,
+      "gold_current": 4697.7,
+      "oil_current": 82.25,
       "beta_ihsg_30": 2.28
     },
     "historical_prices": [
@@ -18187,7 +18187,7 @@
   },
   {
     "ticker": "MEDC.JK",
-    "timestamp": "2026-08-25T16:23:28.218735+00:00",
+    "timestamp": "2026-08-25T16:30:44.728172+00:00",
     "current_price": 1400.0,
     "signal": "Beli (Bullish)",
     "confidence": 58.0,
@@ -18323,8 +18323,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.6,
-      "oil_current": 82.11,
+      "gold_current": 4697.7,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.56
     },
     "historical_prices": [
@@ -19053,7 +19053,7 @@
   },
   {
     "ticker": "PGAS.JK",
-    "timestamp": "2026-08-25T16:23:31.144461+00:00",
+    "timestamp": "2026-08-25T16:30:47.350808+00:00",
     "current_price": 1540.0,
     "signal": "Beli (Bullish)",
     "confidence": 87.7,
@@ -19189,8 +19189,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.7,
-      "oil_current": 82.11,
+      "gold_current": 4697.7,
+      "oil_current": 82.26,
       "beta_ihsg_30": 0.85
     },
     "historical_prices": [
@@ -19919,11 +19919,11 @@
   },
   {
     "ticker": "AKRA.JK",
-    "timestamp": "2026-08-25T16:23:34.174927+00:00",
+    "timestamp": "2026-08-25T16:30:51.101227+00:00",
     "current_price": 1390.0,
-    "signal": "Beli (Bullish)",
-    "confidence": 50.3,
-    "expected_return_pct": -9.09,
+    "signal": "Tunggu (Netral)",
+    "confidence": 77.3,
+    "expected_return_pct": -3.61,
     "target_horizon_days": 20,
     "market_regime": "Konsolidasi (Sideways)",
     "key_factors": [
@@ -20055,8 +20055,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.8,
-      "oil_current": 82.11,
+      "gold_current": 4697.6,
+      "oil_current": 82.26,
       "beta_ihsg_30": 0.21
     },
     "historical_prices": [
@@ -20785,11 +20785,11 @@
   },
   {
     "ticker": "BUMI.JK",
-    "timestamp": "2026-08-25T16:23:37.223386+00:00",
+    "timestamp": "2026-08-25T16:30:54.545073+00:00",
     "current_price": 194.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
-    "expected_return_pct": 27.06,
+    "expected_return_pct": 27.17,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -20815,19 +20815,19 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.71,
+        "value": 0.73,
         "status": "Positif (Bullish)"
       },
       {
         "factor": "Win Rate Simulasi",
-        "value": "48.5%",
-        "status": "16/33 Poin"
+        "value": "36.4%",
+        "status": "12/33 Poin"
       }
     ],
     "news_sentiment": {
       "ticker": "BUMI.JK",
       "news_count": 15,
-      "avg_sentiment": 0.7139,
+      "avg_sentiment": 0.7306,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -20875,11 +20875,11 @@
     },
     "action_alert": {
       "ticker": "BUMI.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: BUMI",
-      "message": "Setup kuantitatif BUMI menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 80.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan BUMI: +7.2%",
+      "message": "Saham BUMI tercatat menguat 7.2% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 7.18,
       "current_price": 194.0
     },
@@ -20921,8 +20921,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.8,
-      "oil_current": 82.11,
+      "gold_current": 4698.7,
+      "oil_current": 82.26,
       "beta_ihsg_30": 2.26
     },
     "historical_prices": [
@@ -21647,15 +21647,15 @@
         "volume": 3431299700
       }
     ],
-    "model_version": "BrokerInstitutionalHybrid (WinRate: 48.5%)"
+    "model_version": "BrokerInstitutionalHybrid (WinRate: 36.4%)"
   },
   {
     "ticker": "BRPT.JK",
-    "timestamp": "2026-08-25T16:23:40.178868+00:00",
+    "timestamp": "2026-08-25T16:30:57.234601+00:00",
     "current_price": 1860.0,
     "signal": "Beli (Bullish)",
-    "confidence": 61.5,
-    "expected_return_pct": -0.46,
+    "confidence": 58.1,
+    "expected_return_pct": -0.95,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -21681,7 +21681,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.61,
+        "value": 0.54,
         "status": "Positif (Bullish)"
       },
       {
@@ -21693,7 +21693,7 @@
     "news_sentiment": {
       "ticker": "BRPT.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6139,
+      "avg_sentiment": 0.5361,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -21730,11 +21730,11 @@
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
-          "title": "Saham BRPT: Profil, Kinerja & Prospek Barito 2026 - Pluang",
-          "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1KaXZZdUQyVUxWakZKMGVhd1Q5aDVkR05WN2MyYXpiV2JwS1JUckJjTTFIZDc4NmMzcm1UaXpYX3N6U1lQYUJGWEFyLXB5VWZ5WmlzZjdTLW16WTR4djlQdUMwdw?oc=5",
-          "published_at": "Mon, 20 Jul 2026 07:00:00 GMT",
+          "title": "Pendapatan Moncer, Laba Emiten Prajogo (BRPT) Drop 64,71 Persen - Emitennews.com",
+          "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPMFNjQ2pHYXB0aUlRX2kzMkFYdUplUW4ySE1QUk43eDVmTFhYaVVueDYtVUl5aWpWUk94ODBkd1lCRTRuVGxBaEZVVldCcGpIc1FvUU5ySEdqd3BDNHE5dkhnQ3Rud0lyVXdQbi1vbTR6T1VRVTFrN2tJUGpDMU9ueXN6enA4NDFRMXdvY0QyaTY?oc=5",
+          "published_at": "Sat, 01 Aug 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/12/12/pt-barito-pacific-tbk-brpt-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.75,
+          "sentiment_score": 0.167,
           "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
@@ -21787,8 +21787,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.7,
-      "oil_current": 82.13,
+      "gold_current": 4698.7,
+      "oil_current": 82.26,
       "beta_ihsg_30": 1.85
     },
     "historical_prices": [
@@ -22517,11 +22517,11 @@
   },
   {
     "ticker": "TPIA.JK",
-    "timestamp": "2026-08-25T16:23:44.350610+00:00",
+    "timestamp": "2026-08-25T16:31:00.252253+00:00",
     "current_price": 1990.0,
     "signal": "Waspada (Bearish)",
     "confidence": 72.6,
-    "expected_return_pct": 2.23,
+    "expected_return_pct": 2.28,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -22616,9 +22616,9 @@
       "current_price": 1990.0
     },
     "risk_management": {
-      "stop_loss_price": 2134.0,
-      "take_profit_price": 1751.0,
-      "conservative_target_price": 1846.0,
+      "stop_loss_price": 1846.0,
+      "take_profit_price": 2229.0,
+      "conservative_target_price": 2134.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -22653,8 +22653,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.3,
-      "oil_current": 82.14,
+      "gold_current": 4698.3,
+      "oil_current": 82.26,
       "beta_ihsg_30": 1.49
     },
     "historical_prices": [
@@ -23383,11 +23383,11 @@
   },
   {
     "ticker": "ICBP.JK",
-    "timestamp": "2026-08-25T16:23:47.826961+00:00",
+    "timestamp": "2026-08-25T16:31:02.781496+00:00",
     "current_price": 7750.0,
     "signal": "Waspada (Bearish)",
-    "confidence": 50.0,
-    "expected_return_pct": -4.09,
+    "confidence": 53.5,
+    "expected_return_pct": -4.6,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -23413,7 +23413,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.42,
+        "value": 0.33,
         "status": "Positif (Bullish)"
       },
       {
@@ -23425,7 +23425,7 @@
     "news_sentiment": {
       "ticker": "ICBP.JK",
       "news_count": 15,
-      "avg_sentiment": 0.4167,
+      "avg_sentiment": 0.3333,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -23454,11 +23454,11 @@
           "catalyst_tag": "BERITA_UMUM"
         },
         {
-          "title": "Laba INDF dan ICBP Anjlok pada Semester I-2026 Imbas Kurs Rupiah - achmadnurhidayat.id",
-          "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBTWmlHdGFVM2RPbThIVXlTNkFhbFZjekFUZXR5dkZ5SGUzWXE3NTdTalVwWWFpVWRXS2wxSjdrblV5WG9Ic0FDeDJ1eDdXeGlib09HbFVIU3pNWHhZZ3c4bWhDRU9sUURQX1JaMWIxODhkMW9VWG5B?oc=5",
-          "published_at": "Mon, 03 Aug 2026 07:00:00 GMT",
+          "title": "INDF dan ICBP Tertekan Rugi Kurs, Bagaimana Prospek Sahamnya? - Ajaib",
+          "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQQkc5aVJvb256dm9GYnJHemI4NzBRLTlVaXVjSTQxd0pNdzMwZk5walc2cjFNNkRhWk9MWGgyQTEzbW0tV241UlY2d3Awei1iZkR1a1dzbEplelZ3RnZNNXFhdlB2dm45MFRFWmZLRDhiT2dYNU8yR3RCbC1hYUt0Y0VzT1NBQnJ2U3RsYWkzWFRaVUk?oc=5",
+          "published_at": "Mon, 10 Aug 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/03/27/pt-indofood-cbp-sukses-makmur-tbk-icbp-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.0,
+          "sentiment_score": -0.5,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
@@ -23473,18 +23473,18 @@
     },
     "action_alert": {
       "ticker": "ICBP.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ICBP",
-      "message": "Setup kuantitatif ICBP menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "NONE",
+      "urgency": "LOW",
+      "title": "",
+      "message": "",
+      "precision_score": 50.0,
       "roc_5": 1.97,
       "current_price": 7750.0
     },
     "risk_management": {
-      "stop_loss_price": 7994.0,
-      "take_profit_price": 7344.0,
-      "conservative_target_price": 7506.0,
+      "stop_loss_price": 7506.0,
+      "take_profit_price": 8156.0,
+      "conservative_target_price": 7994.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -23519,8 +23519,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.15,
+      "gold_current": 4698.5,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.39
     },
     "historical_prices": [
@@ -24249,7 +24249,7 @@
   },
   {
     "ticker": "INDF.JK",
-    "timestamp": "2026-08-25T16:23:50.982893+00:00",
+    "timestamp": "2026-08-25T16:31:05.337042+00:00",
     "current_price": 7375.0,
     "signal": "Beli (Bullish)",
     "confidence": 55.7,
@@ -24385,8 +24385,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.15,
+      "gold_current": 4696.8,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.5
     },
     "historical_prices": [
@@ -25115,11 +25115,11 @@
   },
   {
     "ticker": "UNVR.JK",
-    "timestamp": "2026-08-25T16:23:53.836984+00:00",
+    "timestamp": "2026-08-25T16:31:08.601885+00:00",
     "current_price": 1800.0,
     "signal": "Beli (Bullish)",
-    "confidence": 95.0,
-    "expected_return_pct": 3.69,
+    "confidence": 80.1,
+    "expected_return_pct": 3.53,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -25145,7 +25145,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.66,
+        "value": 0.67,
         "status": "Positif (Bullish)"
       },
       {
@@ -25157,7 +25157,7 @@
     "news_sentiment": {
       "ticker": "UNVR.JK",
       "news_count": 15,
-      "avg_sentiment": 0.6556,
+      "avg_sentiment": 0.6722,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "DIVIDEN",
       "top_headlines": [
@@ -25168,14 +25168,6 @@
           "image_url": "https://akcdn.detik.net.id/visual/2024/02/07/unilever-indonesia-unvr_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "DIVIDEN"
-        },
-        {
-          "title": "Laba Naik 10%, Maybank Sekuritas Masih Rekomendasi Jual Saham Unilever (UNVR) - kontan.co.id",
-          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOVXlUUVRDSWQwa2Z4dDI3ckc0WDQ3ZWtiRDRXQ2x3M3ZpNzlQVVJ3ME02Tl9yS2JmRFFSck1SQ2FwR0xzaWF3T1Q1bEdRRzdqekxKMm5SWjB3UHZBakNVX18zNnN3ajVidWhBbTFSV2ttVjhlY0JBMVhmX3FRWXE1QkZ3NDhuZWh1ZVRRbzdSNlBQcE5wdkE3YkU5STBsRFF4UmdrQ09SaUFNWkFrLXfSAaYBQVVfeXFMUGh0UGR0SWJLektVSHJ3dUtuOUFQdGF2MEw1bkQwbEgwLW0wR2hiM3JFWm1UcXBwYU1kRy16R3BpU3RSbWxKTVhTRlJaZzNBenFXMlhzUmdSZy02aGI0d2c0dUlrSTNfbGRmOVZGa3hfSDc0TjNiR0NkR3hZcTdfZXR1Sy1rc3I0aVhvVnFOUmtvTjhEMnZYb2FWQXpwZEhqWTc4LW9hUQ?oc=5",
-          "published_at": "Mon, 03 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/02/07/unilever-indonesia-unvr_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.833,
-          "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
           "title": "Penjualan Unilever Melonjak namun Margin Tertekan, Simak Rekomendasikan Saham UNVR - Kompas.com",
@@ -25192,6 +25184,14 @@
           "image_url": "https://akcdn.detik.net.id/visual/2023/06/22/gedung-grha-unilever-di-bsd-tangerang-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "BERITA_UMUM"
+        },
+        {
+          "title": "Laba Unilever Indonesia(UNVR) Melesat 37,7% Jadi Rp 2,97 Triliun pada Semester I-2026 - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxORk81dzZwSFRBWjZqVXh1Mlk2MUUtNXdSYUxibmI0Q0hpaWQ5WXVQS3p4UXBzcHZCWnhIR3NpemtfelFmUHU3Vk9HYjhKUWtEWkQ4b1NBUmY2a1lneVRYQ09tdU5jWFdkZ2poVFFORkJra2tzR3o4MVY4SWJuZnN4LXpsNlFXWkxXS0NYcVljOEZrSUViWjA0YVFHZk1IUkFIT0lfR0RfUDFNWVdQT0ZkVThzV0hockHSAa8BQVVfeXFMUDc2NHlxd3Znem42ODlWTW5OeWFLZGVOc2VjZTV5WHJNd2JodUZfR0Z2aS1DS2NWMHR6eHgyS1NncnZ0S0QtNFMzVEVEWERBYWxzSGE1b3Z0QjczbXdPZGo2WWJwRUl2V004cUVYZkh2Wm5jbWdGYWdISmpkMDZyMkRDMHFlalM1V0dlRXBGNjkxM2NMMmtldEVjY3pIc0Jtd2JSZUd2X2NyeEZwM0lWaw?oc=5",
+          "published_at": "Tue, 28 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/06/22/gedung-grha-unilever-di-bsd-tangerang-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 1.0,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
           "title": "Kas Unilever (UNVR) Tergerus, Margin Kotor Susut - Market - Bloomberg Technoz",
@@ -25251,8 +25251,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.13,
+      "gold_current": 4695.9,
+      "oil_current": 82.28,
       "beta_ihsg_30": 0.76
     },
     "historical_prices": [
@@ -25981,7 +25981,7 @@
   },
   {
     "ticker": "MYOR.JK",
-    "timestamp": "2026-08-25T16:23:56.792513+00:00",
+    "timestamp": "2026-08-25T16:31:10.837738+00:00",
     "current_price": 1620.0,
     "signal": "Beli (Bullish)",
     "confidence": 72.7,
@@ -26117,8 +26117,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.14,
+      "gold_current": 4695.6,
+      "oil_current": 82.26,
       "beta_ihsg_30": 0.45
     },
     "historical_prices": [
@@ -26847,7 +26847,7 @@
   },
   {
     "ticker": "KLBF.JK",
-    "timestamp": "2026-08-25T16:23:59.815057+00:00",
+    "timestamp": "2026-08-25T16:31:17.496102+00:00",
     "current_price": 805.0,
     "signal": "Beli (Bullish)",
     "confidence": 89.8,
@@ -26983,8 +26983,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.5,
-      "oil_current": 82.14,
+      "gold_current": 4696.3,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.68
     },
     "historical_prices": [
@@ -27713,11 +27713,11 @@
   },
   {
     "ticker": "SIDO.JK",
-    "timestamp": "2026-08-25T16:24:03.290722+00:00",
+    "timestamp": "2026-08-25T16:31:19.790102+00:00",
     "current_price": 350.0,
     "signal": "Waspada (Bearish)",
-    "confidence": 64.9,
-    "expected_return_pct": -2.85,
+    "confidence": 62.5,
+    "expected_return_pct": -2.51,
     "target_horizon_days": 20,
     "market_regime": "Tren Melemah (Bearish)",
     "key_factors": [
@@ -27743,7 +27743,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.48,
+        "value": 0.54,
         "status": "Positif (Bullish)"
       },
       {
@@ -27755,16 +27755,16 @@
     "news_sentiment": {
       "ticker": "SIDO.JK",
       "news_count": 15,
-      "avg_sentiment": 0.4822,
+      "avg_sentiment": 0.5378,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
         {
-          "title": "Laba Sido Muncul (SIDO) Anjlok 44% di Semester I, Analis Yakin Ada Sinyal Pemulihan - kontan.co.id",
-          "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQNjlDMHNPWUlhZmZCVXF4dFEzaFVkNUpBU0tERGRHaFBmc2pOZm1GcUJQNFhYZG9CR2NSMjR5enFMMDJmVGhsTlBJZGx4cGxaMjg0MUVrdXI3UXBFQW53WFRDcXNXa1RsdzJKTDZKTHNGSFgxcnhyeTJqRXZVTkF3U0E0VG9QWktzLTNQTXlmMER1U08yeG1lMFNkY1h4OHBxTHBHa1M2NFRqQ3pZZ1BRX0Z4bWlFd9IBrgFBVV95cUxPbTFaWGZpbldqZU9OLUZLVUdBODBKQlZFXzhQekI0ajNPOE9aeVlwMHVWX2xNZjgzZ0dWdTJkcFhiakxnMjIxUnR5UTVfM0ZJb0JDZ2hiSWRSbEx0b282VFpQUVctX2J0cEp6TVp2VXRVV0pIRGE0X2JVZ2NoRzNqTlFHbjhZNkNDTWMyRUlmd18wU0RoMzY4ZTJ2QUExcFZVbG81SUs3V1JkbnRnMXc?oc=5",
-          "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
+          "title": "Laba SIDO Semester I di Bawah Estimasi, Analis Pangkas Target & Sarankan Hold - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNclZjdTFqWHkxRnhwckN3Sk1VbTdJeU9TZ29LT3hnbFhZSk1vcjc0cnAwWkVGS21VbzM1OGpDX3VQT3RmekIzRjRIV011TXQycUsyc2dCUllaX0IxeUthU0drdUhzQ09YR083a3RsR2NUVFdHd1FkV1JaOXpFeEtsaEpDZ2o3UUg3aTRuNkVpOWV5aWRqc1hZcGlQblJBSHR3emF6RUh4RkR0d2cybnhN0gGnAUFVX3lxTE8xVWR3bTFINV90SkQxM29mX1RLekVyREFYQWtjaktCLWZKb21Id25JbFBmREpzbkZqRVJYYnk5dXN5Vmd3dU01ZWIxanVDLXNHeXFQVzZRdUpSS2I4YXZOYi1YNXJOeGs1UFpXSXY4SHUxdVE1OFJiOGIyclNSRHpSVUxQLWZmc0dyZHpaOFFmcGkzMS11VTdiN2F2b19RTnd3UWhjMHY0?oc=5",
+          "published_at": "Mon, 10 Aug 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/03/29/pt-industri-jamu-dan-farmasi-sido-muncul-tbk-sido-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.0,
+          "sentiment_score": 0.833,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
@@ -27773,6 +27773,14 @@
           "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/03/29/pt-industri-jamu-dan-farmasi-sido-muncul-tbk-sido-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.167,
+          "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "Laba Sido Muncul (SIDO) Anjlok 44% di Semester I, Analis Yakin Ada Sinyal Pemulihan - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQNjlDMHNPWUlhZmZCVXF4dFEzaFVkNUpBU0tERGRHaFBmc2pOZm1GcUJQNFhYZG9CR2NSMjR5enFMMDJmVGhsTlBJZGx4cGxaMjg0MUVrdXI3UXBFQW53WFRDcXNXa1RsdzJKTDZKTHNGSFgxcnhyeTJqRXZVTkF3U0E0VG9QWktzLTNQTXlmMER1U08yeG1lMFNkY1h4OHBxTHBHa1M2NFRqQ3pZZ1BRX0Z4bWlFd9IBrgFBVV95cUxPbTFaWGZpbldqZU9OLUZLVUdBODBKQlZFXzhQekI0ajNPOE9aeVlwMHVWX2xNZjgzZ0dWdTJkcFhiakxnMjIxUnR5UTVfM0ZJb0JDZ2hiSWRSbEx0b282VFpQUVctX2J0cEp6TVp2VXRVV0pIRGE0X2JVZ2NoRzNqTlFHbjhZNkNDTWMyRUlmd18wU0RoMzY4ZTJ2QUExcFZVbG81SUs3V1JkbnRnMXc?oc=5",
+          "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/03/29/pt-industri-jamu-dan-farmasi-sido-muncul-tbk-sido-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.0,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
@@ -27790,14 +27798,6 @@
           "image_url": "https://akcdn.detik.net.id/visual/2023/03/29/pt-industri-jamu-dan-farmasi-sido-muncul-tbk-sido-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
-        },
-        {
-          "title": "Saham SIDO: Kinerja Awal Tahun Anjlok, Analis Prediksi Ruang Pemulihan Terbuka - KONTAN",
-          "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMGRGNUtkc3gydkMzY1dlX0pCZ2d4YzhmYUxwY01OQXlyWUxDak1KRXNDQk9tdnBQeU01LWstejY3dFFwd2laZTF0TTVlRk81czRzZ2xsOXM5S0g3LWo5Wm1YODZObkctRjBVS1VhMzhfTHo3MXd3SHJBRDE4ZkZHM1liNUt3Z3Vkd29ZbnctQWtHR3dyWnFraVdtVUV1ZTBjaWJ4RnFya1VXYWlXSll3?oc=5",
-          "published_at": "Wed, 20 May 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/03/29/pt-industri-jamu-dan-farmasi-sido-muncul-tbk-sido-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.0,
-          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
@@ -27806,15 +27806,15 @@
       "type": "NEWS_CATALYST",
       "urgency": "MEDIUM",
       "title": "\ud83d\udcf0 Berita Positif: SIDO",
-      "message": "Laba Sido Muncul (SIDO) Anjlok 44% di Semester I, Analis Yakin Ada Sinyal Pemulihan - kontan.co.id",
+      "message": "Laba SIDO Semester I di Bawah Estimasi, Analis Pangkas Target & Sarankan Hold - kontan.co.id",
       "precision_score": 80.0,
       "roc_5": 1.16,
       "current_price": 350.0
     },
     "risk_management": {
-      "stop_loss_price": 359.0,
-      "take_profit_price": 335.0,
-      "conservative_target_price": 341.0,
+      "stop_loss_price": 341.0,
+      "take_profit_price": 365.0,
+      "conservative_target_price": 359.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Rendah (Terkendali)",
       "risk_color": "#1B5E20",
@@ -27849,8 +27849,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.6,
-      "oil_current": 82.13,
+      "gold_current": 4695.7,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.28
     },
     "historical_prices": [
@@ -28579,7 +28579,7 @@
   },
   {
     "ticker": "AMRT.JK",
-    "timestamp": "2026-08-25T16:24:06.191468+00:00",
+    "timestamp": "2026-08-25T16:31:22.420940+00:00",
     "current_price": 1415.0,
     "signal": "Tunggu (Netral)",
     "confidence": 84.6,
@@ -28669,18 +28669,18 @@
     },
     "action_alert": {
       "ticker": "AMRT.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: AMRT",
-      "message": "Setup kuantitatif AMRT menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 95.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: AMRT",
+      "message": "Ditopang Grup AMRT Cs, Laba BLOG Melaju 29,1 Persen Meski EPS Tergerus - Emitennews.com",
+      "precision_score": 80.0,
       "roc_5": 3.28,
       "current_price": 1415.0
     },
     "risk_management": {
-      "stop_loss_price": 1498.0,
-      "take_profit_price": 1278.0,
-      "conservative_target_price": 1332.0,
+      "stop_loss_price": 1332.0,
+      "take_profit_price": 1552.0,
+      "conservative_target_price": 1498.0,
       "risk_reward_ratio": "1 : 1.65",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -28715,8 +28715,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.2,
-      "oil_current": 82.14,
+      "gold_current": 4696.3,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.96
     },
     "historical_prices": [
@@ -29445,11 +29445,11 @@
   },
   {
     "ticker": "MAPI.JK",
-    "timestamp": "2026-08-25T16:24:09.164884+00:00",
+    "timestamp": "2026-08-25T16:31:24.602877+00:00",
     "current_price": 1500.0,
     "signal": "Beli (Bullish)",
-    "confidence": 56.9,
-    "expected_return_pct": 2.95,
+    "confidence": 58.1,
+    "expected_return_pct": 3.12,
     "target_horizon_days": 20,
     "market_regime": "Volatilitas Tinggi",
     "key_factors": [
@@ -29475,7 +29475,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.73,
+        "value": 0.76,
         "status": "Positif (Bullish)"
       },
       {
@@ -29487,46 +29487,46 @@
     "news_sentiment": {
       "ticker": "MAPI.JK",
       "news_count": 15,
-      "avg_sentiment": 0.7306,
+      "avg_sentiment": 0.7583,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
         {
-          "title": "BUMI Catat Laba Bersih Semester I-2026 Naik 188%, AMAR Tetapkan Dividen Interim - detikFinance",
-          "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQbFFjMllsVzQ2aFJiRUlKLXRTYkhPMkNKWTNxR1l0Q0ZIejFpZVA0bmxmbXFXbzdTRlcwWU50YWFSMEc1WVBrNy0yQUtZbU5IclVlRFFTdGlvSGx3Tl9Eanh5SEtPLWRxTDBTeTRWTnNad0VoUXMzTDJpMWdZa0JJZ3paZjNJcFlGdVZKSmlicDBXMGdYVHNIbmdkZVN6RDhydDhlYVR4cE5pS29TZi1ub3U1SGlnMXdDdXd0cWx1c205clluaWxOZ9IBzgFBVV95cUxQYk1SYlI2UEFpTmVjQzJMYWpCVGl4VXdvZFRBTlFsYVRHbUlvbVpqMUlwdk4ydUxxS1FnX1FwNmdkYWJ4bnF0THRMTXBHTTk4dWRxUTUyUnd5V3hLLUtMVVVLTWdpelRXbkN1Sjh3bFZORU5zR2VfamI1MG1vRXRFaGI4dmRvN3JMNTJTdjB6S2hlaWN1UU8wUFMtX01TbGQ2YklSUmxaeFZEcVJTOUkxZDRidnlvZUIxNS1XQmFtVmZ0ZUk5NnZUZ3gtTnlsdw?oc=5",
-          "published_at": "Wed, 05 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.875,
-          "catalyst_tag": "DIVIDEN"
-        },
-        {
-          "title": "Saham MAPI Tiba-Tiba Melejit 20 Persen, Apa Katalisnya? - IDX Channel",
-          "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOOFh1bXhvOTUxYzlycjBvQ3psSzg2R1F4czdBODFQa084ZERpbV9wS2EwY1E1dk5QbUdhbE5UM1c3OG0weUN0ekNXOS1ZSUQyRnJRU0lMUExZYVBaVTZlakNYcEpPVlA4NDhyQno1TEh3WVpvdjhockVYVmZMbjRrazJKQW1yTzlMakN2RzA1VE1tWExv?oc=5",
-          "published_at": "Mon, 03 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.5,
-          "catalyst_tag": "BERITA_UMUM"
-        },
-        {
-          "title": "IHSG Parkir di Zona Hijau dan MAPI Raih Pendapatan Rp 24,16 Triliun - achmadnurhidayat.id",
-          "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9rVnJoeFQzYlNyOWw3UE5TdUx2a1g1eGFwbTVtOTZvMnpET1BWZWNvMVJJNm9WVjJITXJockp0TGttQ1ktSXRHX0Vua245RF92amNjQ1d2N3lPcmJtS2tiUlJEcmM3SFhwOFRnN1l6N0Rsc2VhcVFxRk5rUDYyaDg?oc=5",
-          "published_at": "Fri, 31 Jul 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.5,
-          "catalyst_tag": "KINERJA_KEUANGAN"
-        },
-        {
-          "title": "MAPI Raih Laba Bersih Rp 1,22 Triliun pada Semester I-2026 - achmadnurhidayat.id",
-          "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9BMmZkd3B5UzRqRDRpVmdsUnh4VlpHY3ZGZzd6czVfTzZEUzdrS2pzMTZWQ0pVb2t1cDVYRE5vM2x6SktIT3NDZ0VRQ21tU0JDanFDUU5YQU0wZ09teEloei1XNlMwMUlDTVdGQ2gwMDlkbFk?oc=5",
+          "title": "Laba Mitra Adiperkasa (MAPI) di Atas Ekspektasi, Begini Rekomendasi Sahamnya - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPWEJ6Z2Y2QWpvU2FWbmNaWXVpcWp6M19xLUh0amdHclVsYll2QldCNmpKWW45OUlTRFFQSGUzQ0k1N3dEalF5M05leElITlowUEw2UFJJQUpIeGZJZFc5bEVORExXWU1HWjVpdmRSTzFIR1dwTDNYWC1NVWRFUzlqNTRVYXN2clB6U1lrMEdiNmlVd1hKeTZMTmF4WUFSNVJ2Y2VBMVJUcmxBaV9WMXfSAaYBQVVfeXFMUEp2aTV5QUlueGF6YzF2ZFpSVl9ZOVB2S1FVRzZaWEVMb1o1aGJGUDdKTzE0bkJqd2E0eTRJTUpqOEY1cHkwOEoxTWEycmk2LVlSMlpOckF1dmFzQ3YzUzlfR2dTUDJya2FucG5nQmt6QUpvM2R6TnNMXzlTM1F2WHE2Wk4wOTkyUnoxczlueDgtWlJFblpCcW9DUGRMSVc3QWR2YzVYdw?oc=5",
           "published_at": "Thu, 30 Jul 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
-          "title": "Laba Mitra Adiperkasa (MAPI) di Atas Ekspektasi, Begini Rekomendasi Sahamnya - kontan.co.id",
-          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPWEJ6Z2Y2QWpvU2FWbmNaWXVpcWp6M19xLUh0amdHclVsYll2QldCNmpKWW45OUlTRFFQSGUzQ0k1N3dEalF5M05leElITlowUEw2UFJJQUpIeGZJZFc5bEVORExXWU1HWjVpdmRSTzFIR1dwTDNYWC1NVWRFUzlqNTRVYXN2clB6U1lrMEdiNmlVd1hKeTZMTmF4WUFSNVJ2Y2VBMVJUcmxBaV9WMXfSAaYBQVVfeXFMUEp2aTV5QUlueGF6YzF2ZFpSVl9ZOVB2S1FVRzZaWEVMb1o1aGJGUDdKTzE0bkJqd2E0eTRJTUpqOEY1cHkwOEoxTWEycmk2LVlSMlpOckF1dmFzQ3YzUzlfR2dTUDJya2FucG5nQmt6QUpvM2R6TnNMXzlTM1F2WHE2Wk4wOTkyUnoxczlueDgtWlJFblpCcW9DUGRMSVc3QWR2YzVYdw?oc=5",
+          "title": "Bisnis Ritel Bergairah, Laba MAPA dan MAPI Melonjak - investor.id",
+          "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQWVZ3OVBUa2lfM3BvbDJoak9XUXBnZlM5aEFTVkYxZGVwZmxEaXQzZ0I1c2hWT0NfRnFaa3I3elVZWmwzbGJFM2g3V001WFhWampKLVMtU094eGc0WDNBN2l0bUFSR280ZW9tbmJQeUE3UkJVN0Vib1MzRmlHRnEtQVJ0Q01FRkhVYkhRTg?oc=5",
           "published_at": "Thu, 30 Jul 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "MAPI Tebar Dividen Rp166 Miliar, Cek Jadwalnya - maybanktrade.co.id",
+          "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOekRMdThkOWgzYmN2eVh5dENiQTZ5blR6RXJZNFpOOE4wMDdwMWllU1dWa3NNeEdpTlgxWW85YUdBS1k0NzgtdXBZMU9kQ1ZRYi1fRUs2MEFLMmppQnJKTkpwMExxWjVUN0RQNndQVThYVEJtR3JTNGJzUjZ5WDQ5c2NNU1lBQ0dacnN6UQ?oc=5",
+          "published_at": "Tue, 30 Jun 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "DIVIDEN"
+        },
+        {
+          "title": "MAPI dan MAPA Bagikan Dividen, Yield Masing-masing 0,66% dan 0,67% - SWA.co.id",
+          "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPcm1vWGZGbVJaUTNDZzZnalBIbUkyU3ZiOXBTOGJRRWtIM1B1a0lZczk1R2gxenZHTS1LdG5BSzN5VFpLZUI0ZWZSeVdpTFJ2N09wcE1GMUlSOVQ5NHVqaUJLZE42c2laNUFxUGx5emkzNTU1ZTFMTE5BRGJUUFZvTGFSZHBndkRhM214ald1S2prc2tLa2c?oc=5",
+          "published_at": "Wed, 24 Jun 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "DIVIDEN"
+        },
+        {
+          "title": "Saham MAPI: Harga, Kinerja, dan Potensinya ke Depan - INDODAX",
+          "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9jeVlBMkcwTmRhTnI3NWhzWm5wZkotMk5ha252LWhmTkxqYU0zc1llV0RaS0tqampnajlyVjV4M01ZZDZCQTZoRFdTMWljWUV6bVJrdjJSc2loSEN3eC10c1RnNGR2MzB6ZzJZaG5B?oc=5",
+          "published_at": "Mon, 11 May 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2022/08/18/pt-mitra-adiperkasa-tbk-mapi-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "KINERJA_KEUANGAN"
@@ -29538,7 +29538,7 @@
       "type": "NEWS_CATALYST",
       "urgency": "MEDIUM",
       "title": "\ud83d\udcf0 Berita Positif: MAPI",
-      "message": "BUMI Catat Laba Bersih Semester I-2026 Naik 188%, AMAR Tetapkan Dividen Interim - detikFinance",
+      "message": "Laba Mitra Adiperkasa (MAPI) di Atas Ekspektasi, Begini Rekomendasi Sahamnya - kontan.co.id",
       "precision_score": 80.0,
       "roc_5": 0.33,
       "current_price": 1500.0
@@ -29581,8 +29581,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.15,
+      "gold_current": 4696.5,
+      "oil_current": 82.25,
       "beta_ihsg_30": -0.13
     },
     "historical_prices": [
@@ -30311,7 +30311,7 @@
   },
   {
     "ticker": "ACES.JK",
-    "timestamp": "2026-08-25T16:24:12.194457+00:00",
+    "timestamp": "2026-08-25T16:31:31.233721+00:00",
     "current_price": 362.0,
     "signal": "Tunggu (Netral)",
     "confidence": 82.6,
@@ -30401,18 +30401,18 @@
     },
     "action_alert": {
       "ticker": "ACES.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: ACES",
-      "message": "Setup kuantitatif ACES menunjukkan prospek bagus. RSI 14 (62.5) berada di zona ekspansi ideal. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: ACES",
+      "message": "Dibayangi Sentimen Daya Beli, Simak Rekomendasi Saham Aspirasi Hidup (ACES) - kontan.co.id",
+      "precision_score": 80.0,
       "roc_5": 2.26,
       "current_price": 362.0
     },
     "risk_management": {
-      "stop_loss_price": 375.0,
-      "take_profit_price": 341.0,
-      "conservative_target_price": 349.0,
+      "stop_loss_price": 349.0,
+      "take_profit_price": 383.0,
+      "conservative_target_price": 375.0,
       "risk_reward_ratio": "1 : 1.62",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -30447,8 +30447,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.1,
-      "oil_current": 82.15,
+      "gold_current": 4695.7,
+      "oil_current": 82.26,
       "beta_ihsg_30": 0.37
     },
     "historical_prices": [
@@ -31177,11 +31177,11 @@
   },
   {
     "ticker": "CPIN.JK",
-    "timestamp": "2026-08-25T16:24:15.179901+00:00",
+    "timestamp": "2026-08-25T16:31:34.729240+00:00",
     "current_price": 3020.0,
     "signal": "Beli (Bullish)",
-    "confidence": 51.3,
-    "expected_return_pct": 1.0,
+    "confidence": 54.3,
+    "expected_return_pct": 1.42,
     "target_horizon_days": 20,
     "market_regime": "Tren Melemah (Bearish)",
     "key_factors": [
@@ -31207,7 +31207,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.54,
+        "value": 0.61,
         "status": "Positif (Bullish)"
       },
       {
@@ -31219,7 +31219,7 @@
     "news_sentiment": {
       "ticker": "CPIN.JK",
       "news_count": 15,
-      "avg_sentiment": 0.5444,
+      "avg_sentiment": 0.6111,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -31227,7 +31227,7 @@
           "title": "Kinerja Emiten Poultry Diproyeksi Positif, Cek Rekomendasi Saham CPIN, MAIN & JPFA - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNMDBSNlFra3JEN0gyREVZXzNiQ1RyUmc5ZmYwVVVKeFRyVFh3MGRENElWc1dxXzVucDl6MDUtN292b1lyWk9WRzFHLXZPRUplZFpFa0V2blY1Ym4xN0xjNUg1Sm1PWTlHbmN0T2xxSFVEdjJzaXRHa2ZxT3p2VDd1cHppT1FyMUctSUZRb0c2YnZ2ejRXZTZoOWhYSElBc3hLZ2NTSE9zck03MGp2a21jcVl3YmzSAawBQVVfeXFMUEtNVmlIQ2pySWZabHdFeVBTcm9RSERZR1lzQlU5cmxMbW9UUHdDNzhpajhJeWVrMzByckhvekxNaWFyMTN5MUI0a2F6cHRicWdPdG0wZjRvZTBNSEN5OWRTVFlseE1nUWEweFRoeTdEUm1BQ0l2YlpUdk1aQUY3Vm5jUmxRcmVHZjFZTXg3UE5GS3ZtYWVGc3BJWlBJMDRxdUwzc2M0SXpYeHJIdw?oc=5",
           "published_at": "Sun, 23 Aug 2026 07:54:05 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/06/22/gedung-grha-unilever-di-bsd-tangerang-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&auto=format&fit=crop&q=80",
           "sentiment_score": 0.833,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
@@ -31235,7 +31235,7 @@
           "title": "CPIN Keluar dari MSCI Global Standard Index, Masihkah Layak Dilirik Trader? - Ajaib",
           "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQdEMzcmhwckJIMUpScXVaRzY3VlNjOVliaXB4VnpVY0NyOVRzcktOMzVHMGgzTE45TzBLLTdaY19UOWs5S1lwbHNzaEE5R25Vd0N2a094RUhKZ2xRNWlQVW40OFpuQkpXMkxpVkZ2Z3ZiaE9OdjJCdmlRbzFJbGc2QzUzRWJRU2pmOVJrS1VYWDFYVnNnY1RF?oc=5",
           "published_at": "Thu, 13 Aug 2026 07:00:00 GMT",
-          "image_url": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&auto=format&fit=crop&q=80",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/03/27/pt-indofood-cbp-sukses-makmur-tbk-icbp-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.5,
           "catalyst_tag": "BERITA_UMUM"
         },
@@ -31243,24 +31243,24 @@
           "title": "Intip Performa GOTO dan CPIN Usai Terlempar dari MSCI Global Standard - Emitennews.com",
           "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOek1QV1NLNnBrLVJ0amJ1b2JtM01aWHdEbDdZbE0yNlEycUdPYXBRbjFHWWtPelJXbzhJcHVKR0RZUjFTQzY5UndxRW1uMm9EaExHd1dxdktOSVRHOURSa1BWbU5QZElCZ2ZVQ2NGSVFBTGk4LTc5LW8wQWozQzEtb2k3R2ZoVm9BU1NIT0FTRm1DR2hsSDNjTVNJS0p2bTctSG5R?oc=5",
           "published_at": "Thu, 13 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/06/22/gedung-grha-unilever-di-bsd-tangerang-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&auto=format&fit=crop&q=80",
           "sentiment_score": 0.5,
-          "catalyst_tag": "BERITA_UMUM"
-        },
-        {
-          "title": "MSCI Depak GOTO, CPIN Turun Kasta!",
-          "link": "https://finance.detik.com/bursa-dan-valas/d-8616088/msci-depak-goto-cpin-turun-kasta",
-          "published_at": "Thu, 13 Aug 2026 04:50:46 +0700",
-          "image_url": "https://akcdn.detik.net.id/community/media/visual/2026/05/18/ihsg-anjlok-ke-zona-merah-bursa-saham-melemah-tajam-1779098741437_169.jpeg?w=360&q=90",
-          "sentiment_score": -0.5,
           "catalyst_tag": "BERITA_UMUM"
         },
         {
           "title": "Laba CPIN Melonjak 95%, Analis Ungkap Alasan dan Rekomendasi Sahamnya Terbaru - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOQldnb3hxQS1Tek1xdWdCOVB3VXV6dnNjS3JTRHNsSVNxcUNiSE45WE5PVHFWUEpRd2pWT21yRDd3bEg2YnFwOWNPWklVUjhvelA1Nnd6Z05KOWVWekFlU2NfZ2xPLXNRdkZUTW5xbFRwTFRORDZhakRObXkzZmVEU3hCT0hEVEJuYS1pWkN0VzJ4cmI5ZW10ejd4NWkxYWZjazJQUlpHeWZGbW9kQjJXStIBqAFBVV95cUxObFJKNEZ0VXcxbTdzMXlIVFNWTHRRbHJRQ1dhR0cweUtWZGozcG5GcWxLalVNdE1wWjZjeEx1QV9lZ0hXZkdDTGJ6RzRHaFM0LTFMR1pIVFFnbEhackVuWlR0cG9JWHRtdkRsNVVYeGp6OFJTWHpzZHFhV2gyY2FDX05TODBodjBYMHQyQUdIWWhpcDZud09INWpoNjVnbWxOV2NLUkJmQno?oc=5",
           "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/06/22/gedung-grha-unilever-di-bsd-tangerang-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&auto=format&fit=crop&q=80",
           "sentiment_score": 0.75,
+          "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "Charoen Pokphand (CPIN) Raup Kenaikan Laba dan Penjualan pada Semester I-2026 - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxObmNhZDRHRXRZcUlSYzYzMGpIVi1CaW84QmZtaF9YaXNuLUZ0SmNBU0daT29sWE5qaS11ZWxrUUZGZjRUVHEzMklYOVBQTGZNSmZzUGthZlp3ZUpsV3hUbWpJaDlRT3VrZWtzNmdqcUVuaWU1cHhpM0MwRG85N0dBZks2NXpiWlpObm5hVEJQYTJnTDVIRjdMclB3MDlLOGhIMXd3eEhFbUJXX0xUaV93WtIBqAFBVV95cUxQU2F3NnBvQXVRdUFfY0NBZUpnQ01mSUNKM29rWVZmSHlMVTQ0aktwd3hROEh1a0tQejl3OEMyMGJxRnk2WWd0RFFxclVneTR4THM1X2trVEppZGlENUxqVDVLdEZzeGFPUkhqUmJuakNKaDFzMW0tSmNTOEZ5d1N6VFRqYmx1LVpHV0ZOOGlNb2tHSER0RXdBZnl5c1d0MWxLNkdOdFFXM2Q?oc=5",
+          "published_at": "Tue, 04 Aug 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/03/27/pt-indofood-cbp-sukses-makmur-tbk-icbp-1_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.375,
           "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
@@ -31313,8 +31313,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.4,
-      "oil_current": 82.16,
+      "gold_current": 4696.0,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.65
     },
     "historical_prices": [
@@ -32043,7 +32043,7 @@
   },
   {
     "ticker": "JPFA.JK",
-    "timestamp": "2026-08-25T16:24:18.206546+00:00",
+    "timestamp": "2026-08-25T16:31:37.182999+00:00",
     "current_price": 2210.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -32179,8 +32179,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.0,
-      "oil_current": 82.14,
+      "gold_current": 4695.7,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.52
     },
     "historical_prices": [
@@ -32909,7 +32909,7 @@
   },
   {
     "ticker": "GGRM.JK",
-    "timestamp": "2026-08-25T16:24:21.640307+00:00",
+    "timestamp": "2026-08-25T16:31:39.933179+00:00",
     "current_price": 20325.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -33045,8 +33045,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.0,
-      "oil_current": 82.13,
+      "gold_current": 4695.6,
+      "oil_current": 82.24,
       "beta_ihsg_30": 0.36
     },
     "historical_prices": [
@@ -33775,7 +33775,7 @@
   },
   {
     "ticker": "HMSP.JK",
-    "timestamp": "2026-08-25T16:24:24.522312+00:00",
+    "timestamp": "2026-08-25T16:31:42.377181+00:00",
     "current_price": 745.0,
     "signal": "Waspada (Bearish)",
     "confidence": 50.0,
@@ -33865,18 +33865,18 @@
     },
     "action_alert": {
       "ticker": "HMSP.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: HMSP",
-      "message": "Setup kuantitatif HMSP menunjukkan prospek bagus. RSI 14 (53.6) berada di zona ekspansi ideal. Probabilitas kenaikan tinggi.",
-      "precision_score": 90.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: HMSP",
+      "message": "Melihat Prospek Saham HMSP - KONTAN",
+      "precision_score": 80.0,
       "roc_5": -1.32,
       "current_price": 745.0
     },
     "risk_management": {
-      "stop_loss_price": 778.0,
-      "take_profit_price": 691.0,
-      "conservative_target_price": 712.0,
+      "stop_loss_price": 712.0,
+      "take_profit_price": 799.0,
+      "conservative_target_price": 778.0,
       "risk_reward_ratio": "1 : 1.64",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -33911,8 +33911,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.8,
-      "oil_current": 82.16,
+      "gold_current": 4695.6,
+      "oil_current": 82.24,
       "beta_ihsg_30": 0.48
     },
     "historical_prices": [
@@ -34641,7 +34641,7 @@
   },
   {
     "ticker": "ASII.JK",
-    "timestamp": "2026-08-25T16:24:27.471196+00:00",
+    "timestamp": "2026-08-25T16:31:45.000223+00:00",
     "current_price": 4790.0,
     "signal": "Waspada (Bearish)",
     "confidence": 50.2,
@@ -34691,15 +34691,23 @@
           "title": "Basis Pendapatan Terdiversifikasi, Begini Prospek Kinerja Astra (ASII) - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxORkdnRHQwaEVHLUVyaU9Sd25RQ2Qwa1Rnd2hDOWtZcmpDRUVTbUFLVi1vNU1DdWxmenZZUmV5VnlOTk80RXlJbHdMMHNia1Y3Tzgxbm0yUmpXWTYxd3dfYW5idlRXckVoaGswVGdFdDNUVUpQT04xN2EzbEZKankyeVljNEdZbGRYa1JfZlpUQWlFTHVEejdJLWkyUVQ2cGNSY0YzNXVR0gGeAUFVX3lxTE9CeGpEa2lfcFhxOG9qWFlpUThSY2NyaklwWS0tMkIwUjFSU1MxSVVsN3hCZmlaWFpDVzRpbWFPRnUzRHprR2hDcFl3OUJEUTZYeFpabVNLdWZweWJQUFRmU2dxX0VqbUN4R1NGeUVKNnkxdDFQUVFjME5rMkVKZ1ZhTnZTVXhyUTBmS3lnYXphSG1FUTl4bF9YOVdtQkRR?oc=5",
           "published_at": "Tue, 18 Aug 2026 10:55:47 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/02/28/menara-astra-di-jakarta-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "KINERJA_KEUANGAN"
+        },
+        {
+          "title": "Astra (ASII) Diproyeksi Pulih, Intip Rekomendasi dan Target Harga Ini - InvestorTrust",
+          "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQYVNFWjVYMXRZM3psakh3VUw1QjRZT2lqQU9hZ2dXSUQ0TGhsMFBWcjc5dG9qT19RWUlwTUV5MUUzZnJVTmdGSFVQNUpNbGtsMEVoYTdNVXhBRENEOWdYZjBrdEFjcktNaG9tdTVTOUhhZXFSRFB3RmpUSXJ2dW1aakpGR2JDME5ON0xvaFJmRGhoRk9fM2JBTFlZWGxtX1lxTTFGUGw4aTc?oc=5",
+          "published_at": "Mon, 10 Aug 2026 07:00:00 GMT",
+          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
+          "sentiment_score": 0.75,
+          "catalyst_tag": "BERITA_UMUM"
         },
         {
           "title": "Proyeksi Laba & Target Harga Astra (ASII) Dikerek Naik Usai Rilis Lapkeu Semester I - kontan.co.id",
           "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQY2FzSWotSFFfSTZEVTNpdVgxNHdFUVVobHVuOGRDQmpzMWhjbWVlaDdEcUxhRXZSTFRTR0NVa1dVQUdCLVY0ejZIS1FqMmZETFc3OUx3eGhTTGY5dTV0aGhBS2VZZFZtVzZIVkRJamk4dDE3NkF6UnBqUzF6NGxQOTA1ZlBoRURRUjBQUWhSdGpaWVFsNHpLZzNhbEVQSTdNVlMwX01WVGM3NVlXRnpmeFNoT3ZXUdIBrgFBVV95cUxPS2xlT21YdXZIZFhxRklxemU1d3F5bENzWjBHMzlvUmk1dUw2NG5rOHFva3FXSENKRFd2TXFjbTZJX1FBZGdVZl9BeHhfLWUyZGlRaGNQcTZQckVHVUNMUF9iaDZxSnpGQmY3a1BJVndteDI1MmdjLV9udjQ2LXU2T2JxcFVwbGJiTnFBTG9VZkJleUZSVjNUQTA1dFNEYzE2S3J1U0t4aWNrbEdnSmc?oc=5",
           "published_at": "Wed, 05 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2023/02/28/menara-astra-di-jakarta-1_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.875,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
@@ -34707,7 +34715,7 @@
           "title": "Semester I-2026, Laba Astra Internasional (ASII) Rp12,53 Triliun - CNBC Indonesia",
           "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOUnRRRWp3QjhocUZtWmZBeG1PRGhHUHNDWlZPaHA2UFc1SkJlUFpwcG1kcktDYWVsaXc4RnFrQmtXQnpwOGJ5em5oaXpWeVNJYjdVQThjX2ROc3h3UzV1aEljT1ZkLWk0ZmRaWWRaTHJSZF9xWFd6M2ltLXJEYnBuNEFkR2gxYVBBSlNZU1M4VS0wQVRjTU1hQlJoQTg1WnZvUzRmZHBuTU9QUkFkT2ltT29GM1hZdlI0bzNYLVQ2bTc3Z9IBxwFBVV95cUxPcUpKQnNyYjhSU285RWk0UG44M09LRXg2WGxjN3o5LWlwZWxnV2FoWmRrOUlwWUsxTmt4M1dLSVQtMEhMOVJFdkpnbDFiVy1QV3hxR0QyYWRubUs2Wlc1RHdEUDd2aFE5MDR6VmRDTkh2NUVMRFFIMkg3UW9fSnZUZ29ZUUlRdzR2NlVIY1dWWWR3MkhLa1l2Um8xbHFPTWFMMkVrbU8yMnZWNUJKcXFqajFmNVRSUE8ydDZQeTAzeXlWYUZJUF9Z?oc=5",
           "published_at": "Mon, 03 Aug 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/02/28/menara-astra-di-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
@@ -34715,15 +34723,7 @@
           "title": "Astra (ASII) Cetak Laba Rp12,5 Triliun, Prospek Makin Cerah - Bloomberg Technoz",
           "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOWUhnWVIwLW5qUTFhT0dvYmRQUGI3Q0lvZkFOTFBYYXJRcXRnZ2lrdGJtNXI1QjBXUlhrUTFyTVVzdzVEOWRmWEY3VWN6bi04VlRmVUI5c1dnZWxBdHNkdnB1RndtUEZSNm4taVFtQW5NU3BMQkZTNzUwRXZ6ZVVIZnlyVDhaU1hTV2swUk5QRGR4ZlZ1ZmYxQW9ncDNLYVAtUVFXQUVBVXNoVTdB?oc=5",
           "published_at": "Fri, 31 Jul 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.75,
-          "catalyst_tag": "KINERJA_KEUANGAN"
-        },
-        {
-          "title": "\ud83d\ude97 ASII: Laba Bersih 1H26 (-19% YoY) Masih Lemah, Potensi Pulih Signifikan pada 2H26 - Stockbit Snips",
-          "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQV04wb0VSVFh1LUxCeTd5Nl9WYUpjZWNOd0NxbmJ4VGlSZG9aTXE1aTVFZFdoakNZN2JmakZILU5EaDd1d0VTbXNnaEZSTHRTVVRrZUQ1MXR1dkRaSFJCQ2hPaG1aZjRJWWFibjY1YnBCNlRPN0V4enR2ekRHc3ZENVl1SG5ZU3JCdktfSU1mOERKUy1SNHdqZU1lTXdMYVFsdlF2VDUyWXIxVTVPenVHSkZSaGozVHhq?oc=5",
-          "published_at": "Thu, 30 Jul 2026 07:00:00 GMT",
-          "image_url": "https://akcdn.detik.net.id/visual/2024/02/27/pt-astra-international-tbk-asii_169.jpeg?w=1200&q=90",
+          "image_url": "https://akcdn.detik.net.id/visual/2023/02/28/menara-astra-di-jakarta-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
           "catalyst_tag": "KINERJA_KEUANGAN"
         }
@@ -34740,9 +34740,9 @@
       "current_price": 4790.0
     },
     "risk_management": {
-      "stop_loss_price": 4948.0,
-      "take_profit_price": 4527.0,
-      "conservative_target_price": 4632.0,
+      "stop_loss_price": 4632.0,
+      "take_profit_price": 5053.0,
+      "conservative_target_price": 4948.0,
       "risk_reward_ratio": "1 : 1.66",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -34777,8 +34777,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.8,
-      "oil_current": 82.17,
+      "gold_current": 4696.4,
+      "oil_current": 82.24,
       "beta_ihsg_30": 0.65
     },
     "historical_prices": [
@@ -35507,7 +35507,7 @@
   },
   {
     "ticker": "UNTR.JK",
-    "timestamp": "2026-08-25T16:24:30.366686+00:00",
+    "timestamp": "2026-08-25T16:31:47.759171+00:00",
     "current_price": 24125.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -35643,8 +35643,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.9,
-      "oil_current": 82.16,
+      "gold_current": 4696.4,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.29
     },
     "historical_prices": [
@@ -36373,11 +36373,11 @@
   },
   {
     "ticker": "AUTO.JK",
-    "timestamp": "2026-08-25T16:24:33.335492+00:00",
+    "timestamp": "2026-08-25T16:31:50.465660+00:00",
     "current_price": 3100.0,
     "signal": "Beli (Bullish)",
-    "confidence": 67.0,
-    "expected_return_pct": -2.17,
+    "confidence": 66.7,
+    "expected_return_pct": -2.2,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -36415,7 +36415,7 @@
     "news_sentiment": {
       "ticker": "AUTO.JK",
       "news_count": 15,
-      "avg_sentiment": 0.7322,
+      "avg_sentiment": 0.7267,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "KINERJA_KEUANGAN",
       "top_headlines": [
@@ -36452,8 +36452,8 @@
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
-          "title": "Laba Astra Otoparts (AUTO) Lompat, Pemicunya Diungkap - investor.id",
-          "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUGR2M2NNVGxKUXktc1VRVzZ5Q1d4TjBFd0Npd082V201VFNCcjNnQTQwZnl6TDBhczlHWDFqaUVZcWh3YzVUbWdjR0FTU3RvYUVSalRrMTRWY2JiXzdic3pFV3ROeFJmOU9HRWpzN21RdHhkR1J5MEo0cm5SMWZ4ZTkxQ3Qyckk2b194Vw?oc=5",
+          "title": "Laba Bersih Astra Otoparts Melonjak 22 Persen pada Semester I 2026 - achmadnurhidayat.id",
+          "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPQml4Q3AtWHBNel83Um10UDhYdlpaSXdabFdsbXgwTlVHZkpFMU5jNXlFUG42VWRSdFh3NGVqczNEVzA1czZhMl9ubVQ5QVpBUkNmSFI0dTRMZF9zUFVSeE00bmd5SUhLejdDUlYzbHVwc0UzWU9HRGtvNExmWktBemNwWHRFdw?oc=5",
           "published_at": "Mon, 27 Jul 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/04/12/pt-united-tractors-tbk-untr-1_169.jpeg?w=1200&q=90",
           "sentiment_score": 0.75,
@@ -36509,8 +36509,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.2,
-      "oil_current": 82.17,
+      "gold_current": 4696.6,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.34
     },
     "historical_prices": [
@@ -37239,7 +37239,7 @@
   },
   {
     "ticker": "SMGR.JK",
-    "timestamp": "2026-08-25T16:24:36.288099+00:00",
+    "timestamp": "2026-08-25T16:31:52.813432+00:00",
     "current_price": 1505.0,
     "signal": "Beli (Bullish)",
     "confidence": 95.0,
@@ -37375,8 +37375,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.7,
-      "oil_current": 82.17,
+      "gold_current": 4696.2,
+      "oil_current": 82.25,
       "beta_ihsg_30": 1.26
     },
     "historical_prices": [
@@ -38105,7 +38105,7 @@
   },
   {
     "ticker": "INTP.JK",
-    "timestamp": "2026-08-25T16:24:39.344576+00:00",
+    "timestamp": "2026-08-25T16:31:55.135135+00:00",
     "current_price": 5675.0,
     "signal": "Beli (Bullish)",
     "confidence": 61.5,
@@ -38195,11 +38195,11 @@
     },
     "action_alert": {
       "ticker": "INTP.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: INTP",
-      "message": "Setup kuantitatif INTP menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 80.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan INTP: +6.6%",
+      "message": "Saham INTP tercatat menguat 6.6% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 6.57,
       "current_price": 5675.0
     },
@@ -38241,8 +38241,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.0,
-      "oil_current": 82.17,
+      "gold_current": 4696.2,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.52
     },
     "historical_prices": [
@@ -38971,11 +38971,11 @@
   },
   {
     "ticker": "CTRA.JK",
-    "timestamp": "2026-08-25T16:24:42.305325+00:00",
+    "timestamp": "2026-08-25T16:31:58.115719+00:00",
     "current_price": 620.0,
     "signal": "Beli (Bullish)",
-    "confidence": 82.0,
-    "expected_return_pct": -1.7,
+    "confidence": 83.2,
+    "expected_return_pct": -1.56,
     "target_horizon_days": 20,
     "market_regime": "Tren Menguat (Bullish)",
     "key_factors": [
@@ -39001,7 +39001,7 @@
       },
       {
         "factor": "Sentimen Berita",
-        "value": 0.48,
+        "value": 0.51,
         "status": "Positif (Bullish)"
       },
       {
@@ -39013,7 +39013,7 @@
     "news_sentiment": {
       "ticker": "CTRA.JK",
       "news_count": 15,
-      "avg_sentiment": 0.4833,
+      "avg_sentiment": 0.5056,
       "sentiment_label": "Positif (Bullish)",
       "catalyst_tag": "BERITA_UMUM",
       "top_headlines": [
@@ -39061,11 +39061,11 @@
     },
     "action_alert": {
       "ticker": "CTRA.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: CTRA",
-      "message": "Setup kuantitatif CTRA menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 99.0,
+      "type": "NEWS_CATALYST",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcf0 Berita Positif: CTRA",
+      "message": "BRI Consumer Expo Goes to Ciputra City Sentul, Ada Promo KPR &amp; KKB Menarik",
+      "precision_score": 80.0,
       "roc_5": 1.64,
       "current_price": 620.0
     },
@@ -39107,8 +39107,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.9,
-      "oil_current": 82.17,
+      "gold_current": 4696.2,
+      "oil_current": 82.25,
       "beta_ihsg_30": 1.36
     },
     "historical_prices": [
@@ -39837,7 +39837,7 @@
   },
   {
     "ticker": "BSDE.JK",
-    "timestamp": "2026-08-25T16:24:45.150976+00:00",
+    "timestamp": "2026-08-25T16:32:00.491048+00:00",
     "current_price": 635.0,
     "signal": "Waspada (Bearish)",
     "confidence": 59.1,
@@ -39916,29 +39916,29 @@
           "catalyst_tag": "KINERJA_KEUANGAN"
         },
         {
-          "title": "Emiten Grup Sinar Mas Ditekan Bertubi-tubi ke Rp 500-an, Nilai Buku Rp 2.100 - investor.id",
-          "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQTzN5OXlvMkg4WjNtVU83amh6MTg4ZGdWLUdZRmMtQklZemhZZTVmV0sxRV8wX0h4eUwzWU9xOUc4Y01Vb2RrY2M2ZGlRTTFQR3RDOWRhZDNjb1Via1JHclg1ODVITy1ETEhCRGxzOTFlekxWR1dWOTlMUmE3LW5MN0JiZzlITHFCVkZqa1NINnJfTmdFZG5BUGdrckdCSEVDSmZQVE03UmRJdw?oc=5",
-          "published_at": "Mon, 06 Jul 2026 07:00:00 GMT",
+          "title": "Laba Pengembang Properti Tertekan, BSDE, PWON, SMRA Meleset dari Ekspektasi - kontan.co.id",
+          "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQUlk1MTB0T2hweVVjLWx2WGZqcWtDN290MGxLVjVXZEM4dkFGSGZ1V3dzT0dJc08walBJU1NPYWxFMzdaQnlkT252TllRSDFjLTZrLUowQmE0YVc3anViTUdQaG5CUjQ2X0Q3QUpDZU5jV1VFVVYwLTlUdEJnWjZjZ2tPWlowNlFPQl84dkxQa2VaMlFWLVJCUFhkRkRwakhEUDc5dGNuM19iRGJ60gGkAUFVX3lxTE44c0N3STBZQnZ3cFVMOGdabFFVY2xqTnhDNXFUdWl5cWY3czlxeWhQcjhHV1JZQ2JWbDBGX01hOWtoSWszdFp0dGp6d0hfS01DSngtcGxDY2ZPVXpIV25pVXg5aU9tVXU0RE1pY3FabFQ2bDdTejBFb3lCQzZPQ0xmTzV6cm5VU01Mb2lYUkpGNThwVGFQeGhvODZtQnNkY3FTbDBE?oc=5",
+          "published_at": "Wed, 12 Aug 2026 07:00:00 GMT",
           "image_url": "https://akcdn.detik.net.id/visual/2023/06/27/pt-bumi-serpong-damai-tbk-bsde-1_169.jpeg?w=1200&q=90",
-          "sentiment_score": 0.5,
-          "catalyst_tag": "BERITA_UMUM"
+          "sentiment_score": 0.167,
+          "catalyst_tag": "KINERJA_KEUANGAN"
         }
       ]
     },
     "action_alert": {
       "ticker": "BSDE.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: BSDE",
-      "message": "Setup kuantitatif BSDE menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 80.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan BSDE: +6.7%",
+      "message": "Saham BSDE tercatat menguat 6.7% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 6.72,
       "current_price": 635.0
     },
     "risk_management": {
-      "stop_loss_price": 674.0,
-      "take_profit_price": 570.0,
-      "conservative_target_price": 596.0,
+      "stop_loss_price": 596.0,
+      "take_profit_price": 700.0,
+      "conservative_target_price": 674.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Tinggi (Volatilitas Ekstrem)",
       "risk_color": "#B71C1C",
@@ -39973,8 +39973,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4700.9,
-      "oil_current": 82.17,
+      "gold_current": 4696.1,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.61
     },
     "historical_prices": [
@@ -40703,7 +40703,7 @@
   },
   {
     "ticker": "PWON.JK",
-    "timestamp": "2026-08-25T16:24:48.385129+00:00",
+    "timestamp": "2026-08-25T16:32:02.920210+00:00",
     "current_price": 268.0,
     "signal": "Waspada (Bearish)",
     "confidence": 54.2,
@@ -40793,18 +40793,18 @@
     },
     "action_alert": {
       "ticker": "PWON.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: PWON",
-      "message": "Setup kuantitatif PWON menunjukkan prospek bagus. Golden Cross EMA9/EMA21 dengan akselerasi momentum positif. Probabilitas kenaikan tinggi.",
-      "precision_score": 99.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc8 Pergerakan PWON: +5.5%",
+      "message": "Saham PWON tercatat menguat 5.5% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": 5.51,
       "current_price": 268.0
     },
     "risk_management": {
-      "stop_loss_price": 280.0,
-      "take_profit_price": 248.0,
-      "conservative_target_price": 256.0,
+      "stop_loss_price": 256.0,
+      "take_profit_price": 288.0,
+      "conservative_target_price": 280.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -40839,8 +40839,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.0,
-      "oil_current": 82.16,
+      "gold_current": 4696.4,
+      "oil_current": 82.25,
       "beta_ihsg_30": 0.61
     },
     "historical_prices": [
@@ -41569,7 +41569,7 @@
   },
   {
     "ticker": "SMRA.JK",
-    "timestamp": "2026-08-25T16:24:51.414072+00:00",
+    "timestamp": "2026-08-25T16:32:05.244684+00:00",
     "current_price": 318.0,
     "signal": "Waspada (Bearish)",
     "confidence": 78.2,
@@ -41659,18 +41659,18 @@
     },
     "action_alert": {
       "ticker": "SMRA.JK",
-      "type": "PRIME_BUY",
-      "urgency": "HIGH",
-      "title": "\ud83c\udfaf Prospek Bagus: SMRA",
-      "message": "Setup kuantitatif SMRA menunjukkan prospek bagus. RSI 14 (51.7) berada di zona ekspansi ideal. Probabilitas kenaikan tinggi.",
-      "precision_score": 80.0,
+      "type": "PRICE_SWING",
+      "urgency": "MEDIUM",
+      "title": "\ud83d\udcc9 Pergerakan SMRA: -3.6%",
+      "message": "Saham SMRA tercatat terkoreksi 3.6% dalam 5 hari perdagangan terakhir.",
+      "precision_score": 85.0,
       "roc_5": -3.64,
       "current_price": 318.0
     },
     "risk_management": {
-      "stop_loss_price": 333.0,
-      "take_profit_price": 293.0,
-      "conservative_target_price": 303.0,
+      "stop_loss_price": 303.0,
+      "take_profit_price": 343.0,
+      "conservative_target_price": 333.0,
       "risk_reward_ratio": "1 : 1.67",
       "risk_level": "Sedang (Normal)",
       "risk_color": "#595750",
@@ -41705,8 +41705,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.0,
-      "oil_current": 82.16,
+      "gold_current": 4696.1,
+      "oil_current": 82.24,
       "beta_ihsg_30": 0.88
     },
     "historical_prices": [
@@ -42435,7 +42435,7 @@
   },
   {
     "ticker": "JSMR.JK",
-    "timestamp": "2026-08-25T16:24:54.986903+00:00",
+    "timestamp": "2026-08-25T16:32:08.139500+00:00",
     "current_price": 2760.0,
     "signal": "Beli (Bullish)",
     "confidence": 66.2,
@@ -42571,8 +42571,8 @@
       "ihsg_status": "Menguat (Bullish)",
       "usdidr_current": 17699.0,
       "usdidr_roc_5": -0.39,
-      "gold_current": 4701.5,
-      "oil_current": 82.16,
+      "gold_current": 4696.3,
+      "oil_current": 82.24,
       "beta_ihsg_30": 0.39
     },
     "historical_prices": [

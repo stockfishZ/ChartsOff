@@ -42,10 +42,13 @@ class PrecisionActionEngine:
         news_summary: Optional[Dict[str, Any]] = None,
         holding_info: Optional[Dict[str, Any]] = None,
         fundamentals: Optional[Dict[str, Any]] = None,
-        flow_summary: Optional[Dict[str, Any]] = None
+        flow_summary: Optional[Dict[str, Any]] = None,
+        ml_signal: Optional[str] = None,
+        expected_return_pct: Optional[float] = None
     ) -> Dict[str, Any]:
         """
         Mengevaluasi kondisi saham secara kuantitatif, fundamental & leksikal dengan presisi tinggi.
+        Menjamin konsistensi logis 100% antara Sinyal Model, Proyeksi Imbal Hasil, dan Label Prospek Bagus.
         """
         clean_ticker = ticker.replace(".JK", "").upper()
         
@@ -57,7 +60,7 @@ class PrecisionActionEngine:
         bb_pct_b = float(features_row.get("bb_pct_b", 0.5))
         volatility = float(features_row.get("volatility_pct", 2.0))
         roc_5 = float(features_row.get("roc_5", 0.0))
-        
+
         # Extract sentiment
         news_score = float(news_summary.get("avg_sentiment", 0.0)) if news_summary else 0.0
         news_count = int(news_summary.get("news_count", 0)) if news_summary else 0
@@ -137,60 +140,72 @@ class PrecisionActionEngine:
             }
 
         # =========================================================================
-        # 2. EVALUASI PROSPEK BAGUS (PRIME_BUY) - KONFLUENSI TINGGI & FILTER VALUE TRAP
-        # Kondisi: Golden cross + RSI ideal + Akumulasi Institusi + Sentimen positif + Fundamental sehat
+        # 2. EVALUASI PROSPEK BAGUS (PRIME_BUY) - KONFLUENSI TINGGI & HARMONI TOTAL
+        # Hard Rule: Saham yang OVERBOUGHT (RSI > 68) atau berekspektasi imbal hasil negatif
+        # TIDAK BOLEH dilabeli Prospek Bagus karena rawan aksi profit-taking/pullback.
         # =========================================================================
-        buy_score = 0.0
-        buy_reasons = []
+        is_ml_bullish = True
+        if ml_signal is not None and not ("Beli" in ml_signal or "Bull" in ml_signal):
+            is_ml_bullish = False
+        if expected_return_pct is not None and expected_return_pct <= 0.0:
+            is_ml_bullish = False
 
-        if trend_bull:
-            buy_score += 0.25
-            if macd_hist > 0.02:
+        # Hard Disqualification: Overbought / Extended RSI (> 68.0) atau ML Bearish/Netral
+        if rsi > 68.0 or not is_ml_bullish:
+            # Cannot qualify for PRIME_BUY if already at overbought peak or projection is negative
+            pass
+        else:
+            buy_score = 0.0
+            buy_reasons = []
+
+            if trend_bull:
+                buy_score += 0.25
+                if macd_hist > 0.02:
+                    buy_score += 0.20
+                    buy_reasons.append("Golden Cross EMA9/EMA21 dengan akselerasi momentum positif")
+
+            # Sweet spot RSI (45 - 65): Momentum kuat sebelum area jenuh beli
+            if 45 <= rsi <= 65:
                 buy_score += 0.20
-                buy_reasons.append("Golden Cross EMA9/EMA21 dengan akselerasi momentum positif")
+                buy_reasons.append(f"RSI 14 ({rsi:.1f}) berada di zona ekspansi ideal")
+            elif rsi < 32 and bb_pct_b < 0.10:
+                # Reversal golden setup
+                buy_score += 0.25
+                buy_reasons.append("Kondisi oversold ekstrem di support pita bawah (peluang rebound)")
 
-        # Sweet spot RSI (45 - 65): Momentum kuat sebelum area jenuh beli
-        if 45 <= rsi <= 65:
-            buy_score += 0.20
-            buy_reasons.append(f"RSI 14 ({rsi:.1f}) berada di zona ekspansi ideal")
-        elif rsi < 32 and bb_pct_b < 0.10:
-            # Reversal golden setup
-            buy_score += 0.25
-            buy_reasons.append("Kondisi oversold ekstrem di support pita bawah (peluang rebound)")
+            # Akumulasi Volume & Arus Smart Money
+            if (vol_ratio > 1.25 and roc_5 >= 0) or is_accumulating:
+                buy_score += 0.15
+                buy_reasons.append("Akumulasi arus dana institusi / smart money terdeteksi")
 
-        # Akumulasi Volume & Arus Smart Money
-        if (vol_ratio > 1.25 and roc_5 >= 0) or is_accumulating:
-            buy_score += 0.15
-            buy_reasons.append("Akumulasi arus dana institusi / smart money terdeteksi")
+            # Sentimen Berita
+            if news_score > 0.15:
+                buy_score += 0.20
+                buy_reasons.append(f"Didukung katalis sentimen positif emiten ({news_score:+.2f})")
 
-        # Sentimen Berita
-        if news_score > 0.15:
-            buy_score += 0.20
-            buy_reasons.append(f"Didukung katalis sentimen positif emiten ({news_score:+.2f})")
+            # Fundamental Health Bonus & Value-Trap Filter
+            if fundamentals:
+                if der_ratio > 3.0 or roe_pct < -5.0 or fund_score < 30.0:
+                    buy_score -= 0.35  # Filter out fundamentally bankrupt value traps
+                elif fund_score >= 70.0 and roe_pct >= 12.0:
+                    buy_score += 0.10
+                    buy_reasons.append(f"Kesehatan fundamental solid ({fundamentals.get('grade', 'Sehat')})")
 
-        # Fundamental Health Bonus & Value-Trap Filter
-        if fundamentals:
-            if der_ratio > 3.0 or roe_pct < -5.0 or fund_score < 30.0:
-                buy_score -= 0.35  # Filter out fundamentally bankrupt value traps
-            elif fund_score >= 70.0 and roe_pct >= 12.0:
-                buy_score += 0.10
-                buy_reasons.append(f"Kesehatan fundamental solid ({fundamentals.get('grade', 'Sehat')})")
+            buy_precision_pct = min(99.0, max(0.0, round(buy_score * 100, 1)))
 
-        buy_precision_pct = min(99.0, max(0.0, round(buy_score * 100, 1)))
-
-        # Ambang Batas Presisi Tinggi: Score >= 0.72 untuk memicu Prospek Bagus (PRIME_BUY)
-        if buy_score >= 0.72:
-            primary_reason = buy_reasons[0] if buy_reasons else "Konfluensi teknikal dan momentum kuat terkonfirmasi"
-            return {
-                "ticker": f"{clean_ticker}.JK",
-                "type": "PRIME_BUY",
-                "urgency": "HIGH",
-                "title": f"🎯 Prospek Bagus: {clean_ticker}",
-                "message": f"Setup kuantitatif {clean_ticker} menunjukkan prospek bagus. {primary_reason}. Probabilitas kenaikan tinggi.",
-                "precision_score": buy_precision_pct,
-                "roc_5": round(roc_5, 2),
-                "current_price": current_price
-            }
+            # Ambang Batas Presisi Tinggi: Score >= 0.72 untuk memicu Prospek Bagus (PRIME_BUY)
+            if buy_score >= 0.72:
+                primary_reason = buy_reasons[0] if buy_reasons else "Konfluensi teknikal dan momentum kuat terkonfirmasi"
+                return {
+                    "ticker": f"{clean_ticker}.JK",
+                    "type": "PRIME_BUY",
+                    "urgency": "HIGH",
+                    "title": f"🎯 Prospek Bagus: {clean_ticker}",
+                    "message": f"Setup kuantitatif {clean_ticker} menunjukkan prospek bagus. {primary_reason}. Probabilitas kenaikan tinggi.",
+                    "precision_score": buy_precision_pct,
+                    "roc_5": round(roc_5, 2),
+                    "current_price": current_price
+                }
 
         # =========================================================================
         # 3. EVALUASI PERGERAKAN HARGA SIGNIFIKAN (PRICE_SWING)

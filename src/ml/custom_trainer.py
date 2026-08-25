@@ -347,16 +347,11 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
                 expected_return = round(min(0.0, pred_return), 2)
 
         # 7. Dynamic ATR Risk Management & Adaptive Exit Engine (Upgrade #5)
-        # Stop-Loss: 1.5x ATR, Take-Profit: 2.5x ATR, Conservative: 1.5x ATR
-        is_bull_signal = "Beli" in signal or "Bull" in signal
-        if is_bull_signal:
-            stop_loss = round(max(50.0, current_price - (1.5 * atr_14)), 0)
-            take_profit = round(current_price + (2.5 * atr_14), 0)
-            conservative_target = round(current_price + (1.5 * atr_14), 0)
-        else:
-            stop_loss = round(current_price + (1.5 * atr_14), 0)
-            take_profit = round(max(50.0, current_price - (2.5 * atr_14)), 0)
-            conservative_target = round(max(50.0, current_price - (1.5 * atr_14)), 0)
+        # For equity investing (Long-Only), Stop-Loss is always downside protection below price,
+        # and Take-Profit is always upside exit target above price.
+        stop_loss = round(max(50.0, current_price - (1.5 * atr_14)), 0)
+        take_profit = round(current_price + (2.5 * atr_14), 0)
+        conservative_target = round(current_price + (1.5 * atr_14), 0)
 
         risk_amount = abs(current_price - stop_loss)
         reward_amount = abs(take_profit - current_price)
@@ -393,7 +388,9 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             news_summary=news_summary,
             holding_info=holding_info,
             fundamentals=fundamentals,
-            flow_summary=flow_summary
+            flow_summary=flow_summary,
+            ml_signal=signal,
+            expected_return_pct=expected_return
         )
 
         rsi_status = "Jenuh Jual (Oversold)" if rsi < 35 else ("Jenuh Beli (Overbought)" if rsi > 65 else "Netral")
