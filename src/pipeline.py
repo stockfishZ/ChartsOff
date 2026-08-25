@@ -19,6 +19,9 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
 
     market_feed = MarketDataFeed(historical_days=config.HISTORICAL_DAYS)
     news_feed = NewsDataFeed(lookback_days=config.NEWS_LOOKBACK_DAYS)
+    from src.data.macro_feed import MacroDataFeed
+    macro_feed = MacroDataFeed()
+    macro_df = macro_feed.fetch_macro_benchmarks()
     storage = StorageManager()
 
     all_predictions = []
@@ -40,8 +43,8 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
         news_df = news_feed.fetch_news_for_ticker(ticker=ticker)
         news_summary = SentimentFeatureEngine.aggregate_news_sentiment(news_df, ticker=ticker)
 
-        # 3. Feature Engineering
-        features_df = ml_model.prepare_features(ohlcv_df=ohlcv_df, news_summary=news_summary)
+        # 3. 46-Factor Feature Engineering (Technical + Flows + Macro + News)
+        features_df = ml_model.prepare_features(ohlcv_df=ohlcv_df, news_summary=news_summary, macro_df=macro_df)
 
         # 4. Optional Model Training
         if train_model:

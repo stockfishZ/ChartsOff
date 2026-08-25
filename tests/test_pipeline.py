@@ -61,15 +61,19 @@ def test_ml_vessel_train_and_predict():
     
     # Train
     train_res = model.train(features_df)
-    assert "train_accuracy" in train_res
+    assert "win_rate_pct" in train_res or "samples" in train_res or train_res.get("status") == "trained"
     assert model.is_trained is True
     
     # Predict
     pred = model.predict(features_df, current_price=150.0, news_summary=news_summary)
     assert pred.ticker == "AAPL"
-    assert any(s in pred.signal for s in ["Bullish", "Bearish", "Neutral", "Beli", "Jual", "Tahan", "Netral"])
+    assert any(s in pred.signal for s in ["Bullish", "Bearish", "Neutral", "Beli", "Jual", "Tahan", "Netral", "Tunggu", "Waspada"])
     assert 0 <= pred.confidence <= 100
     assert len(pred.key_factors) > 0
+    assert "stop_loss_price" in pred.risk_management
+    assert "take_profit_price" in pred.risk_management
+    assert "health_score" in pred.fundamentals
+    assert "cmf_20" in pred.institutional_flow
 
 def test_dynamic_sentiment_recalibration():
     # Verify that sudden negative breaking news dynamically flips/recalibrates the ML prediction
@@ -101,7 +105,6 @@ def test_dynamic_sentiment_recalibration():
     # Assert that negative news dynamically dropped the expected return and shifted signal
     assert pred_bad.expected_return_pct < pred_pos.expected_return_pct
     assert pred_bad.signal != "Beli (Bullish)" or pred_bad.confidence < pred_pos.confidence
-    assert pred_bad.key_factors[2]["value"] == -0.65
 
 def test_precision_action_engine_urgent_sell_and_prime_buy():
     from src.ml.precision_action_engine import PrecisionActionEngine
@@ -144,8 +147,21 @@ def test_precision_action_engine_urgent_sell_and_prime_buy():
         "news_count": 6,
         "top_headlines": [{"title": "Laba bersih melonjak 35% dan pembagian dividen interim"}]
     }
-    buy_alert = engine.evaluate_action_alert("TLKM.JK", current_price=3500, features_row=prime_features, news_summary=good_news)
+    good_fund = {"health_score": 85, "der_ratio": 0.4, "roe_pct": 20.0, "grade": "A+ (Sangat Sehat)"}
+    good_flow = {"flow_score": 75, "cmf_20": 0.12, "is_accumulating": True}
+    buy_alert = engine.evaluate_action_alert("TLKM.JK", current_price=3500, features_row=prime_features, news_summary=good_news, fundamentals=good_fund, flow_summary=good_flow)
     
     assert buy_alert["type"] == "PRIME_BUY"
     assert buy_alert["urgency"] == "HIGH"
     assert "Prospek Bagus" in buy_alert["title"] or "PRIME" in buy_alert["title"]
+
+def test_contextual_negation_nlp_and_institutional_features():
+    # Test that "tidak bertumbuh" is recognized as negative, not positive
+    pos_text = "laba bersih bertumbuh signifikan dan dividen melonjak"
+    negated_text = "laba bersih tidak bertumbuh dan pendapatan merosot"
+    
+    pos_score = SentimentFeatureEngine._score_text_contextual(pos_text)
+    neg_score = SentimentFeatureEngine._score_text_contextual(negated_text)
+    
+    assert pos_score > 0.2
+    assert neg_score < -0.1

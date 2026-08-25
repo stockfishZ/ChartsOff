@@ -1,6 +1,7 @@
 import logging
 import re
 import math
+from typing import Dict, Any, List, Optional
 import pandas as pd
 from src.data.news_feed import resolve_article_thumbnail
 
@@ -9,132 +10,186 @@ logger = logging.getLogger(__name__)
 # Kamus Sentimen Finansial Bahasa Indonesia & Global
 FINANCIAL_POSITIVE_KEYWORDS = {
     # Bahasa Indonesia
-    "naik", "menguat", "lonjakan", "rekor", "laba", "dividen", "tumbuh", "kinerja",
-    "cuan", "akumulasi", "rebound", "positif", "akuisisi", "target", "ekspansi",
-    "untung", "bullish", "meningkat", "optimis", "meroket", "peningkatan",
-    # English keywords fallback
-    "surge", "gain", "beat", "profit", "bullish", "growth", "rally", "upgrade"
+    "naik", "menguat", "lonjakan", "rekor", "laba", "dividen", "tumbuh", "bertumbuh", "kinerja",
+    "cuan", "akumulasi", "rebound", "positif", "akuisisi", "target", "ekspansi", "keuntungan",
+    "untung", "bullish", "meningkat", "optimis", "meroket", "peningkatan", "efisien", "pertumbuhan",
+    "dividen interim", "pendapatan naik", "laba bersih", "keuntungan", "kerja sama", "laba usaha",
+    "kenaikan", "terbang", "melesat", "kinerja positif", "surplus",
+    # English keywords
+    "surge", "gain", "beat", "profit", "bullish", "growth", "rally", "upgrade", "dividend",
+    "outperform", "buy", "expansion"
 }
 
 FINANCIAL_NEGATIVE_KEYWORDS = {
     # Bahasa Indonesia
-    "turun", "melemah", "anjlok", "rugi", "merosot", "koreksi", "tekanan",
-    "penjualan", "gugatan", "inflasi", "utang", "negatif", "ambruk", "suspend",
-    "pesimis", "bearish", "penurunan", "jatuh", "tertekan", "penjualan bersih",
-    # English keywords fallback
-    "plunge", "drop", "miss", "loss", "bearish", "downgrade", "crash", "slump"
+    "turun", "melemah", "anjlok", "rugi", "merugi", "merosot", "koreksi", "tekanan",
+    "penjualan", "gugatan", "inflasi", "utang", "negatif", "ambruk", "suspend", "suspensi",
+    "pesimis", "bearish", "penurunan", "jatuh", "tertekan", "pailit", "pkpu", "defisit",
+    "gagal bayar", "sanksi", "penurunan tajam", "rugi bersih", "beban utang", "anjloknya",
+    # English keywords
+    "plunge", "drop", "miss", "loss", "bearish", "downgrade", "crash", "slump", "debt",
+    "default", "lawsuit", "bankruptcy"
+}
+
+# Partikel Negasi (Membalik Polaritas Kata Berikutnya)
+NEGATION_PARTICLES = {
+    "tidak", "tak", "belum", "bukan", "gagal", "tanpa", "hilang", "batal", "nihil",
+    "kurang", "bukanlah", "tiada", "not", "no", "never", "failed", "unable", "without"
+}
+
+# Penguat Intensitas (Amplify Magnitude)
+INTENSIFIERS = {
+    "sangat", "melesat", "rekor", "drastis", "tajam", "luar biasa", "terbang",
+    "ambruk", "anjlok", "ekstrem", "signifikan", "masif", "huge", "massive", "drastic"
 }
 
 class SentimentFeatureEngine:
     """
-    Menganalisis sentimen berita keuangan emiten saham Indonesia dan menghasilkan
-    ringkasan artikel dengan thumbnail foto berita terotomatisasi penuh.
+    Mesin Analisis Sentimen NLP Finansial Kontekstual Lanjutan.
+    Mendukung deteksi negasi (misal 'tidak bertumbuh' vs 'bertumbuh'),
+    pembobotan intensitas leksikal, serta kategorisasi katalis emiten (Laba, Dividen, Utang).
     """
 
     @staticmethod
-    def _score_text(text: str) -> float:
+    def _score_text_contextual(text: str) -> float:
         """
-        Menghitung skor polaritas sentimen antara -1.0 (sangat negatif) sampai +1.0 (sangat positif).
+        Menghitung skor polaritas sentimen berbasis konteks n-gram (-1.0 s.d +1.0)
+        dengan penanganan negasi dan kata penguat.
         """
         if not text:
             return 0.0
-            
-        words = re.findall(r'\b\w+\b', text.lower())
-        pos_count = sum(1 for w in words if w in FINANCIAL_POSITIVE_KEYWORDS)
-        neg_count = sum(1 for w in words if w in FINANCIAL_NEGATIVE_KEYWORDS)
-        
-        total = pos_count + neg_count
-        if total == 0:
+
+        words = re.findall(r'\b[\w-]+\b', text.lower())
+        if not words:
             return 0.0
-        return float((pos_count - neg_count) / total)
+
+        total_score = 0.0
+        match_count = 0
+
+        for i, word in enumerate(words):
+            # Check previous 1 to 3 words for negation particles
+            lookback_start = max(0, i - 3)
+            preceding_tokens = words[lookback_start:i]
+            is_negated = any(p in NEGATION_PARTICLES for p in preceding_tokens)
+            is_intensified = any(p in INTENSIFIERS for p in preceding_tokens) or (word in INTENSIFIERS)
+            weight = 1.5 if is_intensified else 1.0
+
+            if word in FINANCIAL_POSITIVE_KEYWORDS:
+                if is_negated:
+                    total_score -= (1.0 * weight)  # e.g., "tidak bertumbuh" -> negative
+                else:
+                    total_score += (1.0 * weight)
+                match_count += 1
+
+            elif word in FINANCIAL_NEGATIVE_KEYWORDS:
+                if is_negated:
+                    total_score += (0.8 * weight)  # e.g., "tidak rugi" -> positive
+                else:
+                    total_score -= (1.0 * weight)
+                match_count += 1
+
+        if match_count == 0:
+            return 0.0
+
+        raw_score = total_score / (match_count + 1.0)
+        return float(max(-1.0, min(1.0, raw_score)))
+
+    @classmethod
+    def categorize_article_catalyst(cls, title: str, snippet: str = "") -> str:
+        """
+        Mengkategorikan jenis katalis berita emiten.
+        """
+        combined = f"{title} {snippet}".lower()
+        if any(w in combined for w in ["dividen", "dividend", "cum date", "yield"]):
+            return "DIVIDEN"
+        if any(w in combined for w in ["laba", "rugi", "profit", "pendapatan", "kinerja", "quarter", "ebitda"]):
+            return "KINERJA_KEUANGAN"
+        if any(w in combined for w in ["utang", "pkpu", "gugatan", "sanksi", "suspend", "pailit", "default"]):
+            return "RISIKO_HUKUM_UTANG"
+        if any(w in combined for w in ["akuisisi", "ekspansi", "pabrik", "kontrak", "tender", "investasi"]):
+            return "EKSPANSI_BISNIS"
+        return "BERITA_UMUM"
 
     @classmethod
     def aggregate_news_sentiment(cls, news_df: pd.DataFrame, ticker: str) -> dict:
         """
         Mengagregasi sentimen berita terkini saham menjadi metrik ringkas bebas NaN
-        dengan thumbnail foto artikel yang 100% terisi otomatis.
+        dengan thumbnail foto artikel dan tag katalis otomatis.
         """
         clean_ticker = ticker.upper().strip()
         if not clean_ticker.endswith(".JK"):
             clean_ticker += ".JK"
 
         if news_df is None or news_df.empty:
-            default_img = resolve_article_thumbnail(clean_ticker, index=0)
             return {
                 "ticker": clean_ticker,
-                "news_count": 1,
+                "news_count": 0,
                 "avg_sentiment": 0.0,
-                "sentiment_label": "Netral",
-                "top_headlines": [
-                    {
-                        "title": f"Dinamika Pasar Saham {clean_ticker.replace('.JK', '')} di Bursa Efek Indonesia",
-                        "link": f"https://www.google.com/finance/quote/{clean_ticker.replace('.JK', '')}:IDX",
-                        "published_at": "Terkini",
-                        "image_url": default_img
-                    }
-                ]
+                "sentiment_label": "Netral (Minim Berita)",
+                "catalyst_tag": "BERITA_UMUM",
+                "top_headlines": []
             }
 
-        df = news_df.copy()
-        df["score"] = df.apply(lambda r: cls._score_text(f"{r.get('title', '')} {r.get('summary', '')}"), axis=1)
-
-        def _get_pub_ts(val):
-            if not val or str(val).strip() == "Terkini":
-                return time.time()
-            try:
-                import email.utils
-                t = email.utils.parsedate_tz(str(val))
-                if t: return email.utils.mktime_tz(t)
-            except Exception:
-                pass
-            try:
-                from dateutil import parser
-                return parser.parse(str(val)).timestamp()
-            except Exception:
-                return 0.0
-
-        if "published_at" in df.columns:
-            df["_pub_ts"] = df["published_at"].apply(_get_pub_ts)
-            df.sort_values(by="_pub_ts", ascending=False, inplace=True)
-            df.drop(columns=["_pub_ts"], inplace=True)
-
-        avg_score = float(df["score"].mean()) if not df.empty else 0.0
-        if math.isnan(avg_score):
-            avg_score = 0.0
-
-        if avg_score > 0.10:
-            sentiment_label = "Positif (Bullish)"
-        elif avg_score < -0.10:
-            sentiment_label = "Negatif (Bearish)"
+        # Filter news related to ticker (if ticker column exists)
+        if "ticker" in news_df.columns:
+            ticker_base = clean_ticker.replace(".JK", "")
+            mask = news_df["ticker"].astype(str).str.upper().str.contains(ticker_base, na=False)
+            ticker_news = news_df[mask].copy()
+            if ticker_news.empty:
+                ticker_news = news_df.copy()
         else:
-            sentiment_label = "Netral"
+            ticker_news = news_df.copy()
 
-        top_headlines = []
-        for idx, row in enumerate(df.head(8).to_dict(orient="records")):
-            raw_title = str(row.get("title") or "").strip()
-            raw_link = str(row.get("link") or "").strip()
-            raw_pub = str(row.get("published_at") or "Terkini").strip()
-            raw_img = row.get("image_url")
-            
-            # Automated guaranteed valid thumbnail resolution
-            resolved_img = resolve_article_thumbnail(
-                ticker=clean_ticker,
-                title=raw_title,
-                index=idx,
-                extracted_url=raw_img
-            )
+        if ticker_news.empty:
+            return {
+                "ticker": clean_ticker,
+                "news_count": 0,
+                "avg_sentiment": 0.0,
+                "sentiment_label": "Netral (Minim Berita)",
+                "catalyst_tag": "BERITA_UMUM",
+                "top_headlines": []
+            }
 
-            top_headlines.append({
-                "title": raw_title,
-                "link": raw_link,
-                "published_at": raw_pub,
-                "image_url": resolved_img
+        scores = []
+        headlines = []
+        catalyst_counts = {}
+
+        for idx, (_, row) in enumerate(ticker_news.iterrows()):
+            title = str(row.get("title", ""))
+            snippet = str(row.get("snippet", row.get("summary", "")))
+            score = cls._score_text_contextual(f"{title} {snippet}")
+            scores.append(score)
+
+            catalyst = cls.categorize_article_catalyst(title, snippet)
+            catalyst_counts[catalyst] = catalyst_counts.get(catalyst, 0) + 1
+
+            img_url = str(row.get("image_url", ""))
+            headlines.append({
+                "title": title,
+                "link": str(row.get("link", "#")),
+                "published_at": str(row.get("published_at", "")),
+                "image_url": resolve_article_thumbnail(ticker=clean_ticker, title=title, index=idx, extracted_url=img_url),
+                "sentiment_score": round(score, 3),
+                "catalyst_tag": catalyst
             })
+
+        avg_score = float(sum(scores) / len(scores)) if scores else 0.0
+        avg_score = max(-1.0, min(1.0, avg_score))
+
+        if avg_score >= 0.15:
+            sentiment_label = "Positif (Bullish)"
+        elif avg_score <= -0.15:
+            sentiment_label = "Negatif (Waspada Tekanan)"
+        else:
+            sentiment_label = "Netral / Berimbang"
+
+        dominant_catalyst = max(catalyst_counts, key=catalyst_counts.get) if catalyst_counts else "BERITA_UMUM"
 
         return {
             "ticker": clean_ticker,
-            "news_count": len(df),
+            "news_count": len(ticker_news),
             "avg_sentiment": round(avg_score, 4),
             "sentiment_label": sentiment_label,
-            "top_headlines": top_headlines
+            "catalyst_tag": dominant_catalyst,
+            "top_headlines": headlines[:5]
         }

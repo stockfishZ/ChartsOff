@@ -1,0 +1,869 @@
+{
+  "BBCA.JK": {
+    "cached_at": "2026-08-25T23:20:23.087110",
+    "data": {
+      "ticker": "BBCA.JK",
+      "pe_ratio": 13.55,
+      "pbv_ratio": 2.91,
+      "roe_pct": 21.82,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 53.12,
+      "dividend_yield_pct": 5.95,
+      "eps_growth_pct": -0.1,
+      "health_score": 88.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (21.8%)"
+    }
+  },
+  "AAPL.JK": {
+    "cached_at": "2026-08-25T23:21:15.098731",
+    "data": {
+      "ticker": "AAPL.JK",
+      "pe_ratio": 12.0,
+      "pbv_ratio": 1.5,
+      "roe_pct": 12.0,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 15.0,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": 5.0,
+      "health_score": 75.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "BBRI.JK": {
+    "cached_at": "2026-08-25T23:22:25.595237",
+    "data": {
+      "ticker": "BBRI.JK",
+      "pe_ratio": 8.18,
+      "pbv_ratio": 1.42,
+      "roe_pct": 18.14,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 40.23,
+      "dividend_yield_pct": 13.14,
+      "eps_growth_pct": 13.7,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (18.1%)"
+    }
+  },
+  "BMRI.JK": {
+    "cached_at": "2026-08-25T23:22:28.435553",
+    "data": {
+      "ticker": "BMRI.JK",
+      "pe_ratio": 6.29,
+      "pbv_ratio": 1.38,
+      "roe_pct": 22.38,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 43.38,
+      "dividend_yield_pct": 11.36,
+      "eps_growth_pct": 33.5,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (22.4%)"
+    }
+  },
+  "BBNI.JK": {
+    "cached_at": "2026-08-25T23:22:31.421744",
+    "data": {
+      "ticker": "BBNI.JK",
+      "pe_ratio": 6.63,
+      "pbv_ratio": 0.83,
+      "roe_pct": 12.45,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 39.86,
+      "dividend_yield_pct": 9.49,
+      "eps_growth_pct": 8.1,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "BRIS.JK": {
+    "cached_at": "2026-08-25T23:22:34.472177",
+    "data": {
+      "ticker": "BRIS.JK",
+      "pe_ratio": 10.43,
+      "pbv_ratio": 1.63,
+      "roe_pct": 16.15,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 31.49,
+      "dividend_yield_pct": 1.82,
+      "eps_growth_pct": 5.0,
+      "health_score": 95.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (16.1%)"
+    }
+  },
+  "BBTN.JK": {
+    "cached_at": "2026-08-25T23:22:37.291490",
+    "data": {
+      "ticker": "BBTN.JK",
+      "pe_ratio": 4.06,
+      "pbv_ratio": 0.45,
+      "roe_pct": 11.74,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 23.92,
+      "dividend_yield_pct": 3.98,
+      "eps_growth_pct": 61.2,
+      "health_score": 87.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "ARTO.JK": {
+    "cached_at": "2026-08-25T23:22:40.246255",
+    "data": {
+      "ticker": "ARTO.JK",
+      "pe_ratio": 42.02,
+      "pbv_ratio": 1.54,
+      "roe_pct": 3.82,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 14.62,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": 54.6,
+      "health_score": 57.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "BDMN.JK": {
+    "cached_at": "2026-08-25T23:22:43.080113",
+    "data": {
+      "ticker": "BDMN.JK",
+      "pe_ratio": 9.15,
+      "pbv_ratio": 0.77,
+      "roe_pct": 8.74,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 22.81,
+      "dividend_yield_pct": 3.33,
+      "eps_growth_pct": 31.3,
+      "health_score": 87.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "TLKM.JK": {
+    "cached_at": "2026-08-25T23:22:46.086764",
+    "data": {
+      "ticker": "TLKM.JK",
+      "pe_ratio": 14.68,
+      "pbv_ratio": 1.93,
+      "roe_pct": 17.68,
+      "der_ratio": 0.6,
+      "profit_margin_pct": 12.01,
+      "dividend_yield_pct": 8.52,
+      "eps_growth_pct": 27.5,
+      "health_score": 88.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (17.7%)"
+    }
+  },
+  "ISAT.JK": {
+    "cached_at": "2026-08-25T23:22:49.345713",
+    "data": {
+      "ticker": "ISAT.JK",
+      "pe_ratio": 11.34,
+      "pbv_ratio": 2.29,
+      "roe_pct": 20.24,
+      "der_ratio": 1.76,
+      "profit_margin_pct": 12.46,
+      "dividend_yield_pct": 4.22,
+      "eps_growth_pct": 175.1,
+      "health_score": 73.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (20.2%)"
+    }
+  },
+  "EXCL.JK": {
+    "cached_at": "2026-08-25T23:22:52.654711",
+    "data": {
+      "ticker": "EXCL.JK",
+      "pe_ratio": 16.08,
+      "pbv_ratio": 1.69,
+      "roe_pct": -13.44,
+      "der_ratio": 2.04,
+      "profit_margin_pct": -8.86,
+      "dividend_yield_pct": 5.89,
+      "eps_growth_pct": 16.0,
+      "health_score": 35.0,
+      "grade": "D (Tinggi Risiko Beban Utang)",
+      "status_color": "#B71C1C",
+      "highlight_reason": "Kinerja merugi (ROE Negatif)"
+    }
+  },
+  "GOTO.JK": {
+    "cached_at": "2026-08-25T23:22:55.696533",
+    "data": {
+      "ticker": "GOTO.JK",
+      "pe_ratio": -9.4,
+      "pbv_ratio": 1.65,
+      "roe_pct": -1.16,
+      "der_ratio": 0.28,
+      "profit_margin_pct": 0.01,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": 30.6,
+      "health_score": 45.0,
+      "grade": "C (Spekulatif)",
+      "status_color": "#D97706",
+      "highlight_reason": "Kinerja merugi (ROE Negatif)"
+    }
+  },
+  "BUKA.JK": {
+    "cached_at": "2026-08-25T23:22:59.247502",
+    "data": {
+      "ticker": "BUKA.JK",
+      "pe_ratio": 6.16,
+      "pbv_ratio": 0.43,
+      "roe_pct": 7.82,
+      "der_ratio": 0.44,
+      "profit_margin_pct": 25.04,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": -0.5,
+      "health_score": 77.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.44x)"
+    }
+  },
+  "EMTK.JK": {
+    "cached_at": "2026-08-25T23:23:02.327144",
+    "data": {
+      "ticker": "EMTK.JK",
+      "pe_ratio": 14.29,
+      "pbv_ratio": 0.88,
+      "roe_pct": 7.58,
+      "der_ratio": 0.06,
+      "profit_margin_pct": 10.62,
+      "dividend_yield_pct": 1.9,
+      "eps_growth_pct": -97.4,
+      "health_score": 65.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.06x)"
+    }
+  },
+  "ADRO.JK": {
+    "cached_at": "2026-08-25T23:23:05.281711",
+    "data": {
+      "ticker": "ADRO.JK",
+      "pe_ratio": 8.63,
+      "pbv_ratio": 15470.59,
+      "roe_pct": 10.26,
+      "der_ratio": 0.2,
+      "profit_margin_pct": 25.43,
+      "dividend_yield_pct": 8.99,
+      "eps_growth_pct": 67.1,
+      "health_score": 80.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.20x)"
+    }
+  },
+  "PTBA.JK": {
+    "cached_at": "2026-08-25T23:23:08.726180",
+    "data": {
+      "ticker": "PTBA.JK",
+      "pe_ratio": 8.55,
+      "pbv_ratio": 1.21,
+      "roe_pct": 14.41,
+      "der_ratio": 0.11,
+      "profit_margin_pct": 7.84,
+      "dividend_yield_pct": 4.62,
+      "eps_growth_pct": 104.8,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.11x)"
+    }
+  },
+  "ITMG.JK": {
+    "cached_at": "2026-08-25T23:23:11.618041",
+    "data": {
+      "ticker": "ITMG.JK",
+      "pe_ratio": 7.52,
+      "pbv_ratio": 14741.73,
+      "roe_pct": 11.12,
+      "der_ratio": 0.05,
+      "profit_margin_pct": 10.5,
+      "dividend_yield_pct": 6.81,
+      "eps_growth_pct": 97.3,
+      "health_score": 80.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.05x)"
+    }
+  },
+  "ANTM.JK": {
+    "cached_at": "2026-08-25T23:23:14.554735",
+    "data": {
+      "ticker": "ANTM.JK",
+      "pe_ratio": 9.03,
+      "pbv_ratio": 1.97,
+      "roe_pct": 24.69,
+      "der_ratio": 0.22,
+      "profit_margin_pct": 9.66,
+      "dividend_yield_pct": 6.58,
+      "eps_growth_pct": 59.9,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (24.7%)"
+    }
+  },
+  "INCO.JK": {
+    "cached_at": "2026-08-25T23:23:17.953610",
+    "data": {
+      "ticker": "INCO.JK",
+      "pe_ratio": 20.2,
+      "pbv_ratio": 19609.67,
+      "roe_pct": 5.58,
+      "der_ratio": 0.06,
+      "profit_margin_pct": 14.03,
+      "dividend_yield_pct": 1.48,
+      "eps_growth_pct": 1659.8,
+      "health_score": 65.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.06x)"
+    }
+  },
+  "MDKA.JK": {
+    "cached_at": "2026-08-25T23:23:21.183880",
+    "data": {
+      "ticker": "MDKA.JK",
+      "pe_ratio": 1662.92,
+      "pbv_ratio": 84571.43,
+      "roe_pct": 4.48,
+      "der_ratio": 0.77,
+      "profit_margin_pct": -0.04,
+      "dividend_yield_pct": 42.0,
+      "eps_growth_pct": 23.5,
+      "health_score": 62.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.77x)"
+    }
+  },
+  "AMMN.JK": {
+    "cached_at": "2026-08-25T23:23:24.151885",
+    "data": {
+      "ticker": "AMMN.JK",
+      "pe_ratio": 31.25,
+      "pbv_ratio": 59210.53,
+      "roe_pct": 10.48,
+      "der_ratio": 1.17,
+      "profit_margin_pct": 20.66,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": 37937.3,
+      "health_score": 60.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Kondisi fundamental stabil"
+    }
+  },
+  "MEDC.JK": {
+    "cached_at": "2026-08-25T23:23:27.047913",
+    "data": {
+      "ticker": "MEDC.JK",
+      "pe_ratio": 12.92,
+      "pbv_ratio": 15730.34,
+      "roe_pct": 6.97,
+      "der_ratio": 1.56,
+      "profit_margin_pct": 6.15,
+      "dividend_yield_pct": 4.61,
+      "eps_growth_pct": 282.3,
+      "health_score": 55.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Dividen yield menarik (4.6%)"
+    }
+  },
+  "PGAS.JK": {
+    "cached_at": "2026-08-25T23:23:30.001408",
+    "data": {
+      "ticker": "PGAS.JK",
+      "pe_ratio": 8.67,
+      "pbv_ratio": 13162.39,
+      "roe_pct": 10.09,
+      "der_ratio": 0.29,
+      "profit_margin_pct": 6.19,
+      "dividend_yield_pct": 8.16,
+      "eps_growth_pct": 45.8,
+      "health_score": 80.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.29x)"
+    }
+  },
+  "AKRA.JK": {
+    "cached_at": "2026-08-25T23:23:32.874846",
+    "data": {
+      "ticker": "AKRA.JK",
+      "pe_ratio": 10.09,
+      "pbv_ratio": 2.12,
+      "roe_pct": 19.52,
+      "der_ratio": 0.33,
+      "profit_margin_pct": 4.91,
+      "dividend_yield_pct": 7.19,
+      "eps_growth_pct": 25.9,
+      "health_score": 88.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (19.5%)"
+    }
+  },
+  "BUMI.JK": {
+    "cached_at": "2026-08-25T23:23:36.074607",
+    "data": {
+      "ticker": "BUMI.JK",
+      "pe_ratio": 33.33,
+      "pbv_ratio": 48500.0,
+      "roe_pct": 5.42,
+      "der_ratio": 0.25,
+      "profit_margin_pct": 7.4,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": 1266.2,
+      "health_score": 65.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.25x)"
+    }
+  },
+  "BRPT.JK": {
+    "cached_at": "2026-08-25T23:23:39.022118",
+    "data": {
+      "ticker": "BRPT.JK",
+      "pe_ratio": 69.92,
+      "pbv_ratio": 71538.46,
+      "roe_pct": 6.46,
+      "der_ratio": 1.33,
+      "profit_margin_pct": 1.39,
+      "dividend_yield_pct": 9.0,
+      "eps_growth_pct": -80.9,
+      "health_score": 47.0,
+      "grade": "C (Spekulatif)",
+      "status_color": "#D97706",
+      "highlight_reason": "Valuasi tergolong mahal (PER tinggi)"
+    }
+  },
+  "TPIA.JK": {
+    "cached_at": "2026-08-25T23:23:42.016184",
+    "data": {
+      "ticker": "TPIA.JK",
+      "pe_ratio": 140.84,
+      "pbv_ratio": 43260.87,
+      "roe_pct": 3.92,
+      "der_ratio": 1.19,
+      "profit_margin_pct": 1.19,
+      "dividend_yield_pct": 31.0,
+      "eps_growth_pct": -89.3,
+      "health_score": 47.0,
+      "grade": "C (Spekulatif)",
+      "status_color": "#D97706",
+      "highlight_reason": "Valuasi tergolong mahal (PER tinggi)"
+    }
+  },
+  "ICBP.JK": {
+    "cached_at": "2026-08-25T23:23:46.669726",
+    "data": {
+      "ticker": "ICBP.JK",
+      "pe_ratio": 12.24,
+      "pbv_ratio": 1.71,
+      "roe_pct": 12.55,
+      "der_ratio": 0.67,
+      "profit_margin_pct": 9.34,
+      "dividend_yield_pct": 3.42,
+      "eps_growth_pct": -60.8,
+      "health_score": 75.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.67x)"
+    }
+  },
+  "INDF.JK": {
+    "cached_at": "2026-08-25T23:23:49.809494",
+    "data": {
+      "ticker": "INDF.JK",
+      "pe_ratio": 6.77,
+      "pbv_ratio": 0.84,
+      "roe_pct": 12.14,
+      "der_ratio": 0.64,
+      "profit_margin_pct": 7.41,
+      "dividend_yield_pct": 3.93,
+      "eps_growth_pct": -43.3,
+      "health_score": 87.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.64x)"
+    }
+  },
+  "UNVR.JK": {
+    "cached_at": "2026-08-25T23:23:52.662408",
+    "data": {
+      "ticker": "UNVR.JK",
+      "pe_ratio": 18.38,
+      "pbv_ratio": 10.42,
+      "roe_pct": 1.33,
+      "der_ratio": 0.18,
+      "profit_margin_pct": 25.58,
+      "dividend_yield_pct": 12.67,
+      "eps_growth_pct": -9.7,
+      "health_score": 70.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.18x)"
+    }
+  },
+  "MYOR.JK": {
+    "cached_at": "2026-08-25T23:23:55.643533",
+    "data": {
+      "ticker": "MYOR.JK",
+      "pe_ratio": 10.56,
+      "pbv_ratio": 1.96,
+      "roe_pct": 19.62,
+      "der_ratio": 0.25,
+      "profit_margin_pct": 8.78,
+      "dividend_yield_pct": 3.7,
+      "eps_growth_pct": 60.1,
+      "health_score": 95.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (19.6%)"
+    }
+  },
+  "KLBF.JK": {
+    "cached_at": "2026-08-25T23:23:58.531268",
+    "data": {
+      "ticker": "KLBF.JK",
+      "pe_ratio": 10.11,
+      "pbv_ratio": 1.5,
+      "roe_pct": 14.77,
+      "der_ratio": 3.21,
+      "profit_margin_pct": 9.57,
+      "dividend_yield_pct": 2.48,
+      "eps_growth_pct": -0.8,
+      "health_score": 54.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang tinggi (DER 3.21x)"
+    }
+  },
+  "SIDO.JK": {
+    "cached_at": "2026-08-25T23:24:01.672322",
+    "data": {
+      "ticker": "SIDO.JK",
+      "pe_ratio": 10.74,
+      "pbv_ratio": 3.44,
+      "roe_pct": 30.4,
+      "der_ratio": 0.05,
+      "profit_margin_pct": 25.89,
+      "dividend_yield_pct": 10.57,
+      "eps_growth_pct": -49.3,
+      "health_score": 88.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (30.4%)"
+    }
+  },
+  "AMRT.JK": {
+    "cached_at": "2026-08-25T23:24:05.010406",
+    "data": {
+      "ticker": "AMRT.JK",
+      "pe_ratio": 16.45,
+      "pbv_ratio": 3.27,
+      "roe_pct": 20.03,
+      "der_ratio": 0.14,
+      "profit_margin_pct": 2.71,
+      "dividend_yield_pct": 2.93,
+      "eps_growth_pct": 4.5,
+      "health_score": 83.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (20.0%)"
+    }
+  },
+  "MAPI.JK": {
+    "cached_at": "2026-08-25T23:24:08.014268",
+    "data": {
+      "ticker": "MAPI.JK",
+      "pe_ratio": 10.07,
+      "pbv_ratio": 1.63,
+      "roe_pct": 17.64,
+      "der_ratio": 0.48,
+      "profit_margin_pct": 5.22,
+      "dividend_yield_pct": 67.0,
+      "eps_growth_pct": 20.2,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (17.6%)"
+    }
+  },
+  "ACES.JK": {
+    "cached_at": "2026-08-25T23:24:11.046207",
+    "data": {
+      "ticker": "ACES.JK",
+      "pe_ratio": 8.11,
+      "pbv_ratio": 0.97,
+      "roe_pct": 12.12,
+      "der_ratio": 0.15,
+      "profit_margin_pct": 8.6,
+      "dividend_yield_pct": 8.84,
+      "eps_growth_pct": 49.9,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.15x)"
+    }
+  },
+  "CPIN.JK": {
+    "cached_at": "2026-08-25T23:24:13.989208",
+    "data": {
+      "ticker": "CPIN.JK",
+      "pe_ratio": 6.65,
+      "pbv_ratio": 1.42,
+      "roe_pct": 22.79,
+      "der_ratio": 0.28,
+      "profit_margin_pct": 9.67,
+      "dividend_yield_pct": 5.96,
+      "eps_growth_pct": 211.1,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (22.8%)"
+    }
+  },
+  "JPFA.JK": {
+    "cached_at": "2026-08-25T23:24:17.042927",
+    "data": {
+      "ticker": "JPFA.JK",
+      "pe_ratio": 4.92,
+      "pbv_ratio": 1.25,
+      "roe_pct": 29.18,
+      "der_ratio": 0.76,
+      "profit_margin_pct": 7.64,
+      "dividend_yield_pct": 6.33,
+      "eps_growth_pct": 18.6,
+      "health_score": 99.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (29.2%)"
+    }
+  },
+  "GGRM.JK": {
+    "cached_at": "2026-08-25T23:24:20.413505",
+    "data": {
+      "ticker": "GGRM.JK",
+      "pe_ratio": 8.86,
+      "pbv_ratio": 0.61,
+      "roe_pct": 7.06,
+      "der_ratio": 0.5,
+      "profit_margin_pct": 5.12,
+      "dividend_yield_pct": 3.94,
+      "eps_growth_pct": 11194.1,
+      "health_score": 77.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.50x)"
+    }
+  },
+  "HMSP.JK": {
+    "cached_at": "2026-08-25T23:24:23.363829",
+    "data": {
+      "ticker": "HMSP.JK",
+      "pe_ratio": 9.93,
+      "pbv_ratio": 3.33,
+      "roe_pct": 34.69,
+      "der_ratio": 1.29,
+      "profit_margin_pct": 17.65,
+      "dividend_yield_pct": 7.56,
+      "eps_growth_pct": 917.5,
+      "health_score": 73.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "ROE sangat prima (34.7%)"
+    }
+  },
+  "ASII.JK": {
+    "cached_at": "2026-08-25T23:24:26.326155",
+    "data": {
+      "ticker": "ASII.JK",
+      "pe_ratio": 6.47,
+      "pbv_ratio": 0.83,
+      "roe_pct": 11.98,
+      "der_ratio": 0.41,
+      "profit_margin_pct": 9.35,
+      "dividend_yield_pct": 8.14,
+      "eps_growth_pct": -22.1,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.41x)"
+    }
+  },
+  "UNTR.JK": {
+    "cached_at": "2026-08-25T23:24:29.161233",
+    "data": {
+      "ticker": "UNTR.JK",
+      "pe_ratio": 11.42,
+      "pbv_ratio": 0.9,
+      "roe_pct": 7.44,
+      "der_ratio": 0.28,
+      "profit_margin_pct": 6.31,
+      "dividend_yield_pct": 9.09,
+      "eps_growth_pct": -93.7,
+      "health_score": 82.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.28x)"
+    }
+  },
+  "AUTO.JK": {
+    "cached_at": "2026-08-25T23:24:32.165956",
+    "data": {
+      "ticker": "AUTO.JK",
+      "pe_ratio": 6.19,
+      "pbv_ratio": 0.93,
+      "roe_pct": 15.29,
+      "der_ratio": 3.43,
+      "profit_margin_pct": 11.42,
+      "dividend_yield_pct": 7.39,
+      "eps_growth_pct": 36.7,
+      "health_score": 67.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "ROE sangat prima (15.3%)"
+    }
+  },
+  "SMGR.JK": {
+    "cached_at": "2026-08-25T23:24:35.098332",
+    "data": {
+      "ticker": "SMGR.JK",
+      "pe_ratio": 44.25,
+      "pbv_ratio": 0.23,
+      "roe_pct": 0.44,
+      "der_ratio": 0.21,
+      "profit_margin_pct": 0.64,
+      "dividend_yield_pct": 1.88,
+      "eps_growth_pct": 88.7,
+      "health_score": 57.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.21x)"
+    }
+  },
+  "INTP.JK": {
+    "cached_at": "2026-08-25T23:24:38.173549",
+    "data": {
+      "ticker": "INTP.JK",
+      "pe_ratio": 8.03,
+      "pbv_ratio": 0.85,
+      "roe_pct": 10.69,
+      "der_ratio": 0.12,
+      "profit_margin_pct": 12.91,
+      "dividend_yield_pct": 8.25,
+      "eps_growth_pct": 31.8,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.12x)"
+    }
+  },
+  "CTRA.JK": {
+    "cached_at": "2026-08-25T23:24:41.149353",
+    "data": {
+      "ticker": "CTRA.JK",
+      "pe_ratio": 4.56,
+      "pbv_ratio": 0.47,
+      "roe_pct": 10.04,
+      "der_ratio": 0.29,
+      "profit_margin_pct": 21.17,
+      "dividend_yield_pct": 5.81,
+      "eps_growth_pct": 0.7,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.29x)"
+    }
+  },
+  "BSDE.JK": {
+    "cached_at": "2026-08-25T23:24:43.992640",
+    "data": {
+      "ticker": "BSDE.JK",
+      "pe_ratio": 7.13,
+      "pbv_ratio": 0.3,
+      "roe_pct": 4.15,
+      "der_ratio": 0.35,
+      "profit_margin_pct": 16.69,
+      "dividend_yield_pct": 0.0,
+      "eps_growth_pct": -66.8,
+      "health_score": 77.0,
+      "grade": "A (Sehat & Efisien)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.35x)"
+    }
+  },
+  "PWON.JK": {
+    "cached_at": "2026-08-25T23:24:47.180849",
+    "data": {
+      "ticker": "PWON.JK",
+      "pe_ratio": 5.82,
+      "pbv_ratio": 0.56,
+      "roe_pct": 10.03,
+      "der_ratio": 0.22,
+      "profit_margin_pct": 31.17,
+      "dividend_yield_pct": 4.85,
+      "eps_growth_pct": -26.1,
+      "health_score": 92.0,
+      "grade": "A+ (Sangat Sehat)",
+      "status_color": "#1B5E20",
+      "highlight_reason": "Beban utang rendah & sehat (DER 0.22x)"
+    }
+  },
+  "SMRA.JK": {
+    "cached_at": "2026-08-25T23:24:50.133351",
+    "data": {
+      "ticker": "SMRA.JK",
+      "pe_ratio": 8.82,
+      "pbv_ratio": 0.44,
+      "roe_pct": 6.78,
+      "der_ratio": 0.92,
+      "profit_margin_pct": 7.06,
+      "dividend_yield_pct": 1.57,
+      "eps_growth_pct": -46.2,
+      "health_score": 62.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Valuasi menarik (Undervalued)"
+    }
+  },
+  "JSMR.JK": {
+    "cached_at": "2026-08-25T23:24:53.628051",
+    "data": {
+      "ticker": "JSMR.JK",
+      "pe_ratio": 5.71,
+      "pbv_ratio": 0.54,
+      "roe_pct": 7.72,
+      "der_ratio": 1.19,
+      "profit_margin_pct": 11.96,
+      "dividend_yield_pct": 5.66,
+      "eps_growth_pct": -16.5,
+      "health_score": 67.0,
+      "grade": "B (Moderat)",
+      "status_color": "#595750",
+      "highlight_reason": "Valuasi menarik (Undervalued)"
+    }
+  }
+}

@@ -8,7 +8,7 @@ export default function KeyFactors({ factors, onOpenHowItWorks }) {
     <div className="bg-white border border-[#121316] p-4 mb-3">
       <div className="flex items-center justify-between mb-2">
         <span className="font-mono text-xs font-bold uppercase text-[#121316]">
-          Indikator Teknikal Kuantitatif
+          Faktor Kuantitatif & Fundamental Utama
         </span>
         {onOpenHowItWorks && (
           <button
@@ -22,13 +22,13 @@ export default function KeyFactors({ factors, onOpenHowItWorks }) {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {factors.map((f, idx) => (
-          <div key={idx} className="p-2 border border-[#E5E3DC] bg-[#FAF9F6]">
-            <span className="text-[10px] text-[#737168] uppercase block truncate">{f.factor}</span>
-            <div className="flex items-baseline justify-between mt-0.5">
+          <div key={idx} className="p-2.5 border border-[#E5E3DC] bg-[#FAF9F6]">
+            <span className="text-[10px] text-[#737168] uppercase font-mono block truncate" title={f.factor}>{f.factor}</span>
+            <div className="flex items-baseline justify-between mt-1">
               <span className="font-mono-num text-sm font-bold text-[#121316]">{f.value}</span>
-              <span className="text-[10px] font-serif italic text-[#595750] truncate ml-1">{f.status}</span>
+              <span className="text-[10px] font-serif italic text-[#595750] truncate ml-1" title={f.status}>{f.status}</span>
             </div>
           </div>
         ))}

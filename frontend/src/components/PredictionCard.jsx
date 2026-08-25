@@ -273,8 +273,8 @@ export default function PredictionCard({
         </div>
       )}
 
-      {/* 3. Banner Sinyal & Kondisi Pasar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-left">
+      {/* 3. Banner Sinyal & Target */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-left mb-3">
         {/* Sinyal ML */}
         <div
           className={`p-2.5 border ${
@@ -324,6 +324,121 @@ export default function PredictionCard({
           </span>
         </div>
       </div>
+
+      {/* 4. Dynamic ATR Risk Management & Adaptive Exit Brackets (Upgrade #5) */}
+      {prediction.risk_management && (
+        <div className="mb-3 p-3 bg-white border border-[#121316] shadow-xs">
+          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2.5">
+            <span className="font-mono text-xs font-bold uppercase text-[#121316] flex items-center">
+              <span className="w-2 h-2 rounded-full bg-[#121316] mr-1.5 inline-block"></span>
+              Manajemen Risiko & Batas Keluar (ATR 14)
+            </span>
+            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 border text-[#121316] bg-[#F1EFEA]">
+              Risk:Reward {prediction.risk_management.risk_reward_ratio}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left">
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#B71C1C] block">Batas Stop Loss</span>
+              <span className="font-mono-num text-xs font-bold text-[#B71C1C]">
+                {formatRupiah(prediction.risk_management.stop_loss_price)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#1B5E20] block">Target Optimal (TP)</span>
+              <span className="font-mono-num text-xs font-bold text-[#1B5E20]">
+                {formatRupiah(prediction.risk_management.take_profit_price)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Target Konservatif</span>
+              <span className="font-mono-num text-xs font-bold text-[#121316]">
+                {formatRupiah(prediction.risk_management.conservative_target_price)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Tingkat Risiko</span>
+              <span
+                className="font-mono text-xs font-bold block"
+                style={{ color: prediction.risk_management.risk_color || "#121316" }}
+              >
+                {prediction.risk_management.risk_level.split(" ")[0]} ({prediction.risk_management.risk_pct}%)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. Fundamental Valuation Multiples & Health Snapshot (Upgrade #1 & #2) */}
+      {prediction.fundamentals && (
+        <div className="p-3 bg-[#FAF9F6] border border-[#121316]">
+          <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-2">
+            <div className="flex items-center space-x-1.5">
+              <span className="font-mono text-xs font-bold uppercase text-[#121316]">
+                Kesehatan Fundamental & Arus Institusi
+              </span>
+              <span
+                className="text-[9px] font-mono font-bold px-1.5 py-0.2 border uppercase"
+                style={{
+                  color: prediction.fundamentals.status_color || "#121316",
+                  borderColor: `${prediction.fundamentals.status_color || "#121316"}40`,
+                  backgroundColor: "#FFFFFF"
+                }}
+              >
+                {prediction.fundamentals.grade}
+              </span>
+            </div>
+            {prediction.institutional_flow && (
+              <span className="text-[10px] font-mono font-bold text-[#1B5E20] hidden sm:inline-block">
+                {prediction.institutional_flow.flow_status}
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-left text-xs mb-1.5">
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">P/E Ratio</span>
+              <span className="font-mono-num font-bold text-[#121316]">
+                {prediction.fundamentals.pe_ratio > 0 ? `${prediction.fundamentals.pe_ratio}x` : "N/A"}
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">PBV Ratio</span>
+              <span className="font-mono-num font-bold text-[#121316]">
+                {prediction.fundamentals.pbv_ratio}x
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">ROE (%)</span>
+              <span className={`font-mono-num font-bold ${prediction.fundamentals.roe_pct >= 15 ? "text-[#1B5E20]" : "text-[#121316]"}`}>
+                {prediction.fundamentals.roe_pct}%
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">DER (Utang)</span>
+              <span className={`font-mono-num font-bold ${prediction.fundamentals.der_ratio > 2.0 ? "text-[#B71C1C]" : "text-[#121316]"}`}>
+                {prediction.fundamentals.der_ratio}x
+              </span>
+            </div>
+            <div>
+              <span className="text-[9px] uppercase font-mono text-[#737168] block">Dividen Yield</span>
+              <span className="font-mono-num font-bold text-[#1B5E20]">
+                {prediction.fundamentals.dividend_yield_pct > 0 ? `${prediction.fundamentals.dividend_yield_pct}%` : "-"}
+              </span>
+            </div>
+          </div>
+
+          <div className="text-[10px] font-mono text-[#595750] mt-1 pt-1 border-t border-[#E5E3DC]/60 flex items-center justify-between">
+            <span>💡 {prediction.fundamentals.highlight_reason}</span>
+            {prediction.macro_context && (
+              <span className="text-[#737168]">
+                Beta IHSG: {prediction.macro_context.beta_ihsg_30} • IHSG: {prediction.macro_context.ihsg_status}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

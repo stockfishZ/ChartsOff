@@ -56,32 +56,48 @@ export default function HowItWorksModal({ isOpen, onClose, initialChapter }) {
           <section className="bg-white border border-[#121316] p-4 sm:p-5 shadow-xs">
             <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-3">
               <h3 className="font-editorial font-bold text-base text-[#121316]">
-                1. Alur Pemrosesan Data & Machine Learning
+                1. Arsitektur Machine Learning Hibrida 5 Pilar
               </h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
               <div className="p-3 border border-[#E5E3DC] bg-[#FAF9F6]">
-                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">01. INGESTION</span>
-                <p className="font-bold text-[#121316] mb-1">Pasar & Berita</p>
+                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">01. TEKNIKAL & MAKRO</span>
+                <p className="font-bold text-[#121316] mb-1">27 Indikator & Komoditas</p>
                 <p className="text-[#595750] text-[11px] leading-snug">
-                  Menarik 365 data perdagangan harian (OHLCV) dari Bursa Efek Indonesia dan artikel media finansial (*CNBC, Detik, Antara*).
+                  Data 365 hari OHLCV BEI dikombinasikan dengan benchmark IHSG (^JKSE), kurs USD/IDR, serta harga emas & minyak dunia.
                 </p>
               </div>
 
               <div className="p-3 border border-[#E5E3DC] bg-[#FAF9F6]">
-                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">02. FEATURE ENG.</span>
-                <p className="font-bold text-[#121316] mb-1">27 Indikator Kuantitatif</p>
+                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">02. ARUS INSTITUSI</span>
+                <p className="font-bold text-[#121316] mb-1">Smart Money / Asing</p>
                 <p className="text-[#595750] text-[11px] leading-snug">
-                  Menghitung parameter momentum (RSI, MACD), deviasi volatilitas (Bollinger %B, ATR), rasio volume, dan skor leksikal berita.
+                  Chaikin Money Flow (CMF 20) dan Money Flow Index (MFI 14) untuk mendeteksi akumulasi atau distribusi institusi besar.
                 </p>
               </div>
 
               <div className="p-3 border border-[#E5E3DC] bg-[#FAF9F6]">
-                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">03. ML INFERENCE</span>
-                <p className="font-bold text-[#121316] mb-1">Gradient Boosting</p>
+                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">03. FUNDAMENTAL EMITEN</span>
+                <p className="font-bold text-[#121316] mb-1">Valuasi & Filter Risiko</p>
                 <p className="text-[#595750] text-[11px] leading-snug">
-                  Model <em>ensemble tree</em> mengklasifikasikan probabilitas arah harga 5–20 hari ke depan dan menghitung proyeksi kenaikan/penurunan.
+                  Evaluasi rasio kuartalan (PER, PBV, ROE, DER, dividen) untuk memfilter <em>value traps</em> dan emiten dengan risiko utang tinggi.
+                </p>
+              </div>
+
+              <div className="p-3 border border-[#E5E3DC] bg-[#FAF9F6]">
+                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">04. SENTIMEN NLP KONTEKSTUAL</span>
+                <p className="font-bold text-[#121316] mb-1">Deteksi Negasi Finansial</p>
+                <p className="text-[#595750] text-[11px] leading-snug">
+                  Mesin NLP menganalisis berita terkini (CNBC, Detik, Antara) dengan deteksi partikel negasi (misal: <em>"tidak bertumbuh"</em> vs <em>"bertumbuh"</em>).
+                </p>
+              </div>
+
+              <div className="p-3 border border-[#E5E3DC] bg-[#FAF9F6] sm:col-span-2">
+                <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">05. MANAJEMEN RISIKO DINAMIS</span>
+                <p className="font-bold text-[#121316] mb-1">Batas Stop Loss & Target Optimal (ATR 14)</p>
+                <p className="text-[#595750] text-[11px] leading-snug">
+                  Menghitung bracket keluar adaptif (Stop Loss $1.5\times \text{ATR}$ dan Take Profit $2.5\times \text{ATR}$) dengan rasio Risk:Reward di atas $1 : 1.6$.
                 </p>
               </div>
             </div>
@@ -91,12 +107,33 @@ export default function HowItWorksModal({ isOpen, onClose, initialChapter }) {
           <section ref={chapter2Ref} className="bg-white border border-[#121316] p-4 sm:p-5 shadow-xs scroll-mt-2">
             <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-2 mb-3">
               <h3 className="font-editorial font-bold text-base text-[#121316]">
-                2. Parameter Indikator Teknikal Kuantitatif
+                2. Parameter Indikator Teknikal & Fundamental
               </h3>
               <span className="font-mono text-[10px] text-[#737168] uppercase">Kamus & Rentang Nilai</span>
             </div>
 
             <div className="divide-y divide-[#E5E3DC]">
+              {/* CMF / Smart Money */}
+              <div className="py-2.5">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-mono font-bold text-xs text-[#121316]">CMF (Chaikin Money Flow 20)</span>
+                  <span className="font-mono text-[10px] text-[#737168]">Rentang: -1.0 s.d +1.0</span>
+                </div>
+                <p className="text-[11px] text-[#595750] mb-1.5">
+                  Mengukur tekanan beli institusi (akumulasi) saat harga ditutup di paruh atas rentang harian dengan volume tinggi.
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                  <div className="p-1.5 bg-[#FAF9F6] border border-[#E5E3DC]">
+                    <span className="text-[#1B5E20] font-bold">&gt; +0.05 (Akumulasi Institusi)</span>
+                    <p className="text-[#737168] text-[9px] mt-0.5">Institusi/asing aktif memborong saham.</p>
+                  </div>
+                  <div className="p-1.5 bg-[#FAF9F6] border border-[#E5E3DC]">
+                    <span className="text-[#B71C1C] font-bold">&lt; -0.05 (Distribusi Institusi)</span>
+                    <p className="text-[#737168] text-[9px] mt-0.5">Tekanan jual dominan dari investor besar.</p>
+                  </div>
+                </div>
+              </div>
+
               {/* RSI */}
               <div className="py-2.5">
                 <div className="flex items-center justify-between mb-1">

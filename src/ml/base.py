@@ -18,8 +18,12 @@ class PredictionResult(BaseModel):
     key_factors: list[dict] = Field(default_factory=list, description="Top indicators explaining this prediction")
     news_sentiment: dict = Field(default_factory=dict, description="Summary of news volume & sentiment score")
     action_alert: dict = Field(default_factory=dict, description="Precision ML action alert for notifications (URGENT_SELL, PRIME_BUY, PRICE_SWING, NEWS_CATALYST)")
+    risk_management: dict = Field(default_factory=dict, description="Dynamic ATR risk management (stop_loss_price, take_profit_price, risk_reward_ratio, risk_level)")
+    fundamentals: dict = Field(default_factory=dict, description="Quarterly financial ratios and health score (PER, PBV, ROE, DER, grade)")
+    institutional_flow: dict = Field(default_factory=dict, description="Smart money & foreign flow metrics (CMF, MFI, flow_score)")
+    macro_context: dict = Field(default_factory=dict, description="Macroeconomic & commodity context (IHSG, USDIDR, beta)")
     historical_prices: list[dict] = Field(default_factory=list, description="Real historical daily OHLCV bars from market feed")
-    model_version: str = "custom_v1"
+    model_version: str = "custom_v2_institutional"
 
 class BaseStockModel(ABC):
     """

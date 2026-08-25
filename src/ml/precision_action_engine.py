@@ -40,10 +40,12 @@ class PrecisionActionEngine:
         current_price: float,
         features_row: pd.Series | dict,
         news_summary: Optional[Dict[str, Any]] = None,
-        holding_info: Optional[Dict[str, Any]] = None
+        holding_info: Optional[Dict[str, Any]] = None,
+        fundamentals: Optional[Dict[str, Any]] = None,
+        flow_summary: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Mengevaluasi kondisi saham secara kuantitatif & leksikal dengan presisi tinggi.
+        Mengevaluasi kondisi saham secara kuantitatif, fundamental & leksikal dengan presisi tinggi.
         """
         clean_ticker = ticker.replace(".JK", "").upper()
         
@@ -63,9 +65,19 @@ class PrecisionActionEngine:
         if news_summary and news_summary.get("top_headlines"):
             top_news_title = str(news_summary["top_headlines"][0].get("title") or "").strip()
 
+        # Extract smart money flow
+        flow_score = float(flow_summary.get("flow_score", 50.0)) if flow_summary else 50.0
+        cmf_20 = float(flow_summary.get("cmf_20", 0.0)) if flow_summary else 0.0
+        is_accumulating = bool(flow_summary.get("is_accumulating", False)) if flow_summary else False
+
+        # Extract fundamental health
+        fund_score = float(fundamentals.get("health_score", 50.0)) if fundamentals else 50.0
+        der_ratio = float(fundamentals.get("der_ratio", 0.6)) if fundamentals else 0.6
+        roe_pct = float(fundamentals.get("roe_pct", 12.0)) if fundamentals else 12.0
+
         # =========================================================================
         # 1. EVALUASI JUAL DARURAT (URGENT_SELL) - PRESISI TINGGI
-        # Kondisi: Patah trend teknikal berat + Volatilitas melebar + Sentimen buruk / PnL anjlok
+        # Kondisi: Patah trend teknikal berat + Distribusi volume + Sentimen buruk / PnL anjlok
         # =========================================================================
         sell_score = 0.0
         sell_reasons = []
@@ -84,17 +96,22 @@ class PrecisionActionEngine:
                 sell_score += 0.15
                 sell_reasons.append(f"Penurunan tajam 5 hari ({roc_5:+.1f}%) menembus batas bawah")
 
-        # Faktor 3: Lonjakan Volume pada Tekanan Jual (Distribusi Institusi)
-        if vol_ratio > 1.35 and roc_5 < 0:
+        # Faktor 3: Lonjakan Volume pada Tekanan Jual / Distribusi Institusi
+        if (vol_ratio > 1.35 and roc_5 < 0) or cmf_20 < -0.10:
             sell_score += 0.15
-            sell_reasons.append("Distribusi volume tinggi melebihi 1.35x rata-rata")
+            sell_reasons.append("Distribusi institusi terdeteksi (Tekanan jual besar)")
 
         # Faktor 4: Sentimen Berita Negatif Signifikan
         if news_score < -0.25:
             sell_score += 0.25 * min(1.5, 1.0 + (news_count * 0.1))
             sell_reasons.append(f"Katalis berita negatif ({news_score:+.2f}): {top_news_title[:60]}...")
 
-        # Faktor 5: Evaluasi Portofolio Khusus (Jika Saham Sedang Dimiliki)
+        # Faktor 5: Fundamental Insolvency / Debt Warning
+        if der_ratio > 2.8 and roe_pct < 0:
+            sell_score += 0.15
+            sell_reasons.append("Peringatan risiko fundamental (Utang tinggi & merugi)")
+
+        # Faktor 6: Evaluasi Portofolio Khusus (Jika Saham Sedang Dimiliki)
         if holding_info:
             buy_price = float(holding_info.get("buyPrice") or holding_info.get("buy_price") or 0.0)
             if buy_price > 0:
@@ -113,15 +130,15 @@ class PrecisionActionEngine:
                 "type": "URGENT_SELL",
                 "urgency": "HIGH",
                 "title": f"⚠️ Sinyal Jual Darurat: {clean_ticker}",
-                "message": f"Kondisi teknikal {clean_ticker} memburuk tajam. {primary_reason}. Disarankan pertimbangkan exit untuk amankan modal.",
+                "message": f"Kondisi {clean_ticker} memburuk tajam. {primary_reason}. Disarankan pertimbangkan exit untuk amankan modal.",
                 "precision_score": sell_precision_pct,
                 "roc_5": round(roc_5, 2),
                 "current_price": current_price
             }
 
         # =========================================================================
-        # 2. EVALUASI PELUANG BELI EMAS (PRIME_BUY) - KONFLUENSI TINGGI
-        # Kondisi: Golden cross tren + RSI momentum ekspansi sehat + Volume akumulasi + Sentimen positif
+        # 2. EVALUASI PROSPEK BAGUS (PRIME_BUY) - KONFLUENSI TINGGI & FILTER VALUE TRAP
+        # Kondisi: Golden cross + RSI ideal + Akumulasi Institusi + Sentimen positif + Fundamental sehat
         # =========================================================================
         buy_score = 0.0
         buy_reasons = []
@@ -141,13 +158,23 @@ class PrecisionActionEngine:
             buy_score += 0.25
             buy_reasons.append("Kondisi oversold ekstrem di support pita bawah (peluang rebound)")
 
-        if vol_ratio > 1.25 and roc_5 >= 0:
+        # Akumulasi Volume & Arus Smart Money
+        if (vol_ratio > 1.25 and roc_5 >= 0) or is_accumulating:
             buy_score += 0.15
-            buy_reasons.append(f"Akumulasi volume meningkat ({vol_ratio:.2f}x rata-rata)")
+            buy_reasons.append("Akumulasi arus dana institusi / smart money terdeteksi")
 
+        # Sentimen Berita
         if news_score > 0.15:
             buy_score += 0.20
             buy_reasons.append(f"Didukung katalis sentimen positif emiten ({news_score:+.2f})")
+
+        # Fundamental Health Bonus & Value-Trap Filter
+        if fundamentals:
+            if der_ratio > 3.0 or roe_pct < -5.0 or fund_score < 30.0:
+                buy_score -= 0.35  # Filter out fundamentally bankrupt value traps
+            elif fund_score >= 70.0 and roe_pct >= 12.0:
+                buy_score += 0.10
+                buy_reasons.append(f"Kesehatan fundamental solid ({fundamentals.get('grade', 'Sehat')})")
 
         buy_precision_pct = min(99.0, max(0.0, round(buy_score * 100, 1)))
 
