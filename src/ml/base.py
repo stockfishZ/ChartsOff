@@ -36,7 +36,12 @@ class BaseStockModel(ABC):
         self.is_trained = False
 
     @abstractmethod
-    def prepare_features(self, ohlcv_df: pd.DataFrame, news_summary: dict | None = None) -> pd.DataFrame:
+    def prepare_features(
+        self,
+        ohlcv_df: pd.DataFrame,
+        news_summary: dict | None = None,
+        macro_df: pd.DataFrame | None = None
+    ) -> pd.DataFrame:
         """
         Transform raw market OHLCV and news metadata into model-ready features (X).
         """

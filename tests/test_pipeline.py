@@ -165,3 +165,164 @@ def test_contextual_negation_nlp_and_institutional_features():
     
     assert pos_score > 0.2
     assert neg_score < -0.1
+
+def test_no_bfill_data_leakage():
+    dates = pd.date_range("2024-01-01", periods=60)
+    prices = np.linspace(100, 150, 60)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 1000000,
+        "ticker": "BBCA"
+    })
+    result_df = TechnicalFeatureEngine.compute_all_indicators(df)
+    # The first row for sma_50 (window=50, min_periods=10) or rsi_14 should be NaN (no bfill)
+    assert pd.isna(result_df["sma_50"].iloc[0])
+    assert pd.isna(result_df["rsi_14"].iloc[0])
+
+def test_train_guard_insufficient_clean_data():
+    dates = pd.date_range("2024-01-01", periods=40)
+    prices = np.linspace(100, 150, 40)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 1000000,
+        "ticker": "BBCA"
+    })
+    model = CustomStockMLModel()
+    features_df = model.prepare_features(df)
+    # Introducing NaNs so clean rows after dropna are < 30 bars
+    features_df.loc[:15, "rsi_14"] = np.nan
+    res = model.train(features_df)
+    assert res is None
+
+    # Test with dataframe having fewer than 30 total rows
+    res_short = model.train(features_df.iloc[:20])
+    assert res_short is None
+
+def test_feature_importance_in_key_factors_and_persistence(tmp_path):
+    dates = pd.date_range("2024-01-01", periods=80)
+    prices = np.linspace(100, 150, 80)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 2000000,
+        "ticker": "BBCA"
+    })
+    model = CustomStockMLModel()
+    features_df = model.prepare_features(df)
+    model.train(features_df)
+    
+    pred = model.predict(features_df, current_price=10000.0)
+    # Key factors should start with top 3 ML feature importances
+    key_factors = pred.key_factors
+    assert len(key_factors) >= 3
+    importance_factors = [kf for kf in key_factors if "🔑" in kf["factor"]]
+    assert len(importance_factors) == 3
+    for kf in importance_factors:
+        assert "Pengaruh" in kf["value"]
+        assert kf["status"] == "Faktor Kunci Model ML"
+
+    # Test persistence
+    model_path = tmp_path / "latest_model.joblib"
+    model.save(str(model_path))
+    assert model_path.exists()
+    
+    loaded_model = CustomStockMLModel()
+    loaded_model.load(str(model_path))
+    assert loaded_model.is_trained is True
+    pred_loaded = loaded_model.predict(features_df, current_price=10000.0)
+    assert pred_loaded.ticker == pred.ticker
+
+def test_prepare_features_with_macro_df():
+    dates = pd.date_range("2024-01-01", periods=60)
+    prices = np.linspace(100, 150, 60)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 1000000,
+        "ticker": "BBCA"
+    })
+    macro_df = pd.DataFrame({
+        "timestamp": dates,
+        "ihsg": np.linspace(7000, 7200, 60),
+        "usdidr": np.linspace(15000, 15500, 60),
+        "gold": np.linspace(2000, 2100, 60),
+        "oil": np.linspace(70, 75, 60)
+    })
+    model = CustomStockMLModel()
+    features_df = model.prepare_features(df, macro_df=macro_df)
+    assert "ihsg_roc_5" in features_df.columns
+    assert "usdidr_roc_5" in features_df.columns
+    assert "beta_ihsg_30" in features_df.columns
+
+def test_sentiment_compound_phrase_matching():
+    # Verify compound phrases match properly
+    pos_score = SentimentFeatureEngine._score_text_contextual("Emiten membukukan laba bersih dan dividen interim meningkat")
+    assert pos_score > 0.3
+
+    neg_score = SentimentFeatureEngine._score_text_contextual("Emiten mengalami gagal bayar dan penurunan tajam kinerja")
+    assert neg_score < -0.3
+
+    # Negation with compound phrase
+    negated_score = SentimentFeatureEngine._score_text_contextual("Emiten tidak rugi bersih pada kuartal ini")
+    assert negated_score > 0.0
+
+def test_news_lookahead_leakage_prevented():
+    dates = pd.date_range("2024-01-01", periods=60)
+    prices = np.linspace(100, 150, 60)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 1,
+        "Low": prices - 1,
+        "Close": prices,
+        "Volume": 1000000,
+        "ticker": "BBRI.JK"
+    })
+    news_summary = {"avg_sentiment": 0.45, "news_count": 8, "sentiment_label": "Bullish"}
+    model = CustomStockMLModel()
+    features_df = model.prepare_features(df, news_summary=news_summary)
+
+    # Older historical bars must be 0.0 to prevent lookahead data leakage
+    assert (features_df["news_avg_sentiment"].iloc[:-5] == 0.0).all()
+    # Contemporary window (last 5 bars) receives actual news sentiment
+    assert (features_df["news_avg_sentiment"].iloc[-5:] == 0.45).all()
+
+def test_adaptive_support_resistance_risk_brackets():
+    dates = pd.date_range("2024-01-01", periods=80)
+    prices = np.linspace(5000, 5200, 80)
+    df = pd.DataFrame({
+        "timestamp": dates,
+        "Open": prices,
+        "High": prices + 50,
+        "Low": prices - 50,
+        "Close": prices,
+        "Volume": 5000000,
+        "ticker": "BMRI.JK"
+    })
+    model = CustomStockMLModel()
+    features_df = model.prepare_features(df)
+    model.train(features_df)
+
+    pred = model.predict(features_df, current_price=5200.0)
+    risk = pred.risk_management
+    assert risk["stop_loss_price"] < 5200.0
+    assert risk["take_profit_price"] > 5200.0
+    # Stop loss must enforce IDX tick minimum (Rp 50)
+    assert risk["stop_loss_price"] >= 50.0
+    # RRR is non-empty and formatted
+    assert "1 :" in risk["risk_reward_ratio"]
+

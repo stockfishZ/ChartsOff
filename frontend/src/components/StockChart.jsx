@@ -337,7 +337,11 @@ export default function StockChart({ prediction, holding = null }) {
     const history = prediction.historical_prices || [];
     const points = [];
 
-    const barCount = timeframe === "1B" ? 22 : timeframe === "3B" ? 66 : 130;
+    const barCount =
+      timeframe === "1B" ? 22 :
+      timeframe === "2B" ? 44 :
+      timeframe === "3B" ? 66 :
+      130;
     const selectedBars = history.slice(-barCount);
 
     if (selectedBars.length > 0) {
@@ -491,14 +495,14 @@ export default function StockChart({ prediction, holding = null }) {
           {/* Filter Timeframe */}
           <div className="flex space-x-0.5 border border-[#121316] p-0.5 bg-[#FAF9F6]">
             {[
-              { id: "1B", label: "1B" },
-              { id: "3B", label: "3B" },
-              { id: "6B", label: "6B" },
+              { id: "1B", label: "1 Bulan" },
+              { id: "3B", label: "3 Bulan" },
+              { id: "6B", label: "6 Bulan" },
             ].map((tf) => (
               <button
                 key={tf.id}
                 onClick={() => setTimeframe(tf.id)}
-                className={`px-2.5 py-1.5 text-xs font-mono font-bold transition active:scale-95 min-h-[32px] cursor-pointer ${
+                className={`px-2.5 py-1.5 text-xs font-sans font-bold transition active:scale-95 min-h-[32px] cursor-pointer ${
                   timeframe === tf.id ? "bg-[#121316] text-white" : "text-[#737168] hover:text-[#121316]"
                 }`}
               >

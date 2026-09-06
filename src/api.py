@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from src.config import config
 from src.data.market_feed import MarketDataFeed
 from src.data.news_feed import NewsDataFeed
+from src.data.macro_feed import MacroDataFeed
 from src.features.sentiment import SentimentFeatureEngine
 from src.ml.custom_trainer import CustomStockMLModel
 from src.ml.base import PredictionResult
@@ -29,7 +30,6 @@ app.add_middleware(
 
 market_feed = MarketDataFeed(historical_days=config.HISTORICAL_DAYS)
 news_feed = NewsDataFeed(lookback_days=config.NEWS_LOOKBACK_DAYS)
-ml_model = CustomStockMLModel()
 storage = StorageManager()
 
 def compute_prediction_for_ticker(ticker: str) -> PredictionResult:
@@ -49,8 +49,15 @@ def compute_prediction_for_ticker(ticker: str) -> PredictionResult:
     news_df = news_feed.fetch_news_for_ticker(clean_ticker)
     news_summary = SentimentFeatureEngine.aggregate_news_sentiment(news_df, clean_ticker)
 
-    # 3. Features & ML inference
-    features_df = ml_model.prepare_features(ohlcv_df, news_summary)
+    # 3. Fresh model per request to prevent cross-ticker state contamination
+    ml_model = CustomStockMLModel()
+
+    # 4. Fetch macro context
+    macro_feed = MacroDataFeed()
+    macro_df = macro_feed.get_macro_context()
+
+    # 5. Features & ML inference (with macro data)
+    features_df = ml_model.prepare_features(ohlcv_df, news_summary, macro_df=macro_df)
     
     # Fast training fit
     ml_model.train(features_df)

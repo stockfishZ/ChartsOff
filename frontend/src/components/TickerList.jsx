@@ -64,15 +64,15 @@ export default function TickerList({
                   </div>
                   {isPrimeBuy ? (
                     <span
-                      className="text-[8.5px] uppercase font-mono font-bold tracking-wider px-1 py-0.2 border text-[#1B5E20] border-[#1B5E20] bg-[#E8F5E9] flex items-center"
+                      className="text-[10px] uppercase font-mono font-bold tracking-wider px-1.5 py-0.5 border text-[#1B5E20] border-[#1B5E20] bg-[#E8F5E9] flex items-center shrink-0"
                       title="Prospek Bagus: Konfluensi momentum dan sentimen positif terkonfirmasi"
                     >
-                      <Sparkles className="w-2.5 h-2.5 mr-0.5 text-[#1B5E20]" />
+                      <Sparkles className="w-3 h-3 mr-0.5 text-[#1B5E20]" />
                       Prospek Bagus
                     </span>
                   ) : (
                     <span
-                      className={`text-[9px] uppercase font-bold tracking-wider px-1 py-0.2 border ${
+                      className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 border shrink-0 ${
                         isBull
                           ? "text-[#1B5E20] border-[#1B5E20]/30 bg-[#E8F5E9]"
                           : isBear
@@ -86,11 +86,11 @@ export default function TickerList({
                 </div>
 
                 <div className="flex items-baseline justify-between space-x-2 mt-0.5">
-                  <span className="font-mono-num text-[11px] font-semibold text-[#121316]">
+                  <span className="font-mono-num text-xs font-semibold text-[#121316]">
                     {formatRupiah(item.current_price)}
                   </span>
                   <span
-                    className={`font-mono-num text-[10px] font-medium ${
+                    className={`font-mono-num text-[11px] font-medium ${
                       item.expected_return_pct >= 0 ? "text-[#1B5E20]" : "text-[#B71C1C]"
                     }`}
                   >

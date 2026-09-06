@@ -9,30 +9,15 @@ logger = logging.getLogger("ChartsOff.PrecisionActionML")
 
 class PrecisionActionEngine:
     """
-    Model Machine Learning Presisi Tinggi untuk Deteksi Aksi Kritis:
-    1. Sinyal Jual Darurat (URGENT_SELL) - Memitigasi risiko kerugian tajam.
+    Mesin Kuantitatif & Aturan Solvabilitas Presisi Tinggi untuk Deteksi Aksi Kritis:
+    1. Sinyal Jual Darurat (URGENT_SELL) - Memitigasi risiko kebangkrutan / kerugian tajam (DER > 2.8, ROE < 0, RSI breakdown).
     2. Peluang Beli Konfirmed (PRIME_BUY) - Mendeteksi setup momentum emas dengan konfluensi tinggi.
     3. Pergerakan Harga Signifikan (PRICE_SWING).
     4. Katalis Berita Material (NEWS_CATALYST).
     """
 
     def __init__(self):
-        # ExtraTrees Classifier with constrained depth to maximize out-of-sample precision
-        self.sell_urgency_classifier = ExtraTreesClassifier(
-            n_estimators=120,
-            max_depth=4,
-            min_samples_split=4,
-            class_weight="balanced",
-            random_state=42
-        )
-        self.buy_urgency_classifier = ExtraTreesClassifier(
-            n_estimators=120,
-            max_depth=4,
-            min_samples_split=4,
-            class_weight="balanced",
-            random_state=42
-        )
-        self.is_fitted = False
+        self.is_active = True
 
     def evaluate_action_alert(
         self,

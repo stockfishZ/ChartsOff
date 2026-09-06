@@ -287,6 +287,51 @@ export class NotificationService {
           }
         }
       }
+
+      // =======================================================================
+      // SCENARIO 5: PRICE TARGET HIT (Stop-Loss or Take-Profit on Holdings)
+      // =======================================================================
+      if (isHolding && pred.risk_management) {
+        const sl = pred.risk_management.stop_loss_price;
+        const tp = pred.risk_management.take_profit_price;
+        const price = pred.current_price;
+
+        if (sl && price <= sl) {
+          const hash = `SL_HIT_${ticker}_${Math.round(sl)}`;
+          if (!sentHashes[hash] || (now - sentHashes[hash]) > COOLDOWN_MS) {
+            newAlerts.push({
+              id: hash,
+              ticker: ticker,
+              type: "STOP_LOSS_HIT",
+              urgency: "HIGH",
+              title: `🛑 Stop-Loss Tercapai: ${cleanTicker}`,
+              body: `Harga ${cleanTicker} (Rp ${price.toLocaleString("id-ID")}) telah menyentuh batas stop-loss Rp ${sl.toLocaleString("id-ID")}. Pertimbangkan untuk review posisi.`,
+              timestamp: new Date().toISOString(),
+              isRead: false,
+              data: { ticker, currentPrice: price, stopLoss: sl }
+            });
+            sentHashes[hash] = now;
+          }
+        }
+
+        if (tp && price >= tp) {
+          const hash = `TP_HIT_${ticker}_${Math.round(tp)}`;
+          if (!sentHashes[hash] || (now - sentHashes[hash]) > COOLDOWN_MS) {
+            newAlerts.push({
+              id: hash,
+              ticker: ticker,
+              type: "TAKE_PROFIT_HIT",
+              urgency: "HIGH",
+              title: `🎯 Take-Profit Tercapai: ${cleanTicker}`,
+              body: `Harga ${cleanTicker} (Rp ${price.toLocaleString("id-ID")}) telah mencapai target take-profit Rp ${tp.toLocaleString("id-ID")}. Pertimbangkan untuk ambil keuntungan.`,
+              timestamp: new Date().toISOString(),
+              isRead: false,
+              data: { ticker, currentPrice: price, takeProfit: tp }
+            });
+            sentHashes[hash] = now;
+          }
+        }
+      }
     }
 
     // Persist sent hashes

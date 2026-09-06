@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 .venv/
 venv/
 __pycache__/
@@ -20,3 +20,10 @@ frontend/dist/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# IDE & Editors
+.idea/
+.vscode/
+
+# Model artifacts
+outputs/models/

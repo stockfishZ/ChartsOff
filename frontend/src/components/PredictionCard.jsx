@@ -214,27 +214,27 @@ export default function PredictionCard({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left mb-2.5">
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Harga Beli Rata-rata</span>
-              <span className="font-mono-num text-xs font-bold text-[#121316]">
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Harga Beli Rata-rata</span>
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#121316]">
                 {formatRupiah(holding.buyPrice)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Kepemilikan</span>
-              <span className="font-mono-num text-xs font-bold text-[#121316]">
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Kepemilikan</span>
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#121316]">
                 {holding.lots} Lot ({holding.shares.toLocaleString("id-ID")} lbr)
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Total Modal</span>
-              <span className="font-mono-num text-xs font-bold text-[#121316]">
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Total Modal</span>
+              <span className="font-mono-num text-xs sm:text-sm font-bold text-[#121316]">
                 {formatRupiah(holdingStats.totalCost)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Untung / Rugi (P/L)</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Untung / Rugi (P/L)</span>
               <span
-                className={`font-mono-num text-xs font-bold ${
+                className={`font-mono-num text-xs sm:text-sm font-bold ${
                   holdingStats.isProfit ? "text-[#1B5E20]" : "text-[#B71C1C]"
                 }`}
               >
@@ -285,7 +285,7 @@ export default function PredictionCard({
               : "border-[#121316] bg-[#F1EFEA]"
           }`}
         >
-          <span className="text-[9px] uppercase font-bold tracking-wider text-[#595750] block">Sinyal Rekomendasi</span>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-[#595750] block">Sinyal Rekomendasi</span>
           <div
             className={`font-mono font-bold text-sm mt-0.5 ${
               isBull ? "text-[#1B5E20]" : isBear ? "text-[#B71C1C]" : "text-[#121316]"
@@ -300,7 +300,7 @@ export default function PredictionCard({
 
         {/* Target 20 Hari */}
         <div className="p-3 border border-[#121316] bg-[#FAF9F6]">
-          <span className="text-[9px] uppercase font-bold tracking-wider text-[#737168] block">Target {horizon} Hari (1 Bln)</span>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-[#737168] block">Target {horizon} Hari (1 Bln)</span>
           <div className="font-mono-num font-bold text-sm text-[#121316] mt-0.5">
             {formatRupiah(targetPrice)}
           </div>
@@ -315,7 +315,7 @@ export default function PredictionCard({
 
         {/* Kondisi / Regime Pasar */}
         <div className="p-3 border border-[#121316] bg-[#FAF9F6]">
-          <span className="text-[9px] uppercase font-bold tracking-wider text-[#737168] block">Kondisi Pasar</span>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-[#737168] block">Kondisi Pasar</span>
           <div className="font-serif font-bold text-sm text-[#121316] mt-0.5 truncate">
             {prediction.market_regime}
           </div>
@@ -340,25 +340,25 @@ export default function PredictionCard({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 text-left">
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#B71C1C] block font-semibold">Batas Stop Loss</span>
+              <span className="text-[10px] uppercase font-mono text-[#B71C1C] block font-semibold">Batas Stop Loss</span>
               <span className="font-mono-num text-xs sm:text-sm font-bold text-[#B71C1C] block mt-0.5">
                 {formatRupiah(prediction.risk_management.stop_loss_price)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#1B5E20] block font-semibold">Target Optimal (TP)</span>
+              <span className="text-[10px] uppercase font-mono text-[#1B5E20] block font-semibold">Target Optimal (TP)</span>
               <span className="font-mono-num text-xs sm:text-sm font-bold text-[#1B5E20] block mt-0.5">
                 {formatRupiah(prediction.risk_management.take_profit_price)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Target Konservatif</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Target Konservatif</span>
               <span className="font-mono-num text-xs sm:text-sm font-bold text-[#121316] block mt-0.5">
                 {formatRupiah(prediction.risk_management.conservative_target_price)}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Tingkat Risiko</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Tingkat Risiko</span>
               <span
                 className="font-mono text-xs sm:text-sm font-bold block mt-0.5"
                 style={{ color: prediction.risk_management.risk_color || "#121316" }}
@@ -379,7 +379,7 @@ export default function PredictionCard({
                 Kesehatan Fundamental & Arus Institusi
               </span>
               <span
-                className="text-[9px] font-mono font-bold px-1.5 py-0.5 border uppercase"
+                className="text-[10px] font-mono font-bold px-1.5 py-0.5 border uppercase"
                 style={{
                   color: prediction.fundamentals.status_color || "#121316",
                   borderColor: `${prediction.fundamentals.status_color || "#121316"}40`,
@@ -398,31 +398,31 @@ export default function PredictionCard({
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3 text-left text-xs mb-2">
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">P/E Ratio</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">P/E Ratio</span>
               <span className="font-mono-num font-bold text-[#121316] block mt-0.5">
                 {prediction.fundamentals.pe_ratio > 0 ? `${prediction.fundamentals.pe_ratio}x` : "N/A"}
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">PBV Ratio</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">PBV Ratio</span>
               <span className="font-mono-num font-bold text-[#121316] block mt-0.5">
                 {prediction.fundamentals.pbv_ratio}x
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">ROE (%)</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">ROE (%)</span>
               <span className={`font-mono-num font-bold block mt-0.5 ${prediction.fundamentals.roe_pct >= 15 ? "text-[#1B5E20]" : "text-[#121316]"}`}>
                 {prediction.fundamentals.roe_pct}%
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">DER (Utang)</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">DER (Utang)</span>
               <span className={`font-mono-num font-bold block mt-0.5 ${prediction.fundamentals.der_ratio > 2.0 ? "text-[#B71C1C]" : "text-[#121316]"}`}>
                 {prediction.fundamentals.der_ratio}x
               </span>
             </div>
             <div>
-              <span className="text-[9px] uppercase font-mono text-[#737168] block">Dividen Yield</span>
+              <span className="text-[10px] uppercase font-mono text-[#737168] block">Dividen Yield</span>
               <span className="font-mono-num font-bold text-[#1B5E20] block mt-0.5">
                 {prediction.fundamentals.dividend_yield_pct > 0 ? `${prediction.fundamentals.dividend_yield_pct}%` : "-"}
               </span>

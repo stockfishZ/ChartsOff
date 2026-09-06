@@ -22,6 +22,12 @@ class MacroDataFeed:
         self._cached_data = None
         self._last_fetched = None
 
+    def get_macro_context(self, force_refresh: bool = False) -> pd.DataFrame:
+        """
+        Alias for fetch_macro_benchmarks() to provide macro DataFrame context.
+        """
+        return self.fetch_macro_benchmarks(force_refresh=force_refresh)
+
     def fetch_macro_benchmarks(self, force_refresh: bool = False) -> pd.DataFrame:
         """
         Mengunduh data penutupan harian 4 instrumen makro utama.

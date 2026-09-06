@@ -49,6 +49,13 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
         # 4. Optional Model Training
         if train_model:
             ml_model.train(X=features_df)
+            model_dir = config.LOCAL_OUTPUT_DIR / "models"
+            model_dir.mkdir(parents=True, exist_ok=True)
+            try:
+                ml_model.save(str(model_dir / "latest_model.joblib"))
+                logger.info(f"Saved model artifacts to {model_dir / 'latest_model.joblib'}")
+            except Exception as e:
+                logger.warning(f"Could not save model: {e}")
 
         # 5. Prediction Inference
         prediction = ml_model.predict(
@@ -62,6 +69,16 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
     # 6. Save Predictions to Cloud / Local
     storage_res = storage.save_predictions(all_predictions)
     logger.info(f"Pipeline complete! Storage result: {storage_res}")
+
+    # 7. Persist trained model artifacts for faster warm-start next run
+    model_dir = config.LOCAL_OUTPUT_DIR / "models"
+    model_dir.mkdir(parents=True, exist_ok=True)
+    if all_predictions and 'ml_model' in locals():
+        try:
+            ml_model.save(str(model_dir / "latest_model.joblib"))
+            logger.info(f"Saved model artifacts to {model_dir / 'latest_model.joblib'}")
+        except Exception as e:
+            logger.warning(f"Could not save model: {e}")
 
     # Print summary to terminal
     print("\n======================= CHARTSOFF PREDICTIONS =======================")

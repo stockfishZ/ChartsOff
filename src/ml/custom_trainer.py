@@ -96,11 +96,17 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             macro_df = self.macro_feed.fetch_macro_benchmarks()
         df = MacroFeatureEngine.align_and_compute_macro_features(df, macro_df)
 
-        # 4. Contextual News Sentiment
-        news_sentiment = news_summary.get("avg_sentiment", 0.0) if news_summary else 0.0
-        news_count = news_summary.get("news_count", 0) if news_summary else 0
-        df["news_avg_sentiment"] = news_sentiment
-        df["news_count"] = news_count
+        # 4. Contextual News Sentiment (Contemporary window only - prevents historical lookahead leakage)
+        news_sentiment = float(news_summary.get("avg_sentiment", 0.0)) if news_summary else 0.0
+        news_count = int(news_summary.get("news_count", 0)) if news_summary else 0
+        
+        df["news_avg_sentiment"] = 0.0
+        df["news_count"] = 0
+
+        contemporary_window = min(5, len(df))
+        if contemporary_window > 0:
+            df.iloc[-contemporary_window:, df.columns.get_loc("news_avg_sentiment")] = news_sentiment
+            df.iloc[-contemporary_window:, df.columns.get_loc("news_count")] = news_count
 
         return df
 
@@ -114,6 +120,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         """
         Simulasi blindfold walk-forward step-by-step untuk mengukur akurasi out-of-sample.
         """
+        df = df.dropna(subset=self.feature_columns).copy()
         total_rows = len(df)
         actual_min_train = min(min_train_bars, max(25, int(total_rows * 0.35)))
         actual_horizon = min(horizon_days, max(5, int(total_rows * 0.1)))
@@ -127,7 +134,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         false_calcs = 0
         news_disruptions = 0
 
-        actual_step = max(2, min(step_size, max(1, int((total_rows - actual_min_train - actual_horizon) / 30))))
+        actual_step = max(3, min(step_size, max(2, int((total_rows - actual_min_train - actual_horizon) / 20))))
 
         for t in range(actual_min_train, total_rows - actual_horizon, actual_step):
             train_slice = df.iloc[:t].copy()
@@ -138,38 +145,39 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             actual_return = (future_close - current_close) / (current_close + 1e-9)
             actual_direction = 1 if actual_return > 0.005 else (-1 if actual_return < -0.005 else 0)
 
-            latest_features = train_slice[self.feature_columns].iloc[[-1]].copy()
-            
-            # Rule Broker Baseline with Institutional Flow & Macro
-            rsi = latest_features["rsi_14"].iloc[0]
-            macd_hist = latest_features["macd_hist"].iloc[0]
-            trend_bull = latest_features["ma_trend_bullish"].iloc[0]
-            vol_ratio = latest_features["volume_ratio"].iloc[0]
-            cmf = latest_features["cmf_20"].iloc[0]
-            news_score = latest_features["news_avg_sentiment"].iloc[0]
+            # Genuine Machine Learning Out-Of-Sample Evaluation:
+            # Trains GradientBoosting on historical slice, tests on unseen forward bar
+            y_ret_hist = (train_slice["Close"].pct_change(actual_horizon).shift(-actual_horizon)).dropna()
+            valid_indices = y_ret_hist.index
 
-            broker_score = 0.0
-            if trend_bull: broker_score += 0.30 * self.feature_weights["trend"]
-            else: broker_score -= 0.30 * self.feature_weights["trend"]
-            
-            if rsi < 40: broker_score += 0.25 * self.feature_weights["momentum"]
-            elif rsi > 60: broker_score -= 0.25 * self.feature_weights["momentum"]
-            
-            if macd_hist > 0: broker_score += 0.20 * self.feature_weights["momentum"]
-            else: broker_score -= 0.20 * self.feature_weights["momentum"]
+            if len(valid_indices) >= 20:
+                y_clf_hist = (y_ret_hist > 0.005).astype(int)
+                if len(np.unique(y_clf_hist)) < 2:
+                    y_clf_hist = (y_ret_hist > float(y_ret_hist.median())).astype(int)
 
-            if vol_ratio > 1.2: broker_score += (0.15 if broker_score > 0 else -0.15) * self.feature_weights["volume"]
-            if cmf > 0.05: broker_score += 0.15 * self.feature_weights["flow"]
-            elif cmf < -0.05: broker_score -= 0.15 * self.feature_weights["flow"]
+                X_train_slice = train_slice.loc[valid_indices, self.feature_columns].values
+                scaler_wf = StandardScaler()
+                X_train_scaled = scaler_wf.fit_transform(X_train_slice)
 
-            broker_score += (news_score * 0.35) * self.feature_weights["news"]
+                clf_wf = GradientBoostingClassifier(n_estimators=30, max_depth=3, learning_rate=0.08, random_state=42)
+                clf_wf.fit(X_train_scaled, y_clf_hist.values)
 
-            predicted_direction = 1 if broker_score > 0.15 else (-1 if broker_score < -0.15 else 0)
+                latest_feature = train_slice[self.feature_columns].iloc[[-1]].values
+                latest_scaled = scaler_wf.transform(latest_feature)
+                probs = clf_wf.predict_proba(latest_scaled)[0]
+                p_bull = probs[1] if len(probs) > 1 else 0.5
+
+                predicted_direction = 1 if p_bull >= 0.55 else (-1 if p_bull <= 0.45 else 0)
+            else:
+                rsi = float(train_slice["rsi_14"].iloc[-1])
+                trend_bull = bool(train_slice["ma_trend_bullish"].iloc[-1])
+                predicted_direction = 1 if (trend_bull and rsi > 50) else (-1 if (not trend_bull and rsi < 50) else 0)
 
             total_tests += 1
             if predicted_direction == actual_direction or (predicted_direction == 0 and abs(actual_return) <= 0.02):
                 points += 1
             else:
+                news_score = float(train_slice["news_avg_sentiment"].iloc[-1])
                 if abs(news_score) >= 0.30:
                     news_disruptions += 1
                 else:
@@ -190,7 +198,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         Melatih model Gradient Boosting dan melakukan kalibrasi bobot adaptif.
         """
         if len(X) < 30:
-            return {"status": "insufficient_data"}
+            return None
 
         # Ensure all required features are present
         missing_cols = [c for c in self.feature_columns if c not in X.columns]
@@ -198,6 +206,9 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             X = self.prepare_features(X)
 
         features_df = X[self.feature_columns].copy()
+        features_df = features_df.dropna().copy()
+        if len(features_df) < 30:
+            return None
         
         # Target creation (20 bars forward return)
         close = X["Close"]
@@ -207,6 +218,10 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         if valid_mask.sum() < 25:
             forward_return = close.pct_change(5).shift(-5)
             valid_mask = ~forward_return.isna()
+
+        # Align forward_return with features_df after dropna
+        forward_return = forward_return.loc[features_df.index]
+        valid_mask = ~forward_return.isna()
 
         X_train = features_df[valid_mask]
         y_ret = forward_return[valid_mask]
@@ -308,21 +323,24 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             base_bullish_prob = 0.5 + (0.15 if trend_bull else -0.15)
             base_pred_return = (base_bullish_prob - 0.5) * 8.0
 
-        # 5. Multi-Factor Recalibration: Sentiment + Institutional Flow + Macro Beta + Fundamentals
+        # 5. Multi-Factor Recalibration: Sentiment & Fundamentals
+        # (Calibrates GBDT probabilities without double-counting CMF / Money Flow already in the feature matrix)
         news_weight = self.feature_weights.get("news", 1.2)
         news_count = news_summary.get("news_count", 1) if news_summary else 1
         volume_factor = min(1.5, 0.8 + 0.15 * math.sqrt(max(1, news_count)))
         
-        # Institutional flow shift (+/- 12%)
-        flow_shift = (cmf_20 * 0.6) * self.feature_weights.get("flow", 1.0)
-        # Sentiment shift (+/- 25%)
-        sentiment_shift = (news_score * 0.28) * news_weight * volume_factor
-        # Fundamental health shift (+/- 8%)
+        # Contemporary news sentiment calibration (+/- 15% max)
+        sentiment_shift = (news_score * 0.15) * news_weight * volume_factor
+        # Fundamental health shift (+/- 10% max)
         fund_score = fundamentals.get("health_score", 50.0)
-        fund_shift = ((fund_score - 50.0) / 100.0) * 0.15
+        fund_shift = ((fund_score - 50.0) / 100.0) * 0.10
 
-        bullish_prob = max(0.05, min(0.95, base_bullish_prob + sentiment_shift + flow_shift + fund_shift))
-        pred_return = base_pred_return + (news_score * 4.5 * volume_factor) + (cmf_20 * 4.0)
+        bullish_prob = max(0.05, min(0.95, base_bullish_prob + sentiment_shift + fund_shift))
+        
+        # Expected return: GBDT regressor provides quantitative baseline,
+        # with calibrated contemporary news momentum adjustment (no double-counting CMF)
+        news_return_impact = news_score * 1.5 * volume_factor
+        pred_return = base_pred_return + news_return_impact
 
         # 6. Signal & Confidence Classification
         is_divergent = (base_bullish_prob >= 0.55 and news_score < -0.20) or (base_bullish_prob <= 0.45 and news_score > 0.20)
@@ -346,16 +364,35 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
                 signal = "Tunggu (Netral)"
                 expected_return = round(min(0.0, pred_return), 2)
 
-        # 7. Dynamic ATR Risk Management & Adaptive Exit Engine (Upgrade #5)
-        # For equity investing (Long-Only), Stop-Loss is always downside protection below price,
-        # and Take-Profit is always upside exit target above price.
-        stop_loss = round(max(50.0, current_price - (1.5 * atr_14)), 0)
-        take_profit = round(current_price + (2.5 * atr_14), 0)
-        conservative_target = round(current_price + (1.5 * atr_14), 0)
+        # 7. Dynamic Market-Adaptive Risk Management & Structural Exit Brackets
+        # Evaluates recent 20-day price action structure (Swing Low support & Swing High resistance)
+        if isinstance(X_latest, pd.DataFrame) and "Low" in X_latest.columns and "High" in X_latest.columns:
+            recent_slice = X_latest.tail(20)
+            swing_low = float(recent_slice["Low"].min())
+            swing_high = float(recent_slice["High"].max())
+        else:
+            swing_low = current_price - (1.8 * atr_14)
+            swing_high = current_price + (1.8 * atr_14)
 
-        risk_amount = abs(current_price - stop_loss)
-        reward_amount = abs(take_profit - current_price)
-        rrr = round(reward_amount / (risk_amount + 1e-9), 2)
+        # Adaptive Stop-Loss: Anchored just below recent structural support (Swing Low) with a 0.3x ATR buffer.
+        # Constrained between 1.0x ATR (tight) and 2.5x ATR (wide) to prevent excessive capital loss.
+        candidate_sl = swing_low - (0.3 * atr_14)
+        min_sl = current_price - (2.5 * atr_14)
+        max_sl = current_price - (1.0 * atr_14)
+        adaptive_sl = max(min_sl, min(max_sl, candidate_sl))
+        stop_loss = round(max(50.0, adaptive_sl), 0)
+
+        # Adaptive Take-Profit: Anchored to resistance breakout or model expected return
+        model_target_price = current_price * (1.0 + max(0.02, pred_return / 100.0))
+        resistance_tp = max(swing_high + (0.5 * atr_14), current_price + (1.8 * atr_14))
+        adaptive_tp = max(resistance_tp, model_target_price)
+        take_profit = round(adaptive_tp, 0)
+
+        conservative_target = round(current_price + max(0.8 * atr_14, (take_profit - current_price) * 0.5), 0)
+
+        risk_amount = max(1.0, current_price - stop_loss)
+        reward_amount = max(1.0, take_profit - current_price)
+        rrr = round(reward_amount / risk_amount, 2)
         risk_pct = (atr_14 / current_price) * 100
 
         if risk_pct > 3.8:
@@ -397,7 +434,47 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         macd_status = "Golden Cross (Positif)" if macd_hist > 0 else "Dead Cross (Tekanan Jual)"
         win_rate = self.backtest_metrics.get("win_rate_pct", 75.0)
 
-        key_factors = [
+        # Data-driven feature importance from trained GradientBoosting
+        feature_importance_factors = []
+        if self.is_trained and hasattr(self.classifier, "feature_importances_"):
+            importances = self.classifier.feature_importances_
+            feature_importance_pairs = sorted(
+                zip(self.feature_columns, importances),
+                key=lambda x: x[1],
+                reverse=True
+            )
+            FEATURE_LABELS = {
+                "ma_trend_bullish": "Tren Moving Average",
+                "ema_9": "EMA 9 Hari",
+                "ema_21": "EMA 21 Hari",
+                "sma_50": "SMA 50 Hari",
+                "rsi_14": "RSI 14 Hari",
+                "macd": "Indikator MACD",
+                "macd_hist": "Momentum MACD",
+                "bb_pct_b": "Posisi Bollinger Band",
+                "bb_width": "Lebar Bollinger Band",
+                "volatility_pct": "Volatilitas Harga",
+                "volume_ratio": "Rasio Volume Perdagangan",
+                "roc_5": "Momentum 5 Hari",
+                "roc_20": "Momentum 20 Hari",
+                "cmf_20": "Arus Dana Institusi (CMF)",
+                "mfi_14": "Money Flow Index",
+                "smart_money_flow_score": "Smart Money Flow Score",
+                "ihsg_roc_5": "Momentum IHSG 5 Hari",
+                "usdidr_roc_5": "Pergerakan USD/IDR",
+                "beta_ihsg_30": "Beta terhadap IHSG",
+                "news_avg_sentiment": "Sentimen Berita",
+                "news_count": "Jumlah Berita",
+            }
+            for col_name, importance in feature_importance_pairs[:3]:
+                label = FEATURE_LABELS.get(col_name, col_name)
+                feature_importance_factors.append({
+                    "factor": f"🔑 {label}",
+                    "value": f"Pengaruh {importance * 100:.1f}%",
+                    "status": "Faktor Kunci Model ML"
+                })
+
+        key_factors = feature_importance_factors + [
             {"factor": "RSI 14 Hari", "value": round(rsi, 2), "status": rsi_status},
             {"factor": "Momentum MACD", "value": round(macd_hist, 4), "status": macd_status},
             {"factor": "Arus Dana Asing / Institusi", "value": f"CMF {cmf_20:+.2f}", "status": flow_summary.get("flow_status", "Netral")},

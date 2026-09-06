@@ -97,7 +97,7 @@ export default function HowItWorksModal({ isOpen, onClose, initialChapter }) {
                 <span className="font-mono text-[10px] font-bold text-[#737168] block mb-1">05. MANAJEMEN RISIKO DINAMIS</span>
                 <p className="font-bold text-[#121316] mb-1">Batas Stop Loss & Target Optimal (ATR 14)</p>
                 <p className="text-[#595750] text-[11px] leading-snug">
-                  Menghitung bracket keluar adaptif (Stop Loss $1.5\times \text{ATR}$ dan Take Profit $2.5\times \text{ATR}$) dengan rasio Risk:Reward di atas $1 : 1.6$.
+                  Menghitung bracket keluar adaptif (Stop Loss 1.5× ATR dan Take Profit 2.5× ATR) dengan rasio Risk:Reward di atas 1 : 1.6.
                 </p>
               </div>
             </div>

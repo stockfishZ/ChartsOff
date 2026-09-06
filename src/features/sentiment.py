@@ -25,16 +25,16 @@ FINANCIAL_NEGATIVE_KEYWORDS = {
     "turun", "melemah", "anjlok", "rugi", "merugi", "merosot", "koreksi", "tekanan",
     "penjualan", "gugatan", "inflasi", "utang", "negatif", "ambruk", "suspend", "suspensi",
     "pesimis", "bearish", "penurunan", "jatuh", "tertekan", "pailit", "pkpu", "defisit",
-    "gagal bayar", "sanksi", "penurunan tajam", "rugi bersih", "beban utang", "anjloknya",
+    "gagal bayar", "sanksi", "penurunan tajam", "rugi bersih", "beban utang", "anjloknya", "gagal",
     # English keywords
     "plunge", "drop", "miss", "loss", "bearish", "downgrade", "crash", "slump", "debt",
-    "default", "lawsuit", "bankruptcy"
+    "default", "lawsuit", "bankruptcy", "failed"
 }
 
 # Partikel Negasi (Membalik Polaritas Kata Berikutnya)
 NEGATION_PARTICLES = {
-    "tidak", "tak", "belum", "bukan", "gagal", "tanpa", "hilang", "batal", "nihil",
-    "kurang", "bukanlah", "tiada", "not", "no", "never", "failed", "unable", "without"
+    "tidak", "tak", "belum", "bukan", "tanpa", "hilang", "batal", "nihil",
+    "kurang", "bukanlah", "tiada", "not", "no", "never", "unable", "without"
 }
 
 # Penguat Intensitas (Amplify Magnitude)
@@ -54,7 +54,7 @@ class SentimentFeatureEngine:
     def _score_text_contextual(text: str) -> float:
         """
         Menghitung skor polaritas sentimen berbasis konteks n-gram (-1.0 s.d +1.0)
-        dengan penanganan negasi dan kata penguat.
+        dengan penanganan negasi, kata penguat, dan pencocokan frasa multi-kata.
         """
         if not text:
             return 0.0
@@ -65,9 +65,36 @@ class SentimentFeatureEngine:
 
         total_score = 0.0
         match_count = 0
+        i = 0
+        n_words = len(words)
 
-        for i, word in enumerate(words):
-            # Check previous 1 to 3 words for negation particles
+        while i < n_words:
+            # 1. Cek frasa 2 kata (Bigram) terlebih dahulu (e.g. "laba bersih", "gagal bayar")
+            if i + 1 < n_words:
+                bigram = f"{words[i]} {words[i+1]}"
+                lookback_start = max(0, i - 3)
+                preceding_tokens = words[lookback_start:i]
+                is_negated = any(p in NEGATION_PARTICLES for p in preceding_tokens)
+                is_intensified = (
+                    any(p in INTENSIFIERS for p in preceding_tokens)
+                    or (words[i] in INTENSIFIERS)
+                    or (words[i+1] in INTENSIFIERS)
+                )
+                weight = 1.5 if is_intensified else 1.0
+
+                if bigram in FINANCIAL_POSITIVE_KEYWORDS:
+                    total_score += (-1.0 * weight) if is_negated else (1.2 * weight)
+                    match_count += 1
+                    i += 2
+                    continue
+                elif bigram in FINANCIAL_NEGATIVE_KEYWORDS:
+                    total_score += (0.9 * weight) if is_negated else (-1.2 * weight)
+                    match_count += 1
+                    i += 2
+                    continue
+
+            # 2. Evaluasi kata tunggal (Unigram)
+            word = words[i]
             lookback_start = max(0, i - 3)
             preceding_tokens = words[lookback_start:i]
             is_negated = any(p in NEGATION_PARTICLES for p in preceding_tokens)
@@ -80,13 +107,14 @@ class SentimentFeatureEngine:
                 else:
                     total_score += (1.0 * weight)
                 match_count += 1
-
             elif word in FINANCIAL_NEGATIVE_KEYWORDS:
                 if is_negated:
                     total_score += (0.8 * weight)  # e.g., "tidak rugi" -> positive
                 else:
                     total_score -= (1.0 * weight)
                 match_count += 1
+
+            i += 1
 
         if match_count == 0:
             return 0.0

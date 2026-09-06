@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { RefreshCw, Search, X, Info, Bell } from "lucide-react";
+import { RefreshCw, Search, X, Info, Bell, Briefcase } from "lucide-react";
 import { IDX_COMPANIES, resolveTicker } from "../data/idx_companies";
 import { getHolidayInfo } from "../services/holidayService";
 
@@ -256,7 +256,7 @@ export default function Header({
               title="Dokumentasi Cara Kerja CHARTSOFF & Panduan Indikator"
             >
               <Info className="w-3.5 h-3.5 text-[#121316] group-hover:text-white transition shrink-0" />
-              <span className="text-[11px] font-sans font-medium hidden sm:inline">How CHARTSOFF Works</span>
+              <span className="text-[11px] font-sans font-medium hidden sm:inline">Panduan & Cara Kerja</span>
               <span className="text-[11px] font-sans font-medium sm:hidden">Panduan</span>
             </button>
 
@@ -371,12 +371,12 @@ export default function Header({
         )}
 
         {/* Header Navigation Tabs: "Forecast" and "List Saham" + Real-Time BEI Market Status Badge */}
-        <div className="flex items-center justify-between border-t border-[#E5E3DC] -mx-4 px-4 bg-[#FAF9F6]">
-          <div className="flex items-center">
+        <div className="flex items-center justify-between border-t border-[#E5E3DC] -mx-4 px-4 py-1.5 md:py-0 bg-[#FAF9F6]">
+          <div className="hidden md:flex items-center">
             <button
               type="button"
               onClick={() => setActiveTab("signals")}
-              className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+              className={`py-2 px-3 sm:px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
                 activeTab === "signals"
                   ? "border-[#121316] text-[#121316] bg-white"
                   : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
@@ -387,7 +387,7 @@ export default function Header({
             <button
               type="button"
               onClick={() => setActiveTab("watchlist")}
-              className={`py-2 px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
+              className={`py-2 px-3 sm:px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
                 activeTab === "watchlist"
                   ? "border-[#121316] text-[#121316] bg-white"
                   : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
@@ -395,14 +395,26 @@ export default function Header({
             >
               List Saham
             </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("portfolio")}
+              className={`py-2 px-3 sm:px-4 text-xs font-sans font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer flex items-center space-x-1 ${
+                activeTab === "portfolio"
+                  ? "border-[#121316] text-[#121316] bg-white"
+                  : "border-transparent text-[#737168] hover:text-[#121316] hover:bg-[#F1EFEA]"
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              <span>Portofolio</span>
+            </button>
           </div>
 
           {/* Real-Time BEI / IDX Market Status Indicator */}
           <div
-            className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none"
+            className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none shrink-0 max-w-full"
             title={`Status Pasar Bursa Efek Indonesia: ${marketStatus.label} (${marketStatus.sublabel})`}
           >
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2 w-2 shrink-0">
               {marketStatus.isOpen && (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B5E20] opacity-75"></span>
               )}
@@ -418,8 +430,8 @@ export default function Header({
                 }`}
               ></span>
             </span>
-            <span className="font-bold text-[#121316]">{marketStatus.label}</span>
-            <span className="text-[#737168] hidden sm:inline">• {marketStatus.sublabel}</span>
+            <span className="font-bold text-[#121316] truncate">{marketStatus.label}</span>
+            <span className="text-[#737168] hidden sm:inline truncate">• {marketStatus.sublabel}</span>
           </div>
         </div>
       </div>

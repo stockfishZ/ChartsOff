@@ -52,7 +52,7 @@ export default function PortfolioModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-      <div className="bg-white border-2 border-[#121316] w-full max-w-md p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div className="bg-white border-2 border-[#121316] w-full max-w-md p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150 max-h-[90dvh] overflow-y-auto">
         {/* Header Modal */}
         <div className="flex items-center justify-between border-b border-[#E5E3DC] pb-3 mb-4">
           <div className="flex items-center space-x-2.5">

@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 import numpy as np
 import pandas as pd
 
@@ -70,8 +70,9 @@ class TechnicalFeatureEngine:
         vol_sma_20 = volume.rolling(window=20).mean()
         res["volume_ratio"] = volume / (vol_sma_20 + 1e-9)
 
-        # Clean NaN rows resulting from rolling windows
-        res.bfill(inplace=True)
+        # Forward-fill only to prevent look-ahead bias in walk-forward simulation.
+        # The first ~50 rows will have NaN from rolling windows — these are handled
+        # downstream by dropping NaN before training or by min_train_bars guard.
         res.ffill(inplace=True)
         
         return res

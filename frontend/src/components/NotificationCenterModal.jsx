@@ -56,25 +56,25 @@ export default function NotificationCenterModal({
     switch (type) {
       case "URGENT_SELL":
         return (
-          <span className="text-[9px] font-mono font-bold uppercase text-[#B71C1C] bg-[#FFEBEE] px-1.5 py-0.5 border border-[#B71C1C]/30">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#B71C1C] bg-[#FFEBEE] px-1.5 py-0.5 border border-[#B71C1C]/30">
             Jual Darurat
           </span>
         );
       case "PRIME_BUY":
         return (
-          <span className="text-[9px] font-mono font-bold uppercase text-[#1B5E20] bg-[#E8F5E9] px-1.5 py-0.5 border border-[#1B5E20]/30">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#1B5E20] bg-[#E8F5E9] px-1.5 py-0.5 border border-[#1B5E20]/30">
             Prospek Bagus
           </span>
         );
       case "PRICE_SWING":
         return (
-          <span className="text-[9px] font-mono font-bold uppercase text-[#121316] bg-[#F1EFEA] px-1.5 py-0.5 border border-[#121316]/30">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#121316] bg-[#F1EFEA] px-1.5 py-0.5 border border-[#121316]/30">
             Pergerakan Harga
           </span>
         );
       case "NEWS_CATALYST":
         return (
-          <span className="text-[9px] font-mono font-bold uppercase text-[#E65100] bg-[#FFF3E0] px-1.5 py-0.5 border border-[#E65100]/30">
+          <span className="text-[10px] font-mono font-bold uppercase text-[#E65100] bg-[#FFF3E0] px-1.5 py-0.5 border border-[#E65100]/30">
             Berita Katalis
           </span>
         );
@@ -237,19 +237,19 @@ export default function NotificationCenterModal({
                   {notif.body}
                 </p>
 
-                <div className="flex items-center justify-between text-[9px] font-mono text-[#737168] pl-5.5">
+                <div className="flex items-center justify-between text-[10px] font-mono text-[#737168] pl-5.5">
                   <span>
                     {notif.timestamp ? new Date(notif.timestamp).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) : "Terkini"}
                   </span>
                   {notif.type === "NEWS_CATALYST" && (notif.link || notif.data?.link) ? (
                     <span className="text-[#E65100] font-bold group-hover:underline flex items-center space-x-0.5">
                       <span>Buka Berita</span>
-                      <ExternalLink className="w-2.5 h-2.5 ml-0.5" />
+                      <ExternalLink className="w-3 h-3 ml-0.5" />
                     </span>
                   ) : (
                     <span className="text-[#121316] font-bold group-hover:underline flex items-center space-x-0.5">
                       <span>Lihat Saham</span>
-                      <ArrowRight className="w-2.5 h-2.5 ml-0.5" />
+                      <ArrowRight className="w-3 h-3 ml-0.5" />
                     </span>
                   )}
                 </div>

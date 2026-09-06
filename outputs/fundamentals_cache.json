@@ -1,14 +1,14 @@
 {
   "BBCA.JK": {
-    "cached_at": "2026-08-25T23:20:23.087110",
+    "cached_at": "2026-09-05T22:33:31.969263",
     "data": {
       "ticker": "BBCA.JK",
-      "pe_ratio": 13.55,
-      "pbv_ratio": 2.91,
+      "pe_ratio": 14.2,
+      "pbv_ratio": 3.04,
       "roe_pct": 21.82,
       "der_ratio": 0.5,
       "profit_margin_pct": 53.12,
-      "dividend_yield_pct": 5.95,
+      "dividend_yield_pct": 5.69,
       "eps_growth_pct": -0.1,
       "health_score": 88.0,
       "grade": "A+ (Sangat Sehat)",
@@ -17,7 +17,7 @@
     }
   },
   "AAPL.JK": {
-    "cached_at": "2026-08-25T23:21:15.098731",
+    "cached_at": "2026-09-05T22:33:28.295977",
     "data": {
       "ticker": "AAPL.JK",
       "pe_ratio": 12.0,
@@ -51,15 +51,15 @@
     }
   },
   "BMRI.JK": {
-    "cached_at": "2026-08-25T23:22:28.435553",
+    "cached_at": "2026-09-06T12:46:23.323721",
     "data": {
       "ticker": "BMRI.JK",
-      "pe_ratio": 6.29,
-      "pbv_ratio": 1.38,
+      "pe_ratio": 6.62,
+      "pbv_ratio": 1.45,
       "roe_pct": 22.38,
       "der_ratio": 0.5,
       "profit_margin_pct": 43.38,
-      "dividend_yield_pct": 11.36,
+      "dividend_yield_pct": 10.79,
       "eps_growth_pct": 33.5,
       "health_score": 99.0,
       "grade": "A+ (Sangat Sehat)",
@@ -153,15 +153,15 @@
     }
   },
   "TLKM.JK": {
-    "cached_at": "2026-08-25T23:22:46.086764",
+    "cached_at": "2026-09-06T12:47:05.258592",
     "data": {
       "ticker": "TLKM.JK",
-      "pe_ratio": 14.68,
-      "pbv_ratio": 1.93,
+      "pe_ratio": 14.64,
+      "pbv_ratio": 1.92,
       "roe_pct": 17.68,
       "der_ratio": 0.6,
       "profit_margin_pct": 12.01,
-      "dividend_yield_pct": 8.52,
+      "dividend_yield_pct": 8.55,
       "eps_growth_pct": 27.5,
       "health_score": 88.0,
       "grade": "A+ (Sangat Sehat)",
