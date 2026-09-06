@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Star, Sparkles } from "lucide-react";
 import HoldingIcon from "./components/HoldingIcon";
 import Header from "./components/Header";
@@ -21,6 +21,14 @@ import { useNotifications } from "./hooks/useNotifications";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("signals");
+  const scrollContainerRef = useRef(null);
+
+  // Scroll-to-top helper — scrolls the app container (not window, since body is position:fixed)
+  const scrollToTop = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  };
 
   // Portfolio Modal Dialog State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,11 +53,7 @@ export default function App() {
     if (switchTab) {
       setActiveTab("signals");
     }
-    try {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    } catch {
-      window.scrollTo(0, 0);
-    }
+    scrollToTop();
   };
 
   // Hook 3: Predictions (data, polling at 30min, priority sorting, search)
@@ -88,11 +92,7 @@ export default function App() {
 
   // Always reset scroll to the top when selectedTicker or activeTab changes
   useEffect(() => {
-    try {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    } catch {
-      window.scrollTo(0, 0);
-    }
+    scrollToTop();
   }, [selectedTicker, activeTab]);
 
   const handleOpenHowItWorks = (chapter = null) => {
@@ -113,7 +113,7 @@ export default function App() {
   const activeHolding = activePrediction ? portfolio[activePrediction.ticker] : null;
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-[#121316] flex flex-col justify-between selection:bg-[#E5E3DC]">
+    <div ref={scrollContainerRef} className="h-screen overflow-y-auto overscroll-none bg-[#F8F7F4] text-[#121316] flex flex-col justify-between selection:bg-[#E5E3DC]">
       <div>
         <Header
           onRefresh={fetchPredictions}

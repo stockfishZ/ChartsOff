@@ -22,7 +22,7 @@ app = FastAPI(title="ChartsOff IDX Prediction API")
 # Enable CORS for local Vite dev server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://chartsoff.vercel.app", "capacitor://localhost", "https://localhost"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -112,7 +112,7 @@ def predict_stock(ticker: str):
         raise
     except Exception as e:
         logger.error(f"Error analyzing {ticker}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/api/quote/{ticker}")
 def get_live_quote(ticker: str):
@@ -124,8 +124,8 @@ def get_live_quote(ticker: str):
         quote = market_feed.fetch_current_quote(clean_ticker)
         return sanitize_json_payload(quote)
     except Exception as e:
-        logger.warning(f"Error fetching quote for {ticker}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error fetching quote for {ticker}: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/api/news/{ticker}")
 def get_live_stock_news(ticker: str):

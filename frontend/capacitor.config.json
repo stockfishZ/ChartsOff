@@ -4,7 +4,7 @@
   "webDir": "dist",
   "server": {
     "androidScheme": "https",
-    "cleartext": true
+    "cleartext": false
   },
   "plugins": {
     "SplashScreen": {
@@ -13,5 +13,8 @@
       "showSpinner": false,
       "androidSplashResourceName": "splash"
     }
+  },
+  "android": {
+    "overscrollMode": "never"
   }
 }
