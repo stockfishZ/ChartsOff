@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 
+from src.config import config
 from src.features.technical import TechnicalFeatureEngine
 from src.features.institutional_flow import InstitutionalFlowEngine
 from src.features.macro import MacroFeatureEngine
@@ -210,9 +211,9 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         if len(features_df) < 30:
             return None
         
-        # Target creation (20 bars forward return)
+        # Target creation (forward return based on config.PREDICTION_HORIZON_DAYS)
         close = X["Close"]
-        forward_return = close.pct_change(20).shift(-20)
+        forward_return = close.pct_change(config.PREDICTION_HORIZON_DAYS).shift(-config.PREDICTION_HORIZON_DAYS)
         
         valid_mask = ~forward_return.isna()
         if valid_mask.sum() < 25:
@@ -431,7 +432,12 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
         )
 
         rsi_status = "Jenuh Jual (Oversold)" if rsi < 35 else ("Jenuh Beli (Overbought)" if rsi > 65 else "Netral")
-        macd_status = "Golden Cross (Positif)" if macd_hist > 0 else "Dead Cross (Tekanan Jual)"
+        if macd_hist > 0:
+            macd_status = "Momentum Bullish (Positif)"
+        elif macd_hist < 0:
+            macd_status = "Momentum Bearish (Tekanan Jual)"
+        else:
+            macd_status = "Netral (Konsolidasi)"
         win_rate = self.backtest_metrics.get("win_rate_pct", 75.0)
 
         # Data-driven feature importance from trained GradientBoosting
@@ -504,7 +510,7 @@ class AdaptiveBrokerWalkForwardModel(BaseStockModel):
             signal=signal,
             confidence=confidence,
             expected_return_pct=expected_return,
-            target_horizon_days=20,
+            target_horizon_days=config.PREDICTION_HORIZON_DAYS,
             market_regime=regime,
             key_factors=key_factors,
             news_sentiment=news_summary or {},

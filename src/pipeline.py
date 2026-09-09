@@ -52,10 +52,11 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
             model_dir = config.LOCAL_OUTPUT_DIR / "models"
             model_dir.mkdir(parents=True, exist_ok=True)
             try:
-                ml_model.save(str(model_dir / "latest_model.joblib"))
-                logger.info(f"Saved model artifacts to {model_dir / 'latest_model.joblib'}")
+                model_file = model_dir / f"{ticker}_model.joblib"
+                ml_model.save(str(model_file))
+                logger.info(f"Saved model artifacts to {model_file}")
             except Exception as e:
-                logger.warning(f"Could not save model: {e}")
+                logger.warning(f"Could not save model for {ticker}: {e}")
 
         # 5. Prediction Inference
         prediction = ml_model.predict(
@@ -66,24 +67,25 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
         all_predictions.append(prediction)
         logger.info(f"[{ticker}] Signal: {prediction.signal} | Confidence: {prediction.confidence}% | Regime: {prediction.market_regime}")
 
-    # 6. Save Predictions to Cloud / Local
-    storage_res = storage.save_predictions(all_predictions)
-    logger.info(f"Pipeline complete! Storage result: {storage_res}")
-
-    # 7. Persist trained model artifacts for faster warm-start next run
-    model_dir = config.LOCAL_OUTPUT_DIR / "models"
-    model_dir.mkdir(parents=True, exist_ok=True)
-    if all_predictions and 'ml_model' in locals():
+        # Save single stock prediction incrementally so progress is visible immediately in real time
         try:
-            ml_model.save(str(model_dir / "latest_model.joblib"))
-            logger.info(f"Saved model artifacts to {model_dir / 'latest_model.joblib'}")
+            storage.save_predictions([prediction], is_incremental=True, sync_to_frontend=False)
         except Exception as e:
-            logger.warning(f"Could not save model: {e}")
+            logger.warning(f"Failed incremental save for {ticker}: {e}")
+
+    # 6. Save Predictions to Cloud / Local
+    storage_res = storage.save_predictions(
+        all_predictions,
+        is_incremental=False,
+        sync_to_frontend=True,
+        full_run=(tickers == config.DEFAULT_TICKERS)
+    )
+    logger.info(f"Pipeline complete! Storage result: {storage_res}")
 
     # Print summary to terminal
     print("\n======================= CHARTSOFF PREDICTIONS =======================")
     for p in all_predictions:
-        print(f"• {p.ticker:5s} | ${p.current_price:<8.2f} | Signal: {p.signal:<8s} ({p.confidence:>5.1f}%) | Regime: {p.market_regime:<15s} | Exp. 5D Move: {p.expected_return_pct:>+5.2f}%")
+        print(f"• {p.ticker:5s} | ${p.current_price:<8.2f} | Signal: {p.signal:<8s} ({p.confidence:>5.1f}%) | Regime: {p.market_regime:<15s} | Exp. {config.PREDICTION_HORIZON_DAYS}D Move: {p.expected_return_pct:>+5.2f}%")
     print("=====================================================================\n")
 
     return all_predictions

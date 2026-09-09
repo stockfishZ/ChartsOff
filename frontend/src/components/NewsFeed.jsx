@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { ExternalLink, Newspaper, RefreshCw } from "lucide-react";
 
 // Curated high-quality editorial fallback thumbnails for Indonesian and global financial markets
@@ -93,6 +93,8 @@ export default function NewsFeed({ ticker, newsSentiment }) {
   const [headlines, setHeadlines] = useState(() => newsSentiment?.top_headlines || []);
   const [isUpdating, setIsUpdating] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(() => new Date());
+  const timerRef = useRef(null);
+  const lastFetchTimeRef = useRef(Date.now());
 
   // Synchronize when initial newsSentiment changes
   useEffect(() => {
@@ -103,10 +105,11 @@ export default function NewsFeed({ ticker, newsSentiment }) {
   }, [newsSentiment]);
 
   // Automated Real-Time Article Renewing Engine
-  const fetchLiveNews = async (silent = false) => {
+  const fetchLiveNews = useCallback(async (silent = false) => {
     if (!ticker) return;
     const cleanTicker = ticker.replace(".JK", "").trim();
     if (!silent) setIsUpdating(true);
+    lastFetchTimeRef.current = Date.now();
 
     try {
       let data = null;
@@ -115,7 +118,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
         if (res.ok) data = await res.json();
       } catch (e) {}
 
-      if (!data || !data.top_headlines || data.top_headlines.length === 0) {
+      if ((!data || !data.top_headlines || data.top_headlines.length === 0) && Boolean(import.meta.env?.DEV)) {
         const host = window.location.hostname || "localhost";
         try {
           const directRes = await fetch(`http://${host}:8000/api/news/${cleanTicker}`);
@@ -132,20 +135,59 @@ export default function NewsFeed({ ticker, newsSentiment }) {
     } finally {
       if (!silent) setIsUpdating(false);
     }
-  };
+  }, [ticker]);
 
   // Trigger live fetch when stock ticker changes
   useEffect(() => {
     fetchLiveNews(false);
-  }, [ticker]);
+  }, [fetchLiveNews]);
 
-  // Automated recurring news poll every 3 minutes
+  // Lifecycle-aware 5-minute periodic auto-refresh
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchLiveNews(true);
-    }, 180000); // 3 minutes
-    return () => clearInterval(interval);
-  }, [ticker]);
+    if (!ticker) return;
+
+    const startPolling = () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        if (typeof document !== "undefined" && document.visibilityState === "visible") {
+          fetchLiveNews(true);
+        }
+      }, 5 * 60 * 1000);
+    };
+
+    const stopPolling = () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (typeof document === "undefined") return;
+      if (document.visibilityState === "visible") {
+        fetchLiveNews(true);
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    };
+
+    if (typeof document !== "undefined" && document.visibilityState === "visible") {
+      startPolling();
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+    }
+
+    return () => {
+      stopPolling();
+      if (typeof document !== "undefined") {
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
+    };
+  }, [ticker, fetchLiveNews]);
+
 
   const cleanTicker = ticker ? ticker.replace(".JK", "").trim() : "Saham";
 

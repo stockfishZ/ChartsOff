@@ -113,7 +113,7 @@ export default function App() {
   const activeHolding = activePrediction ? portfolio[activePrediction.ticker] : null;
 
   return (
-    <div ref={scrollContainerRef} className="h-screen overflow-y-auto overscroll-none bg-[#F8F7F4] text-[#121316] flex flex-col justify-between selection:bg-[#E5E3DC]">
+    <div ref={scrollContainerRef} className="w-full max-w-full h-full overflow-y-auto overflow-x-hidden overscroll-y-none overscroll-x-none bg-[#F8F7F4] text-[#121316] flex flex-col justify-between selection:bg-[#E5E3DC]">
       <div>
         <Header
           onRefresh={fetchPredictions}

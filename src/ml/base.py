@@ -13,7 +13,7 @@ class PredictionResult(BaseModel):
     signal: str = Field(description="'Bullish', 'Bearish', or 'Neutral'")
     confidence: float = Field(description="Confidence percentage [0.0 - 100.0%]")
     expected_return_pct: float = Field(default=0.0, description="Projected % price move over horizon")
-    target_horizon_days: int = 5
+    target_horizon_days: int = 20
     market_regime: str = Field(default="Normal", description="e.g. High_Volatility, Trending_Bull, Mean_Reverting")
     key_factors: list[dict] = Field(default_factory=list, description="Top indicators explaining this prediction")
     news_sentiment: dict = Field(default_factory=dict, description="Summary of news volume & sentiment score")

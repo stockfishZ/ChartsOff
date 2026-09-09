@@ -70,9 +70,15 @@ class TechnicalFeatureEngine:
         vol_sma_20 = volume.rolling(window=20).mean()
         res["volume_ratio"] = volume / (vol_sma_20 + 1e-9)
 
-        # Forward-fill only to prevent look-ahead bias in walk-forward simulation.
-        # The first ~50 rows will have NaN from rolling windows — these are handled
-        # downstream by dropping NaN before training or by min_train_bars guard.
-        res.ffill(inplace=True)
+        # Forward-fill only specific continuous technical indicators to avoid look-ahead bias
+        # while preserving genuine raw price/volume data gaps without corrupting walk-forward datasets.
+        # Rolling warmup NaNs at the start remain and are cleanly handled downstream via dropna().
+        indicator_cols = [
+            "ema_9", "ema_21", "sma_50", "sma_200", "ma_trend_bullish",
+            "rsi_14", "macd", "macd_signal", "macd_hist",
+            "bb_upper", "bb_lower", "bb_width", "bb_pct_b",
+            "atr_14", "volatility_pct", "roc_5", "roc_20", "volume_ratio"
+        ]
+        res[indicator_cols] = res[indicator_cols].ffill()
         
         return res

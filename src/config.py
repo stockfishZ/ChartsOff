@@ -1,4 +1,4 @@
-﻿import os
+import os
 from pathlib import Path
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -8,6 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 class AppConfig(BaseModel):
+    BASE_DIR: Path = BASE_DIR
     # Top Liquid & Popular Stocks on Bibit (IDX / BEI)
     DEFAULT_TICKERS: list[str] = [
         # Banking & Finance
@@ -26,7 +27,7 @@ class AppConfig(BaseModel):
     
     HISTORICAL_DAYS: int = 365
     NEWS_LOOKBACK_DAYS: int = 7
-    PREDICTION_HORIZON_DAYS: int = 5
+    PREDICTION_HORIZON_DAYS: int = 20
     
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")

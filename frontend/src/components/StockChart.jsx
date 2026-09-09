@@ -76,7 +76,7 @@ function CandlestickCanvas({ data, minPrice, maxPrice, holding = null, height = 
       <svg
         ref={svgRef}
         viewBox={`0 0 ${totalWidth} ${height}`}
-        className="w-full h-56 overflow-visible cursor-crosshair"
+        className="w-full h-56 overflow-hidden cursor-crosshair"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setHoveredIndex(null)}
         onTouchStart={handleTouchMove}

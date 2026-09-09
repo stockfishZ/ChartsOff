@@ -1,6 +1,23 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { resolveTicker } from "../data/idx_companies";
 
+// Helper function to find the newest timestamp in a predictions dataset
+export function getLatestTimestamp(dataset) {
+  if (!Array.isArray(dataset) || dataset.length === 0) return 0;
+  let maxTime = 0;
+  for (const item of dataset) {
+    if (!item) continue;
+    const tsStr = item.timestamp || item.updatedAt || item.date || item.created_at;
+    if (tsStr) {
+      const t = new Date(tsStr).getTime();
+      if (!isNaN(t) && t > maxTime) {
+        maxTime = t;
+      }
+    }
+  }
+  return maxTime;
+}
+
 // Helper to determine default stock based on 3-tier user priority
 export function determineDefaultTicker(data, currentPortfolio, currentFavorites) {
   if (!data || data.length === 0) return "BBCA.JK";
@@ -66,6 +83,10 @@ export function usePredictions({
   // References to avoid stale closures in recurring fetch callbacks
   const portfolioRef = useRef(portfolio);
   const favoritesRef = useRef(favorites);
+  const selectedTickerRef = useRef(selectedTicker);
+  selectedTickerRef.current = selectedTicker;
+  const lastFetchTimeRef = useRef(Date.now());
+
   useEffect(() => {
     portfolioRef.current = portfolio;
     favoritesRef.current = favorites;
@@ -73,27 +94,46 @@ export function usePredictions({
 
   const fetchPredictions = useCallback(async () => {
     setIsRefreshing(true);
+    lastFetchTimeRef.current = Date.now();
     try {
       let data = null;
 
-      // Tier 1: Try Local Development Proxy API (if running locally with FastAPI)
-      try {
-        const apiRes = await fetch("/api/predictions");
-        if (apiRes.ok) data = await apiRes.json();
-      } catch {}
+      const isDev = Boolean(import.meta.env?.DEV);
 
-      if (!data || data.length === 0) {
+      const fetchLocalData = async () => {
+        // Try local dev proxy API (if running FastAPI)
         try {
-          const host = window.location.hostname || "localhost";
-          if (host === "localhost" || host === "127.0.0.1") {
-            const directRes = await fetch(`http://${host}:8000/api/predictions`);
-            if (directRes.ok) data = await directRes.json();
+          const apiRes = await fetch("/api/predictions");
+          if (apiRes.ok) {
+            const apiData = await apiRes.json();
+            if (Array.isArray(apiData) && apiData.length > 0) return apiData;
           }
         } catch {}
-      }
 
-      // Tier 2: Remote GitHub Raw Cloud Sync (Guarantees automatic updates for installed APKs)
-      if (!data || data.length === 0) {
+        if (isDev && typeof window !== "undefined") {
+          const host = window.location.hostname || "localhost";
+          try {
+            const directRes = await fetch(`http://${host}:8000/api/predictions`);
+            if (directRes.ok) {
+              const directData = await directRes.json();
+              if (Array.isArray(directData) && directData.length > 0) return directData;
+            }
+          } catch {}
+        }
+
+        // Try static local JSON (/data/latest_predictions.json)
+        try {
+          const res = await fetch(`/data/latest_predictions.json?t=${Date.now()}`);
+          if (res.ok) {
+            const localJson = await res.json();
+            if (Array.isArray(localJson) && localJson.length > 0) return localJson;
+          }
+        } catch {}
+
+        return null;
+      };
+
+      const fetchCloudData = async () => {
         const cloudUrls = [
           `https://raw.githubusercontent.com/stockfishZ/ChartsOff/main/outputs/latest_predictions.json?t=${Date.now()}`,
           `https://cdn.jsdelivr.net/gh/stockfishZ/ChartsOff@main/outputs/latest_predictions.json?t=${Date.now()}`
@@ -104,35 +144,58 @@ export function usePredictions({
             if (cloudRes.ok) {
               const cloudData = await cloudRes.json();
               if (Array.isArray(cloudData) && cloudData.length > 0) {
-                data = cloudData;
-                break;
+                return cloudData;
               }
             }
           } catch {}
         }
-      }
+        return null;
+      };
 
-      // Tier 3: Local APK Asset Bundle fallback (Offline mode)
-      if (!data || data.length === 0) {
-        try {
-          const res = await fetch(`/data/latest_predictions.json?t=${Date.now()}`);
-          if (res.ok) data = await res.json();
-        } catch {}
+      if (isDev) {
+        // In development: try local sources (/data/latest_predictions.json or API) FIRST
+        const localData = await fetchLocalData();
+        if (localData && localData.length > 0) {
+          data = localData;
+        } else {
+          // Fall back to GitHub CDN only if local data is unavailable
+          data = await fetchCloudData();
+        }
+      } else {
+        // In production / mobile APK: fetch both cloud and local, compare timestamps
+        const [cloudData, localData] = await Promise.all([
+          fetchCloudData(),
+          fetchLocalData()
+        ]);
+
+        if (cloudData && localData) {
+          // Only accept cloud data if its latest timestamp is >= the local data's timestamp
+          const cloudTs = getLatestTimestamp(cloudData);
+          const localTs = getLatestTimestamp(localData);
+          if (cloudTs >= localTs) {
+            data = cloudData;
+          } else {
+            data = localData;
+          }
+        } else {
+          data = cloudData || localData;
+        }
       }
 
       if (Array.isArray(data) && data.length > 0) {
-        setPredictions(data);
         try {
           localStorage.setItem("chartsoff_cached_predictions", JSON.stringify(data));
           localStorage.setItem("chartsoff_last_sync", new Date().toISOString());
         } catch {}
+
+        setPredictions(data);
 
         // Apply Priority on initial open / fresh refresh
         if (isInitialLoadRef.current) {
           const defaultTicker = determineDefaultTicker(data, portfolioRef.current, favoritesRef.current);
           setSelectedTicker(defaultTicker);
           isInitialLoadRef.current = false;
-        } else if (!data.some((d) => d.ticker === selectedTicker)) {
+        } else if (!data.some((d) => d.ticker === selectedTickerRef.current)) {
           const fallback = determineDefaultTicker(data, portfolioRef.current, favoritesRef.current);
           setSelectedTicker(fallback);
         }
@@ -143,15 +206,66 @@ export function usePredictions({
       setLoading(false);
       setIsRefreshing(false);
     }
-  }, [selectedTicker]);
+  }, []);
 
-  // Background auto-sync polling every 30 minutes (30 * 60 * 1000 ms)
+  // Mount effect: run fetchPredictions() ONCE on initial mount
   useEffect(() => {
     fetchPredictions();
-    const interval = setInterval(() => {
-      fetchPredictions();
-    }, 30 * 60 * 1000); // 30 minutes
-    return () => clearInterval(interval);
+  }, [fetchPredictions]);
+
+  // Active polling (5 mins) and opportunity-based refresh on app return
+  useEffect(() => {
+    let intervalId = null;
+
+    const startPolling = () => {
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(() => {
+        if (typeof document !== "undefined" && document.visibilityState === "visible") {
+          fetchPredictions();
+        }
+      }, 5 * 60 * 1000);
+    };
+
+    const stopPolling = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (typeof document === "undefined") return;
+      if (document.visibilityState === "visible") {
+        const now = Date.now();
+        if (now - lastFetchTimeRef.current >= 60 * 1000) {
+          fetchPredictions();
+        }
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    };
+
+    if (typeof document !== "undefined" && document.visibilityState === "visible") {
+      startPolling();
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+    }
+    if (typeof window !== "undefined") {
+      window.addEventListener("focus", handleVisibilityChange);
+    }
+
+    return () => {
+      stopPolling();
+      if (typeof document !== "undefined") {
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      }
+      if (typeof window !== "undefined") {
+        window.removeEventListener("focus", handleVisibilityChange);
+      }
+    };
   }, [fetchPredictions]);
 
   // Check and update live price immediately every time a stock is selected
@@ -159,7 +273,10 @@ export function usePredictions({
     if (selectedTicker) {
       const clean = selectedTicker.replace(".JK", "");
       const host = window.location.hostname || "localhost";
-      const quoteUrls = [`/api/quote/${clean}`, `http://${host}:8000/api/quote/${clean}`];
+      const quoteUrls = [`/api/quote/${clean}`];
+      if (Boolean(import.meta.env?.DEV)) {
+        quoteUrls.push(`http://${host}:8000/api/quote/${clean}`);
+      }
 
       (async () => {
         for (const url of quoteUrls) {
@@ -203,14 +320,20 @@ export function usePredictions({
         res = await fetch(`/api/predict/${clean}`);
       } catch {}
 
-      if (!res || !res.ok) {
+      if ((!res || !res.ok) && Boolean(import.meta.env?.DEV)) {
         const host = window.location.hostname || "localhost";
-        res = await fetch(`http://${host}:8000/api/predict/${clean}`);
+        try {
+          res = await fetch(`http://${host}:8000/api/predict/${clean}`);
+        } catch {}
       }
 
       if (!res || !res.ok) {
-        const err = res ? await res.json() : {};
-        throw new Error(err.detail || "Gagal menganalisis saham");
+        let errMsg = "Gagal menganalisis saham";
+        try {
+          const err = res ? await res.json() : {};
+          if (err?.detail) errMsg = err.detail;
+        } catch {}
+        throw new Error(errMsg);
       }
 
       const newPred = await res.json();

@@ -179,6 +179,30 @@ export function getIdxMarketStatus() {
   };
 }
 
+/**
+ * Formats current date in Western Indonesian Time (WIB / UTC+7)
+ * e.g. "Minggu, 6 Sep 2026" (long) or "Min, 6 Sep 2026" (short)
+ */
+export function getWibDateFormatted() {
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const wibDate = new Date(utc + 7 * 3600000);
+
+  const daysLong = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const daysShort = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+  const dayIndex = wibDate.getDay();
+  const date = wibDate.getDate();
+  const month = months[wibDate.getMonth()];
+  const year = wibDate.getFullYear();
+
+  return {
+    long: `${daysLong[dayIndex]}, ${date} ${month} ${year}`,
+    short: `${daysShort[dayIndex]}, ${date} ${month} ${year}`,
+  };
+}
+
 export default function Header({
   onRefresh,
   isRefreshing,
@@ -193,12 +217,14 @@ export default function Header({
   const [searchInput, setSearchInput] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [marketStatus, setMarketStatus] = useState(() => getIdxMarketStatus());
+  const [currentDate, setCurrentDate] = useState(() => getWibDateFormatted());
   const searchRef = useRef(null);
 
-  // Update market status every 30 seconds
+  // Update market status and WIB date every 30 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setMarketStatus(getIdxMarketStatus());
+      setCurrentDate(getWibDateFormatted());
     }, 30000);
     return () => clearInterval(timer);
   }, []);
@@ -371,7 +397,7 @@ export default function Header({
         )}
 
         {/* Header Navigation Tabs: "Forecast" and "List Saham" + Real-Time BEI Market Status Badge */}
-        <div className="flex items-center justify-between border-t border-[#E5E3DC] -mx-4 px-4 py-1.5 md:py-0 bg-[#FAF9F6]">
+        <div className="flex items-center justify-between border-t border-[#E5E3DC] -mx-3.5 sm:-mx-4 px-3.5 sm:px-4 py-1.5 md:py-0 bg-[#FAF9F6]">
           <div className="hidden md:flex items-center">
             <button
               type="button"
@@ -409,29 +435,36 @@ export default function Header({
             </button>
           </div>
 
-          {/* Real-Time BEI / IDX Market Status Indicator */}
-          <div
-            className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none shrink-0 max-w-full"
-            title={`Status Pasar Bursa Efek Indonesia: ${marketStatus.label} (${marketStatus.sublabel})`}
-          >
-            <span className="relative flex h-2 w-2 shrink-0">
-              {marketStatus.isOpen && (
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B5E20] opacity-75"></span>
-              )}
-              <span
-                className={`relative inline-flex rounded-full h-2 w-2 ${
-                  marketStatus.color === "green"
-                    ? "bg-[#1B5E20]"
-                    : marketStatus.color === "amber"
-                    ? "bg-[#D97706]"
-                    : marketStatus.color === "blue"
-                    ? "bg-[#1565C0]"
-                    : "bg-[#737168]"
-                }`}
-              ></span>
+          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            <span className="text-[10px] font-mono text-[#595750] px-2 py-1 bg-white border border-[#E5E3DC] select-none">
+              <span className="hidden sm:inline">{currentDate.long}</span>
+              <span className="sm:hidden">{currentDate.short}</span>
             </span>
-            <span className="font-bold text-[#121316] truncate">{marketStatus.label}</span>
-            <span className="text-[#737168] hidden sm:inline truncate">• {marketStatus.sublabel}</span>
+
+            {/* Real-Time BEI / IDX Market Status Indicator */}
+            <div
+              className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none shrink-0 max-w-full"
+              title={`Status Pasar Bursa Efek Indonesia: ${marketStatus.label} (${marketStatus.sublabel})`}
+            >
+              <span className="relative flex h-2 w-2 shrink-0">
+                {marketStatus.isOpen && (
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B5E20] opacity-75"></span>
+                )}
+                <span
+                  className={`relative inline-flex rounded-full h-2 w-2 ${
+                    marketStatus.color === "green"
+                      ? "bg-[#1B5E20]"
+                      : marketStatus.color === "amber"
+                      ? "bg-[#D97706]"
+                      : marketStatus.color === "blue"
+                      ? "bg-[#1565C0]"
+                      : "bg-[#737168]"
+                  }`}
+                ></span>
+              </span>
+              <span className="font-bold text-[#121316] truncate">{marketStatus.label}</span>
+              <span className="text-[#737168] hidden sm:inline truncate">• {marketStatus.sublabel}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -2,14 +2,19 @@
 
 @layer base {
   html, body {
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
     overflow: hidden;
     position: fixed;
     width: 100%;
+    max-width: 100vw;
     height: 100%;
     margin: 0;
     padding: 0;
+    touch-action: pan-y;
   }
 
   body {
@@ -22,11 +27,11 @@
   }
 
   #root {
+    width: 100%;
+    max-width: 100vw;
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    position: relative;
   }
 
   h1, h2, h3, .font-editorial {
@@ -77,3 +82,13 @@
   background: #C4C2BA;
   border-radius: 2px;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
