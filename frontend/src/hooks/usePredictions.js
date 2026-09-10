@@ -60,7 +60,9 @@ export function usePredictions({
       const cached = localStorage.getItem("chartsoff_cached_predictions");
       if (cached) {
         const parsed = JSON.parse(cached);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.filter((p) => p.ticker !== "CUSTOM.JK");
+        }
       }
     } catch {}
     return [];
@@ -183,16 +185,17 @@ export function usePredictions({
       }
 
       if (Array.isArray(data) && data.length > 0) {
+        const cleanData = data.filter((p) => p.ticker !== "CUSTOM.JK");
         try {
-          localStorage.setItem("chartsoff_cached_predictions", JSON.stringify(data));
+          localStorage.setItem("chartsoff_cached_predictions", JSON.stringify(cleanData));
           localStorage.setItem("chartsoff_last_sync", new Date().toISOString());
         } catch {}
 
-        setPredictions(data);
+        setPredictions(cleanData);
 
         // Apply Priority on initial open / fresh refresh
         if (isInitialLoadRef.current) {
-          const defaultTicker = determineDefaultTicker(data, portfolioRef.current, favoritesRef.current);
+          const defaultTicker = determineDefaultTicker(cleanData, portfolioRef.current, favoritesRef.current);
           setSelectedTicker(defaultTicker);
           isInitialLoadRef.current = false;
         } else if (!data.some((d) => d.ticker === selectedTickerRef.current)) {
