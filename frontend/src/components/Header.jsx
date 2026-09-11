@@ -522,22 +522,17 @@ export default function Header({
               className="flex items-center space-x-1.5 px-2 py-1 bg-white border border-[#E5E3DC] text-[10px] font-mono select-none shrink-0 max-w-[48%] sm:max-w-none"
               title={`Status Pasar Bursa Efek Indonesia: ${marketStatus.label} (${marketStatus.sublabel})`}
             >
-              <span className="relative flex h-2 w-2 shrink-0">
-                {marketStatus.isOpen && (
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B5E20] opacity-75"></span>
-                )}
-                <span
-                  className={`relative inline-flex rounded-full h-2 w-2 ${
-                    marketStatus.color === "green"
-                      ? "bg-[#1B5E20]"
-                      : marketStatus.color === "amber"
-                      ? "bg-[#D97706]"
-                      : marketStatus.color === "blue"
-                      ? "bg-[#1565C0]"
-                      : "bg-[#737168]"
-                  }`}
-                ></span>
-              </span>
+              <span
+                className={`inline-flex rounded-full h-2 w-2 shrink-0 ${
+                  marketStatus.color === "green"
+                    ? "bg-[#1B5E20]"
+                    : marketStatus.color === "amber"
+                    ? "bg-[#D97706]"
+                    : marketStatus.color === "blue"
+                    ? "bg-[#1565C0]"
+                    : "bg-[#737168]"
+                }`}
+              ></span>
               <span className="font-bold text-[#121316] truncate">{marketStatus.label}</span>
               <span className="text-[#737168] hidden sm:inline truncate">• {marketStatus.sublabel}</span>
             </div>

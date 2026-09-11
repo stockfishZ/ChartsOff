@@ -152,7 +152,7 @@ export default function PredictionCard({
             <div className="flex items-center justify-end space-x-1">
               <span
                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                  getIdxMarketStatus().isOpen ? "bg-[#1B5E20] animate-pulse" : "bg-[#737168]"
+                  getIdxMarketStatus().isOpen ? "bg-[#1B5E20]" : "bg-[#737168]"
                 }`}
               ></span>
               <span className="text-[10px] uppercase tracking-wider text-[#737168] block font-mono">

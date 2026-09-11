@@ -63,9 +63,9 @@ jobs:
       - name: Build Web & Mobile Assets
         working-directory: ./frontend
         run: |
-          npm ci
+          npm install --legacy-peer-deps --no-audit --no-fund
           npm run build
-          npx cap sync android
+          npx @capacitor/cli sync android
 
       - name: Commit and Push Updated Predictions
         run: |

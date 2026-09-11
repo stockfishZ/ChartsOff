@@ -225,7 +225,7 @@ export default function NewsFeed({ ticker, newsSentiment }) {
           className="flex items-center space-x-1 text-[10px] font-mono text-[#1B5E20] hover:underline cursor-pointer p-1 min-h-[30px]"
           title="Klik untuk memperbarui berita secara langsung"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20] animate-pulse"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20]"></span>
           <span>{isUpdating ? "Memperbarui..." : "Live Update"}</span>
           <RefreshCw className={`w-2.5 h-2.5 ml-0.5 text-[#737168] ${isUpdating ? "animate-spin" : ""}`} />
         </button>
