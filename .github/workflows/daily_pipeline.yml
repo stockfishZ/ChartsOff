@@ -65,7 +65,7 @@ jobs:
         run: |
           npm install --legacy-peer-deps --no-audit --no-fund
           npm run build
-          npx @capacitor/cli sync android
+          npm run cap sync android
 
       - name: Commit and Push Updated Predictions
         run: |
