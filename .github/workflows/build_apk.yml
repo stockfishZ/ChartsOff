@@ -75,9 +75,16 @@ jobs:
             exit 1
           }
 
+      - name: Locate and Stage APK
+        run: |
+          mkdir -p release_apk
+          find frontend/android -name "*.apk" -exec cp {} release_apk/ChartsOff.apk \;
+          ls -lh release_apk/
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ChartsOff-Debug-APK
-          path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
+          path: release_apk/ChartsOff.apk
+          if-no-files-found: error
           retention-days: 30
