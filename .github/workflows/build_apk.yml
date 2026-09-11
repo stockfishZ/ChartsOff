@@ -69,9 +69,13 @@ jobs:
       - name: Build Debug APK
         working-directory: ./frontend/android
         run: |
+          set -o pipefail
           ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle.log || {
-            ERR=$(grep -E -C 2 -i "(FAILED|FAILURE|Could not|cannot find|exception|error)" gradle.log | head -n 30 | tr '\n' ' ' | cut -c 1-500)
-            echo "::error title=Gradle Build Error::$ERR"
+            ERR=$(grep -E "(FAILURE:|Caused by:|What went wrong:)" -A 5 gradle.log | head -n 12 | tr '\n' ' ' | cut -c 1-500)
+            if [ -z "$ERR" ]; then
+              ERR=$(tail -n 25 gradle.log | tr '\n' ' ' | cut -c 1-500)
+            fi
+            echo "::error title=Gradle Root Cause::$ERR"
             exit 1
           }
 
