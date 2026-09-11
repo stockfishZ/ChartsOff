@@ -78,8 +78,19 @@ jobs:
       - name: Locate and Stage APK
         run: |
           mkdir -p release_apk
-          find frontend/android -name "*.apk" -exec cp {} release_apk/ChartsOff.apk \;
-          ls -lh release_apk/
+          echo "=== SEARCHING FOR APK FILES ==="
+          find . -type f \( -name "*.apk" -o -name "*.aab" \) | tee apk_list.txt
+          if [ -s apk_list.txt ]; then
+            FIRST_APK=$(head -n 1 apk_list.txt)
+            echo "Found APK at: $FIRST_APK"
+            cp "$FIRST_APK" release_apk/ChartsOff.apk
+            ls -lh release_apk/ChartsOff.apk
+          else
+            echo "::error title=APK Not Found::No APK or AAB found after gradle assembleDebug"
+            echo "=== Listing all files in android build directory ==="
+            find frontend/android -type f -name "*.*" | head -n 50 || true
+            exit 1
+          fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
