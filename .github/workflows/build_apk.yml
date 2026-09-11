@@ -69,7 +69,7 @@ jobs:
       - name: Build Debug APK
         working-directory: ./frontend/android
         run: |
-          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle.log || {
+          ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle.log || {
             ERR=$(grep -E -C 2 -i "(FAILED|FAILURE|Could not|cannot find|exception|error)" gradle.log | head -n 30 | tr '\n' ' ' | cut -c 1-500)
             echo "::error title=Gradle Build Error::$ERR"
             exit 1
@@ -79,16 +79,17 @@ jobs:
         run: |
           mkdir -p release_apk
           echo "=== SEARCHING FOR APK FILES ==="
-          find . -type f \( -name "*.apk" -o -name "*.aab" \) | tee apk_list.txt
+          find . -name "*.apk" | tee apk_list.txt
           if [ -s apk_list.txt ]; then
             FIRST_APK=$(head -n 1 apk_list.txt)
             echo "Found APK at: $FIRST_APK"
             cp "$FIRST_APK" release_apk/ChartsOff.apk
             ls -lh release_apk/ChartsOff.apk
           else
-            echo "::error title=APK Not Found::No APK or AAB found after gradle assembleDebug"
-            echo "=== Listing all files in android build directory ==="
-            find frontend/android -type f -name "*.*" | head -n 50 || true
+            GRADLE_TAIL=$(tail -n 25 frontend/android/gradle.log | tr '\n' ' ' | cut -c 1-450)
+            echo "::error title=Gradle Log Output::$GRADLE_TAIL"
+            BUILD_FILES=$(find frontend/android/app/build -maxdepth 4 -type f 2>/dev/null | head -n 20 | tr '\n' ' ' | cut -c 1-450)
+            echo "::error title=Build Output Files::$BUILD_FILES"
             exit 1
           fi
 
