@@ -68,7 +68,12 @@ jobs:
 
       - name: Build Debug APK
         working-directory: ./frontend/android
-        run: ./gradlew assembleDebug --stacktrace
+        run: |
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle.log || {
+            ERR=$(grep -E -C 2 -i "(FAILED|FAILURE|Could not|cannot find|exception|error)" gradle.log | head -n 30 | tr '\n' ' ' | cut -c 1-500)
+            echo "::error title=Gradle Build Error::$ERR"
+            exit 1
+          }
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
