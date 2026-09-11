@@ -74,11 +74,10 @@ class MacroDataFeed:
                     close_df[key] = float("nan")
 
             close_df.reset_index(inplace=True)
-            close_df.rename(columns={"Date": "timestamp", "Datetime": "timestamp"}, inplace=True)
+            close_df.rename(columns={"Date": "timestamp", "Datetime": "timestamp", "index": "timestamp"}, inplace=True)
             
-            # Forward fill missing weekend/holiday data across timezones
-            close_df.ffill(inplace=True)
-            close_df.bfill(inplace=True)
+            # Forward fill and backward fill missing weekend/holiday discrepancies across timezones and BEI calendar
+            close_df = close_df.ffill().bfill()
 
             self._cached_data = close_df
             self._last_fetched = now

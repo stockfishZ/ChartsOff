@@ -291,7 +291,7 @@ export default function HowItWorksModal({ isOpen, onClose, initialChapter }) {
         {/* Footer */}
         <div className="bg-white border-t border-[#121316] p-3 sm:px-6 flex items-center justify-between shrink-0">
           <span className="text-[11px] font-mono text-[#737168]">
-            © StockfishZ
+            Copyright © StockfishZ
           </span>
           <button
             type="button"

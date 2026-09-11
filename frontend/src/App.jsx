@@ -68,6 +68,10 @@ export default function App() {
     fetchPredictions,
     handleAddCustomTicker,
     sortedPredictions,
+    syncSource,
+    lastSyncTime,
+    lastDataTimestamp,
+    isOffline,
   } = usePredictions({
     portfolio,
     favorites,
@@ -125,6 +129,10 @@ export default function App() {
           onOpenHowItWorks={() => handleOpenHowItWorks(null)}
           unreadNotifCount={unreadNotifCount}
           onOpenNotifications={() => setIsNotifModalOpen(true)}
+          syncSource={syncSource}
+          lastSyncTime={lastSyncTime}
+          lastDataTimestamp={lastDataTimestamp}
+          isOffline={isOffline}
         />
 
         {errorMessage && (
@@ -446,7 +454,7 @@ export default function App() {
       {/* Main Page Footer */}
       <footer className="py-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 border-t border-[#E5E3DC] text-center bg-[#FAF9F6] mt-6">
         <span className="text-[11px] font-mono text-[#737168]">
-          © StockfishZ
+          Copyright © StockfishZ
         </span>
       </footer>
 

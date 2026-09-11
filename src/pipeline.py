@@ -47,16 +47,22 @@ def run_pipeline(tickers: list[str] | None = None, train_model: bool = True):
         features_df = ml_model.prepare_features(ohlcv_df=ohlcv_df, news_summary=news_summary, macro_df=macro_df)
 
         # 4. Optional Model Training
+        model_dir = config.LOCAL_OUTPUT_DIR / "models"
+        model_file = model_dir / f"{ticker}_model.joblib"
         if train_model:
             ml_model.train(X=features_df)
-            model_dir = config.LOCAL_OUTPUT_DIR / "models"
             model_dir.mkdir(parents=True, exist_ok=True)
             try:
-                model_file = model_dir / f"{ticker}_model.joblib"
                 ml_model.save(str(model_file))
                 logger.info(f"Saved model artifacts to {model_file}")
             except Exception as e:
                 logger.warning(f"Could not save model for {ticker}: {e}")
+        elif model_file.exists():
+            try:
+                ml_model.load(str(model_file))
+                logger.info(f"Loaded existing model for {ticker} from {model_file}")
+            except Exception as e:
+                logger.debug(f"Could not load existing model for {ticker}: {e}")
 
         # 5. Prediction Inference
         prediction = ml_model.predict(

@@ -2,9 +2,17 @@ name: Automated Daily Stock Prediction Pipeline
 
 on:
   schedule:
-    # Runs Monday to Friday at 09:30 UTC (16:30 WIB / GMT+7), 30 mins after IDX Market Close
-    - cron: '30 9 * * 1-5'
+    # Runs Monday to Saturday at 09:30 UTC (16:30 WIB / GMT+7), 30 mins after IDX Market Close
+    # Mon-Fri: Daily prediction inference
+    # Saturday: Weekly walk-forward retraining (--train)
+    - cron: '30 9 * * 1-6'
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab anytime
+    inputs:
+      train:
+        description: 'Force model retraining (--train)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -39,7 +47,18 @@ jobs:
 
       - name: Run Machine Learning Pipeline
         run: |
-          python -m src.pipeline
+          DAY=$(date -u +%u)
+          if [ "$DAY" -eq 6 ] || [ "${{ github.event.inputs.train }}" = "true" ]; then
+            echo "Saturday / retraining flag detected (day $DAY). Running weekly walk-forward retraining pipeline..."
+            python -m src.pipeline --train
+          else
+            echo "Weekday detected (day $DAY). Running daily prediction inference..."
+            python -m src.pipeline
+          fi
+
+      - name: Pre-commit Data Quality Gate
+        run: |
+          python -c "import json, os, sys; p = 'outputs/latest_predictions.json'; assert os.path.exists(p), f'{p} does not exist'; data = json.load(open(p, encoding='utf-8')); req = {'ticker', 'current_price', 'signal', 'historical_prices'}; assert isinstance(data, list) and len(data) >= 45 and all(req.issubset(x.keys()) for x in data), f'Data Quality Gate Failed: invalid predictions format or count < 45 ({len(data) if isinstance(data, list) else 0})'; print(f'Data Quality Gate Passed: {len(data)} valid ticker predictions verified.')"
 
       - name: Build Web & Mobile Assets
         working-directory: ./frontend
@@ -51,8 +70,8 @@ jobs:
       - name: Commit and Push Updated Predictions
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add outputs/latest_predictions.json frontend/public/data/latest_predictions.json frontend/dist/ frontend/android/app/src/main/assets/public/
+          git add outputs/latest_predictions.json frontend/public/data/latest_predictions.json
+          git add -f frontend/android/app/src/main/assets/public/data/latest_predictions.json
           
           if git diff --staged --quiet; then
             echo "No data changes detected. Skipping commit."
@@ -61,3 +80,9 @@ jobs:
             git pull --rebase origin main
             git push origin main
           fi
+
+      - name: Pipeline Failure Alert
+        if: failure()
+        run: |
+          echo "::error title=Pipeline Failure::ChartsOff daily prediction pipeline or data quality gate failed! Corrupt or partial runs were blocked from committing to git or mobile assets."
+          echo "Review pipeline logs above to diagnose failures in market data feed, sentiment extraction, or ML training."

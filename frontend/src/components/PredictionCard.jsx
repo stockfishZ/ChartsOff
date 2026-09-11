@@ -2,7 +2,7 @@ import React from "react";
 import { Star, Plus, Edit2, ShieldAlert, Sparkles } from "lucide-react";
 import HoldingIcon from "./HoldingIcon";
 import { formatRupiah } from "./TickerList";
-import { getIdxMarketStatus } from "./Header";
+import { getIdxMarketStatus, formatWibDateTime } from "./Header";
 
 export const COMPANY_NAMES = {
   "BBCA.JK": "Bank Central Asia Tbk",
@@ -149,11 +149,23 @@ export default function PredictionCard({
           </div>
 
           <div className="text-right shrink-0">
-            <span className="text-[10px] uppercase tracking-wider text-[#737168] block">
-              {getIdxMarketStatus().isOpen ? "Harga Pasar Live" : "Harga Penutupan"}
-            </span>
-            <span className="font-mono-num text-xl sm:text-2xl font-bold text-[#121316]">
+            <div className="flex items-center justify-end space-x-1">
+              <span
+                className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                  getIdxMarketStatus().isOpen ? "bg-[#1B5E20] animate-pulse" : "bg-[#737168]"
+                }`}
+              ></span>
+              <span className="text-[10px] uppercase tracking-wider text-[#737168] block font-mono">
+                {getIdxMarketStatus().isOpen ? "Harga Pasar Live" : "Harga Penutupan"}
+              </span>
+            </div>
+            <span className="font-mono-num text-xl sm:text-2xl font-bold text-[#121316] block">
               {formatRupiah(prediction.current_price)}
+            </span>
+            <span className="text-[9px] font-mono text-[#737168] block mt-0.5">
+              {prediction.timestamp
+                ? `Update: ${formatWibDateTime(prediction.timestamp, { short: true })}`
+                : "Penutupan Terakhir"}
             </span>
           </div>
         </div>
@@ -439,6 +451,23 @@ export default function PredictionCard({
           </div>
         </div>
       )}
+
+      {/* 6. Model Freshness & Market Session Reassurance Footer */}
+      <div className="mt-3.5 pt-2.5 border-t border-[#E5E3DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[10px] font-mono text-[#737168]">
+        <div className="flex items-center space-x-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20] shrink-0"></span>
+          <span>
+            Analisis Model AI: {prediction.timestamp ? formatWibDateTime(prediction.timestamp, { includeDay: true }) : "Penutupan Terakhir BEI"}
+          </span>
+        </div>
+        <div className="flex items-center space-x-1 text-[#595750]">
+          <span>
+            {getIdxMarketStatus().isOpen
+              ? "● Sesi Live Berjalan • Evaluasi Target 20 Hari"
+              : "● Sesi Pasar Ditutup • Model Siap Sesi Berikutnya"}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

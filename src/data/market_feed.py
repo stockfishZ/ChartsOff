@@ -1,4 +1,6 @@
-﻿import logging
+import logging
+import random
+import time
 from datetime import datetime, timedelta
 import pandas as pd
 import yfinance as yf
@@ -21,32 +23,44 @@ class MarketDataFeed:
         days = days or self.historical_days
         start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
         
-        try:
-            logger.info(f"Fetching {ticker} market data from {start_date} (interval: {interval})")
-            data = yf.download(
-                tickers=ticker,
-                start=start_date,
-                interval=interval,
-                progress=False,
-                auto_adjust=True
-            )
-            
-            if data.empty:
-                logger.warning(f"No data returned for ticker {ticker}")
-                return pd.DataFrame()
-            
-            # Flatten multi-index columns if present (from newer yfinance versions)
-            if isinstance(data.columns, pd.MultiIndex):
-                data.columns = [col[0] for col in data.columns]
+        for attempt in range(2):
+            try:
+                logger.info(f"Fetching {ticker} market data from {start_date} (interval: {interval}, attempt {attempt+1})")
+                data = yf.download(
+                    tickers=ticker,
+                    start=start_date,
+                    interval=interval,
+                    progress=False,
+                    auto_adjust=True
+                )
                 
-            data.reset_index(inplace=True)
-            data.rename(columns={"Date": "timestamp", "Datetime": "timestamp"}, inplace=True)
-            data["ticker"] = ticker
-            return data
-            
-        except Exception as e:
-            logger.error(f"Error fetching market data for {ticker}: {e}")
-            return pd.DataFrame()
+                if data.empty:
+                    if attempt == 0:
+                        jitter = random.uniform(0.5, 1.2)
+                        logger.info(f"Empty data returned for {ticker}; retrying after {jitter:.2f}s backoff")
+                        time.sleep(jitter)
+                        continue
+                    logger.warning(f"No data returned for ticker {ticker}")
+                    return pd.DataFrame()
+                
+                # Flatten multi-index columns if present (from newer yfinance versions)
+                if isinstance(data.columns, pd.MultiIndex):
+                    data.columns = [col[0] for col in data.columns]
+                    
+                data.reset_index(inplace=True)
+                data.rename(columns={"Date": "timestamp", "Datetime": "timestamp", "index": "timestamp"}, inplace=True)
+                data["ticker"] = ticker
+                return data
+                
+            except Exception as e:
+                logger.warning(f"Attempt {attempt+1} error fetching market data for {ticker}: {e}")
+                if attempt == 0:
+                    jitter = random.uniform(0.5, 1.2)
+                    logger.info(f"Retrying {ticker} after {jitter:.2f}s backoff")
+                    time.sleep(jitter)
+                else:
+                    return pd.DataFrame()
+        return pd.DataFrame()
 
     def fetch_current_quote(self, ticker: str) -> dict:
         """

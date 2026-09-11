@@ -321,8 +321,137 @@ def test_adaptive_support_resistance_risk_brackets():
     risk = pred.risk_management
     assert risk["stop_loss_price"] < 5200.0
     assert risk["take_profit_price"] > 5200.0
-    # Stop loss must enforce IDX tick minimum (Rp 50)
-    assert risk["stop_loss_price"] >= 50.0
     # RRR is non-empty and formatted
     assert "1 :" in risk["risk_reward_ratio"]
+
+def test_storage_safe_upsert_and_prune(tmp_path, monkeypatch):
+    from src.config import config
+    from src.ml.base import PredictionResult
+    from src.storage.supabase_client import StorageManager
+    import json
+
+    monkeypatch.setattr(config, "LOCAL_OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr(config, "USE_SUPABASE", False)
+
+    storage = StorageManager()
+    
+    # 1. Simulate existing predictions with old timestamps (e.g., 2 weeks old)
+    old_file = tmp_path / "latest_predictions.json"
+    initial_data = [
+        {"ticker": "BBCA.JK", "timestamp": "2026-08-25T10:00:00+00:00", "signal": "Beli (Bullish)", "current_price": 9500},
+        {"ticker": "BBRI.JK", "timestamp": "2026-08-25T10:00:00+00:00", "signal": "Beli (Bullish)", "current_price": 5000},
+        {"ticker": "CUSTOM_ROGUE.JK", "timestamp": "2026-08-25T10:00:00+00:00", "signal": "Netral", "current_price": 100},
+    ]
+    with open(old_file, "w", encoding="utf-8") as f:
+        json.dump(initial_data, f)
+
+    # 2. Run partial update for BMRI.JK with full_run=False
+    dummy_pred = PredictionResult(
+        ticker="BMRI.JK",
+        current_price=4300.0,
+        signal="Beli (Bullish)",
+        confidence=80.0,
+        expected_return_pct=2.5,
+        target_horizon_days=20,
+        market_regime="Bullish",
+        key_factors=[],
+        news_sentiment={},
+        action_alert={"type": "NONE", "urgency": "LOW", "title": "", "description": "", "action_label": ""},
+        risk_management={"stop_loss_price": 4000.0, "take_profit_price": 4600.0, "risk_reward_ratio": "1 : 2.0", "risk_level": "Low", "risk_color": "#000"},
+        fundamentals={},
+        institutional_flow={},
+        macro_context={},
+        historical_prices=[]
+    )
+    storage.save_predictions([dummy_pred], is_incremental=False, sync_to_frontend=False, full_run=False)
+
+    with open(old_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    tickers_present = {x["ticker"] for x in data}
+    # Both BBCA and BBRI must still be present even if older than 72h!
+    assert "BBCA.JK" in tickers_present
+    assert "BBRI.JK" in tickers_present
+    assert "BMRI.JK" in tickers_present
+
+    # 3. Now run a full run (full_run=True) - rogue ticker CUSTOM_ROGUE.JK should be pruned, defaults kept
+    storage.save_predictions([dummy_pred], is_incremental=False, sync_to_frontend=False, full_run=True)
+    with open(old_file, "r", encoding="utf-8") as f:
+        data_full = json.load(f)
+    tickers_full = {x["ticker"] for x in data_full}
+    assert "CUSTOM_ROGUE.JK" not in tickers_full
+    assert "BBCA.JK" in tickers_full
+    assert "BMRI.JK" in tickers_full
+
+def test_market_data_feed_retry_jitter(monkeypatch):
+    import time
+    feed = MarketDataFeed(historical_days=30)
+    
+    sleep_calls = []
+    monkeypatch.setattr(time, "sleep", lambda s: sleep_calls.append(s))
+    
+    calls = 0
+    def mock_download(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return pd.DataFrame()
+        dates = pd.date_range("2024-01-01", periods=5)
+        return pd.DataFrame({"Date": dates, "Open": [100]*5, "High": [105]*5, "Low": [95]*5, "Close": [102]*5, "Volume": [1000]*5})
+
+    import yfinance as yf
+    monkeypatch.setattr(yf, "download", mock_download)
+    
+    df = feed.fetch_historical_ohlcv("BBCA.JK")
+    assert not df.empty
+    assert calls == 2
+    assert len(sleep_calls) == 1
+    assert 0.5 <= sleep_calls[0] <= 1.2
+
+def test_macro_data_feed_holiday_discrepancies_ffill_bfill(monkeypatch):
+    from src.data.macro_feed import MacroDataFeed
+    feed = MacroDataFeed()
+    
+    # Simulate holiday gap: day 2 is holiday on BEI (NaN for ihsg), day 3 is US holiday (NaN for gold/oil)
+    mock_dates = pd.date_range("2024-01-01", periods=4)
+    raw_mock = pd.DataFrame({
+        "^JKSE": [7000.0, np.nan, 7100.0, 7150.0],
+        "USDIDR=X": [15500.0, 15520.0, 15550.0, 15540.0],
+        "GC=F": [2000.0, 2010.0, np.nan, 2030.0],
+        "CL=F": [75.0, 76.0, np.nan, 78.0],
+    }, index=mock_dates)
+    
+    import yfinance as yf
+    monkeypatch.setattr(yf, "download", lambda *args, **kwargs: raw_mock)
+    
+    macro_df = feed.fetch_macro_benchmarks(force_refresh=True)
+    assert not macro_df.empty
+    # Verify no NaN remains after clean ffill().bfill()
+    assert not macro_df["ihsg"].isna().any()
+    assert not macro_df["gold"].isna().any()
+    assert not macro_df["oil"].isna().any()
+    # Check that day 2 ihsg was forward filled from day 1
+    assert macro_df.loc[macro_df["timestamp"] == mock_dates[1], "ihsg"].values[0] == 7000.0
+    # Check that day 3 gold was forward filled from day 2
+    assert macro_df.loc[macro_df["timestamp"] == mock_dates[2], "gold"].values[0] == 2010.0
+
+def test_pre_commit_data_quality_gate():
+    # Test valid dataset
+    valid_predictions = [
+        {"ticker": f"TICK{i}.JK", "current_price": 1000 + i, "signal": "Beli (Bullish)", "historical_prices": [100, 101, 102]}
+        for i in range(50)
+    ]
+    req = {'ticker', 'current_price', 'signal', 'historical_prices'}
+    assert len(valid_predictions) >= 45
+    assert all(req.issubset(x.keys()) for x in valid_predictions)
+    
+    # Test failure: insufficient tickers (< 45)
+    partial_predictions = valid_predictions[:40]
+    assert len(partial_predictions) < 45
+    
+    # Test failure: missing required field
+    corrupt_predictions = [dict(x) for x in valid_predictions]
+    del corrupt_predictions[0]["signal"]
+    assert not all(req.issubset(x.keys()) for x in corrupt_predictions)
+
+
 

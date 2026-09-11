@@ -82,6 +82,35 @@ export function usePredictions({
   const [errorMessage, setErrorMessage] = useState("");
   const isInitialLoadRef = useRef(true);
 
+  // Sync & freshness state tracking
+  const [syncSource, setSyncSource] = useState(() => {
+    try {
+      return localStorage.getItem("chartsoff_sync_source") || "cache";
+    } catch {
+      return "cache";
+    }
+  });
+
+  const [lastSyncTime, setLastSyncTime] = useState(() => {
+    try {
+      return localStorage.getItem("chartsoff_last_sync") || null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isOffline, setIsOffline] = useState(() => {
+    if (typeof navigator !== "undefined" && typeof navigator.onLine === "boolean") {
+      return !navigator.onLine;
+    }
+    return false;
+  });
+
+  // Calculate newest data timestamp across the current predictions dataset
+  const lastDataTimestamp = useMemo(() => {
+    return getLatestTimestamp(predictions);
+  }, [predictions]);
+
   // References to avoid stale closures in recurring fetch callbacks
   const portfolioRef = useRef(portfolio);
   const favoritesRef = useRef(favorites);
@@ -154,14 +183,20 @@ export function usePredictions({
         return null;
       };
 
+      let fetchedSource = "cache";
+
       if (isDev) {
         // In development: try local sources (/data/latest_predictions.json or API) FIRST
         const localData = await fetchLocalData();
         if (localData && localData.length > 0) {
           data = localData;
+          fetchedSource = "local";
         } else {
           // Fall back to GitHub CDN only if local data is unavailable
           data = await fetchCloudData();
+          if (data && data.length > 0) {
+            fetchedSource = "cloud";
+          }
         }
       } else {
         // In production / mobile APK: fetch both cloud and local, compare timestamps
@@ -176,22 +211,33 @@ export function usePredictions({
           const localTs = getLatestTimestamp(localData);
           if (cloudTs >= localTs) {
             data = cloudData;
+            fetchedSource = "cloud";
           } else {
             data = localData;
+            fetchedSource = "local";
           }
-        } else {
-          data = cloudData || localData;
+        } else if (cloudData) {
+          data = cloudData;
+          fetchedSource = "cloud";
+        } else if (localData) {
+          data = localData;
+          fetchedSource = "local";
         }
       }
 
       if (Array.isArray(data) && data.length > 0) {
         const cleanData = data.filter((p) => p.ticker !== "CUSTOM.JK");
+        const nowIso = new Date().toISOString();
         try {
           localStorage.setItem("chartsoff_cached_predictions", JSON.stringify(cleanData));
-          localStorage.setItem("chartsoff_last_sync", new Date().toISOString());
+          localStorage.setItem("chartsoff_last_sync", nowIso);
+          localStorage.setItem("chartsoff_sync_source", fetchedSource);
         } catch {}
 
         setPredictions(cleanData);
+        setSyncSource(fetchedSource);
+        setLastSyncTime(nowIso);
+        setIsOffline(false);
 
         // Apply Priority on initial open / fresh refresh
         if (isInitialLoadRef.current) {
@@ -202,9 +248,19 @@ export function usePredictions({
           const fallback = determineDefaultTicker(data, portfolioRef.current, favoritesRef.current);
           setSelectedTicker(fallback);
         }
+      } else {
+        // Fetch returned no data or failed (e.g. offline) -> retain cache
+        if (typeof navigator !== "undefined" && !navigator.onLine) {
+          setIsOffline(true);
+        }
+        setSyncSource("cache");
       }
     } catch (err) {
       console.error("Error memuat JSON prediksi:", err);
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        setIsOffline(true);
+      }
+      setSyncSource("cache");
     } finally {
       setLoading(false);
       setIsRefreshing(false);
@@ -267,6 +323,29 @@ export function usePredictions({
       }
       if (typeof window !== "undefined") {
         window.removeEventListener("focus", handleVisibilityChange);
+      }
+    };
+  }, [fetchPredictions]);
+
+  // Network connection status listeners (online/offline)
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      fetchPredictions();
+    };
+    const handleOffline = () => {
+      setIsOffline(true);
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
       }
     };
   }, [fetchPredictions]);
@@ -409,6 +488,10 @@ export function usePredictions({
     fetchPredictions,
     handleAddCustomTicker,
     sortedPredictions,
+    syncSource,
+    lastSyncTime,
+    lastDataTimestamp,
+    isOffline,
   };
 }
 

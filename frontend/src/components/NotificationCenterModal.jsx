@@ -260,7 +260,7 @@ export default function NotificationCenterModal({
 
         {/* Modal Footer */}
         <div className="bg-white border-t border-[#121316] p-2.5 px-4 flex items-center justify-between shrink-0 text-[10px] font-mono text-[#737168]">
-          <span>© StockfishZ • Precision Alert Engine</span>
+          <span>Copyright © StockfishZ • Precision Alert Engine</span>
           <button
             type="button"
             onClick={onClose}

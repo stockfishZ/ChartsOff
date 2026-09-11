@@ -83,34 +83,15 @@ class StorageManager:
                     existing_map[ticker] = item
                     current_run_tickers.add(ticker)
 
-            # Issue 1: Prune stale predictions on non-incremental (final) run
-            if not is_incremental:
-                now = datetime.now(timezone.utc)
-                cutoff_time = now - timedelta(hours=72)
+            # Prune obsolete / rogue test tickers on final full_run save
+            if not is_incremental and full_run:
                 default_tickers_set = set(config.DEFAULT_TICKERS)
                 pruned_map: dict[str, dict] = {}
 
                 for ticker, item in existing_map.items():
-                    # If full_run is True, drop any default ticker not present in current run (failed/skipped)
-                    if full_run and (ticker in default_tickers_set) and (ticker not in current_run_tickers):
-                        logger.info(f"Pruning skipped/failed default ticker '{ticker}' during full run.")
-                        continue
-
-                    # Prune any entry older than 72 hours (3 days)
-                    ts_str = item.get("timestamp")
-                    if ts_str:
-                        try:
-                            ts = datetime.fromisoformat(str(ts_str).replace("Z", "+00:00"))
-                            if ts.tzinfo is None:
-                                ts = ts.replace(tzinfo=timezone.utc)
-                            if ts < cutoff_time:
-                                logger.info(f"Pruning stale prediction for '{ticker}' (timestamp: {ts_str} > 72h old).")
-                                continue
-                        except Exception as e:
-                            logger.warning(f"Could not parse timestamp '{ts_str}' for {ticker}, pruning: {e}")
-                            continue
-                    else:
-                        logger.info(f"Pruning prediction for '{ticker}' due to missing timestamp.")
+                    # Only retain configured default tickers in production full runs (purging ad-hoc test tickers like CUSTOM.JK)
+                    if ticker not in default_tickers_set:
+                        logger.info(f"Pruning non-default/test ticker '{ticker}' during full run.")
                         continue
 
                     pruned_map[ticker] = item

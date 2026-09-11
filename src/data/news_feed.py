@@ -2,14 +2,25 @@ import logging
 import urllib.parse
 import re
 import time
-import socket
+import requests
 import feedparser
 import pandas as pd
 
-# Set default network socket timeout to 4 seconds to prevent stalling
-socket.setdefaulttimeout(4)
-
 logger = logging.getLogger(__name__)
+
+def _fetch_rss_parsed(url: str, timeout: int = 10):
+    """Fetch RSS feed content using requests with explicit per-request timeout to avoid process-wide socket side-effects."""
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        }
+        resp = requests.get(url, headers=headers, timeout=timeout)
+        if resp.status_code == 200 and resp.content:
+            return feedparser.parse(resp.content)
+    except Exception as e:
+        logger.debug(f"Direct requests feed fetch failed for {url}: {e}")
+    # Fallback to direct parse if requests fails
+    return feedparser.parse(url)
 
 # Indonesian Stock Key Aliases for accurate news matching
 TICKER_ALIASES = {
@@ -415,7 +426,7 @@ class NewsDataFeed:
         entries = []
         for url in direct_urls:
             try:
-                feed = feedparser.parse(url)
+                feed = _fetch_rss_parsed(url, timeout=8)
                 for entry in feed.entries:
                     t = getattr(entry, "title", "")
                     if not t:
@@ -472,7 +483,7 @@ class NewsDataFeed:
         google_rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=id&gl=ID&ceid=ID:id"
 
         try:
-            feed = feedparser.parse(google_rss_url)
+            feed = _fetch_rss_parsed(google_rss_url, timeout=8)
             for idx, entry in enumerate(feed.entries[:max_articles]):
                 title = getattr(entry, "title", "")
                 summary = getattr(entry, "summary", "")
