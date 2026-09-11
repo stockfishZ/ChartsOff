@@ -62,9 +62,12 @@ jobs:
             exit 1
           }
 
-      - name: Make Gradle Executable
+      - name: Make Gradle Executable & Ensure Plugin Stubs
         working-directory: ./frontend/android
-        run: chmod +x gradlew
+        run: |
+          chmod +x gradlew
+          mkdir -p capacitor-cordova-android-plugins
+          touch capacitor-cordova-android-plugins/cordova.variables.gradle
 
       - name: Build Debug APK
         working-directory: ./frontend/android
