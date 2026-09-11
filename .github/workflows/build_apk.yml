@@ -35,12 +35,32 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Build Web Assets & Sync Capacitor
+      - name: Install Frontend Dependencies
         working-directory: ./frontend
         run: |
-          npm install --legacy-peer-deps --no-audit --no-fund
-          npm run build
-          npm run cap sync android
+          npm install --legacy-peer-deps --no-audit --no-fund 2>&1 | tee install.log || {
+            ERR=$(tail -n 20 install.log | tr '\n' ' ')
+            echo "::error title=NPM Install Failed::$ERR"
+            exit 1
+          }
+
+      - name: Build Vite Web Assets
+        working-directory: ./frontend
+        run: |
+          npm run build 2>&1 | tee build.log || {
+            ERR=$(tail -n 20 build.log | tr '\n' ' ')
+            echo "::error title=Vite Build Failed::$ERR"
+            exit 1
+          }
+
+      - name: Sync Capacitor Android
+        working-directory: ./frontend
+        run: |
+          ./node_modules/.bin/cap sync android 2>&1 | tee sync.log || {
+            ERR=$(tail -n 20 sync.log | tr '\n' ' ')
+            echo "::error title=Capacitor Sync Failed::$ERR"
+            exit 1
+          }
 
       - name: Make Gradle Executable
         working-directory: ./frontend/android
